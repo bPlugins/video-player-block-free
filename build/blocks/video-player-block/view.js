@@ -64,7 +64,7 @@ const plyrConfig = attributes => {
   const mutedProps = muted ? {
     storage: {
       enabled: false,
-      key: 'plyr'
+      key: "plyr"
     },
     volume: 0
   } : {};
@@ -95,7 +95,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   prefix: () => (/* binding */ prefix)
 /* harmony export */ });
-const prefix = 'vpbVideoPlayer';
+const prefix = 'vpbpVideoPlayer';
 
 /***/ }),
 

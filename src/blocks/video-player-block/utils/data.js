@@ -1,1 +1,1 @@
-export const prefix = 'vpbVideoPlayer';
+export const prefix = 'vpbpVideoPlayer';

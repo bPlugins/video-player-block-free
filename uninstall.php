@@ -1,11 +1,11 @@
 <?php
 /**
- * Uninstall handler for Video Gallery Block.
+ * Uninstall handler for Video Player Block.
  *
  * Cleans up plugin data when the plugin is deleted from the admin.
  * Only runs if the user has opted in via the "Delete data on uninstall" setting.
  *
- * @package VGB
+ * @package VPBP
  */
 
 // Exit if not called by WordPress.
@@ -13,7 +13,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-$isDeleteData = get_option( 'vgb_delete_data_on_uninstall', false );
+$isDeleteData = get_option( 'vpbp_delete_data_on_uninstall', false );
 
 if ( ! $isDeleteData ) {
 	return;
@@ -21,18 +21,18 @@ if ( ! $isDeleteData ) {
 
 global $wpdb;
 
-// 1. Delete all 'video-gallery-block' custom post type posts and their meta/revisions efficiently.
-$vgb_post_ids = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", 'video-gallery-block' ) );
+// 1. Delete all 'video-player-block' custom post type posts and their meta/revisions efficiently.
+$vpbp_post_ids = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", 'video-player-block' ) );
 
-if ( ! empty( $vgb_post_ids ) ) {
-	foreach ( $vgb_post_ids as $post_id ) {
+if ( ! empty( $vpbp_post_ids ) ) {
+	foreach ( $vpbp_post_ids as $post_id ) {
 		wp_delete_post( $post_id, true ); // Force delete (bypass trash).
 	}
 }
 
 // 2. Delete plugin options.
-delete_option( 'vgb_delete_data_on_uninstall' );
-delete_option( 'vgbDisabledBlocks' );
-delete_option( 'vgbAPIKey' );
-delete_option( 'vgbUtils' );
+delete_option( 'vpbp_delete_data_on_uninstall' );
+delete_option( 'vpbpDisabledBlocks' );
+delete_option( 'vpbpAPIKey' );
+delete_option( 'vpbpUtils' );
 

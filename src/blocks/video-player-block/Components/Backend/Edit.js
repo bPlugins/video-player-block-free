@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { withSelect } from "@wordpress/data";
 import { useBlockProps } from "@wordpress/block-editor";
 import { useRefEffect } from "@wordpress/compose";
@@ -28,7 +28,8 @@ const Edit = (props) => {
     autoplay,
     muted,
     resetOnEnd,
-    autoHideControl
+    autoHideControl,
+    isSetup,
   } = attributes;
 
   const [autoplayProps, setAutoplayProps] = useState(
@@ -133,7 +134,7 @@ const Edit = (props) => {
   const id = `${prefix}-${clientId}`;
   const blockProps = useBlockProps({ ref });
   const isPlayerPostType = ["video-player-block"].includes(
-    currentPostType
+    currentPostType,
   );
 
   return (

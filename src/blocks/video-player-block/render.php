@@ -2,7 +2,7 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-$id = wp_unique_id( 'vpbVideoPlayer-' );
+$id = wp_unique_id( 'vpbpVideoPlayer-' );
 ?>
 <div
     <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() is properly escaped ?>

@@ -18,6 +18,7 @@
 }
 .wp-block-vpbp-video-player-block .vpbVideoPlayer .plyr {
   position: relative !important;
+  pointer-events: all !important;
 }
 .wp-block-vpbp-video-player-block .vpbVideoPlayer .plyr .plyr__controls {
   position: absolute !important;
@@ -25,6 +26,11 @@
   left: 0 !important;
   right: 0 !important;
   z-index: 3;
+  pointer-events: all !important;
+}
+.wp-block-vpbp-video-player-block .vpbVideoPlayer .plyr .plyr__control--overlaid {
+  z-index: 4;
+  pointer-events: all !important;
 }
 .wp-block-vpbp-video-player-block .vpbVideoPlayer .plyr .plyr__video-wrapper {
   position: relative !important;

@@ -7,10 +7,8 @@
  * Author URI: https://bplugins.com
  * License: GPLv3
  * License URI: https://www.gnu.org/licenses/gpl-3.0.txt
- * Text Domain: video-player
+ * Text Domain: video-player-block
  *
- * @fs_premium_only vendor/freemius, /includes/fs.php, /build/blocks/index.js, /build/blocks/index.css, /build/blocks/index.asset.php, /build/blocks/index.js.LICENSE.txt, /build/blocks/lightbox-video-gallery, /build/blocks/masonry-video-grid, /build/blocks/parallax-row-video-gallery, /build/blocks/slider-autoplay-video, /build/blocks/video-carousel-gallery, /build/blocks/video-playlist-gallery, /build/blocks/video-slider, /build/blocks/video-testimonial-section, /includes/video-stats-api.php, /includes/woocommerce-integration.php, /public/images/video-gallery-block-banner.gif, /includes/LicenseActivation.php
- * @fs_free_only /vendor/freemius-lite, /includes/fs-lite.php, /public/images/blocks.png
  */
 
 if (!defined('ABSPATH')) {
@@ -67,17 +65,19 @@ if (function_exists('vpb_fs')) {
 
                 wp_register_script('plyr', VPBP_PUBLIC_DIR . 'js/plyr.js', [], '3.8.4', true);
                 wp_register_style('plyr', VPBP_PUBLIC_DIR . 'css/plyr.css', [], '3.8.4');
+                wp_enqueue_script('plyr');
+                wp_enqueue_style('plyr');
             }
 
             public function wpEnqueueScripts() {
+                // Relying on enqueueBlockAssets for block-specific loading if possible,
+                // but if we must load globally, we can keep it here.
+                // It's better to let block.json handle it, but for now we ensure it's available.
                 wp_enqueue_script('plyr');
                 wp_enqueue_style('plyr');
             }
 
             public function vpbpEnqueueBlockEditorAssets() {
-                wp_enqueue_script('plyr');
-                wp_enqueue_style('plyr');
-
                 wp_add_inline_style(
                     'wp-block-editor',
                     '

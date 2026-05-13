@@ -25,6 +25,7 @@ $primaryColor: #4527a4;
 		// Ensure Plyr controls overlay the video in the iframe editor
 		.plyr {
 			position: relative !important;
+			pointer-events: all !important;
 
 			// Force controls to overlay video (WordPress editor CSS can override)
 			.plyr__controls {
@@ -33,6 +34,12 @@ $primaryColor: #4527a4;
 				left: 0 !important;
 				right: 0 !important;
 				z-index: 3;
+				pointer-events: all !important;
+			}
+
+			.plyr__control--overlaid {
+				z-index: 4;
+				pointer-events: all !important;
 			}
 
 			// Ensure the video wrapper fills the plyr container

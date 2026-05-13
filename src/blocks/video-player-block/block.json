@@ -66,10 +66,6 @@
     "autoHideControl": {
       "type": "boolean",
       "default": true
-    },
-    "isSetup": {
-      "type": "boolean",
-      "default": false
     }
   },
   "supports": {

@@ -1,0 +1,57 @@
+$primaryColor: #4527a4;
+
+// Dashicon
+.dashicons {
+	font-family: dashicons !important;
+}
+
+// Video Player
+.wp-block-vpbp-video-player-block {
+	* {
+		box-sizing: border-box;
+	}
+
+	.vpbVideoPlayer {
+		overflow: hidden;
+		margin: 0 auto;
+		max-width: 100%;
+
+		.videoWrapper {
+			button {
+				color: #fff !important;
+			}
+		}
+
+		// Ensure Plyr controls overlay the video in the iframe editor
+		.plyr {
+			position: relative !important;
+
+			// Force controls to overlay video (WordPress editor CSS can override)
+			.plyr__controls {
+				position: absolute !important;
+				bottom: 0 !important;
+				left: 0 !important;
+				right: 0 !important;
+				z-index: 3;
+			}
+
+			// Ensure the video wrapper fills the plyr container
+			.plyr__video-wrapper {
+				position: relative !important;
+				width: 100% !important;
+			}
+
+			input[type=range]::-webkit-slider-runnable-track {
+				box-shadow: none;
+			}
+
+			input[type=range]::-moz-range-track {
+				box-shadow: none;
+			}
+
+			input[type=range]::-ms-track {
+				box-shadow: none;
+			}
+		}
+	}
+}

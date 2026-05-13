@@ -1,0 +1,110 @@
+{
+  "apiVersion": 2,
+  "name": "vpbp/video-player-block",
+  "title": "Video Player",
+  "description": "A Simple, accessible, Easy to Use & fully Customizable video player.",
+  "category": "vpbpblocks",
+  "keywords": [
+    "video embed",
+    "mp4 ogg player",
+    "any video play"
+  ],
+  "textdomain": "video-player",
+  "attributes": {
+    "align": {
+      "type": "string",
+      "default": ""
+    },
+    "source": {
+      "type": "string",
+      "default": ""
+    },
+    "poster": {
+      "type": "string",
+      "default": ""
+    },
+    "controls": {
+      "type": "object",
+      "default": {
+        "play-large": true,
+        "restart": false,
+        "rewind": true,
+        "play": true,
+        "fast-forward": true,
+        "progress": true,
+        "current-time": true,
+        "duration": false,
+        "mute": true,
+        "volume": true,
+        "pip": false,
+        "airplay": false,
+        "settings": true,
+        "download": false,
+        "fullscreen": true
+      }
+    },
+    "width": {
+      "type": "string",
+      "default": "100%"
+    },
+    "radius": {
+      "type": "string",
+      "default": "0px"
+    },
+    "repeat": {
+      "type": "boolean",
+      "default": false
+    },
+    "autoplay": {
+      "type": "boolean",
+      "default": false
+    },
+    "muted": {
+      "type": "boolean",
+      "default": false
+    },
+    "resetOnEnd": {
+      "type": "boolean",
+      "default": false
+    },
+    "autoHideControl": {
+      "type": "boolean",
+      "default": true
+    },
+    "isSetup": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "html": false,
+    "layout": false
+  },
+  "example": {
+    "attributes": {
+      "preview": true,
+      "sourceType": "link"
+    }
+  },
+  "editorScript": [
+    "file:./index.js",
+    "plyr"
+  ],
+  "editorStyle": [
+    "file:./index.css",
+    "plyr"
+  ],
+  "style": [
+    "file:./view.css",
+    "plyr"
+  ],
+  "render": "file:./render.php",
+  "viewScript": [
+    "file:./view.js",
+    "plyr"
+  ]
+}

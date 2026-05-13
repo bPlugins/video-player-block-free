@@ -1,0 +1,56 @@
+# Copyright (C) 2024 bPlugins
+# This file is distributed under the GPLv3.
+msgid ""
+msgstr ""
+"Project-Id-Version: Video Player Block 1.0.6\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/video-player-block\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-11-20T10:41:41+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.8.1\n"
+"X-Domain: video-player\n"
+
+#. Plugin Name of the plugin
+msgid "Video Player Block"
+msgstr ""
+
+#. Description of the plugin
+msgid "A Simple, accessible, Easy to Use & fully Customizable video player."
+msgstr ""
+
+#. Author of the plugin
+msgid "bPlugins"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://bplugins.com"
+msgstr ""
+
+#: build/block.json
+msgctxt "block title"
+msgid "Video Player"
+msgstr ""
+
+#: build/block.json
+msgctxt "block description"
+msgid "A Simple, accessible, Easy to Use & fully Customizable video player."
+msgstr ""
+
+#: build/block.json
+msgctxt "block keyword"
+msgid "video embed"
+msgstr ""
+
+#: build/block.json
+msgctxt "block keyword"
+msgid "mp4 ogg player"
+msgstr ""
+
+#: build/block.json
+msgctxt "block keyword"
+msgid "any video play"
+msgstr ""

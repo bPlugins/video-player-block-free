@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { withSelect } from "@wordpress/data";
 import { useBlockProps } from "@wordpress/block-editor";
 import { useRefEffect } from "@wordpress/compose";
@@ -10,7 +10,6 @@ import { plyrConfig } from "../../utils/config";
 import { cameraIcon } from "../../utils/icons";
 import { prefix } from "../../utils/data";
 import { FrontShortCode } from "../../../../Components/Common/FrontShortCode/FrontShortCode";
-
 
 const Edit = (props) => {
   const {
@@ -28,8 +27,7 @@ const Edit = (props) => {
     autoplay,
     muted,
     resetOnEnd,
-    autoHideControl,
-    isSetup,
+    autoHideControl
   } = attributes;
 
   const [autoplayProps, setAutoplayProps] = useState(

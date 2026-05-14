@@ -22,17 +22,15 @@ export const updateData = (attr, value, ...props) => {
   });
 };
 
-export const premiumBlocks = [
+export const disabledBlocks = [
   "vpbp/react-video-player",
   "vpbp/videojs-player",
   "vpbp/vidstack-video-player",
 ];
 
 export const isBlockEnabled = (name) => {
-  const isPremium = vpbpPipecheck;
-  const disabledBlocks = vpbpDisabledBlocks || [];
-  const checkProBlock = premiumBlocks.includes(name);
-  if (!isPremium && checkProBlock) {
+  const checkDisabledBlock = disabledBlocks.includes(name);
+  if (checkDisabledBlock) {
     return false;
   }
   return !disabledBlocks.includes(name);

@@ -44,8 +44,8 @@ class Init {
             'public' => true,
 			'menu_icon' => 'dashicons-controls-play',
             'publicly_queryable' => false,
-            'item_published' => 'Video Player Published',
-            'item_updated' => 'Video Player Updated',
+            'item_published' => __('Video Player Published', 'video-player-block'),
+            'item_updated' => __('Video Player Updated', 'video-player-block'),
             'template' => [['vpbp/video-player-block']],
             'template_lock' => 'all',
         ]);

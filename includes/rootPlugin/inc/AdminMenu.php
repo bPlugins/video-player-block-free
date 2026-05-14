@@ -28,7 +28,6 @@ class AdminMenu  {
                     'version' => VPBP_PLUGIN_VERSION,
                     'adminUrl' => admin_url(), 
                     'nonce' => wp_create_nonce('vpbp_activation_nonce'),
-                    'licenseActiveNonce' => wp_create_nonce('vpbp_activation_nonce'),
                     'disabledBlocksNonce' => wp_create_nonce('vpbp_disabled_blocks'),
                     'vpbpDisabledBlocks' => get_option('vpbpDisabledBlocks', []),
                     'uninstallNonce' => wp_create_nonce('vpbp_activation_nonce'),

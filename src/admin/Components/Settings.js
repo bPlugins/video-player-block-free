@@ -13,8 +13,8 @@ const Settings = ({ deleteDataOnUninstall, uninstallNonce, adminUrl }) => {
     if (newValue) {
       const confirmed = window.confirm(
         __(
-          "Are you sure? This will permanently delete all Video Gallery Block posts and settings when the plugin is uninstalled.",
-          "video-player",
+          "Are you sure? This will permanently delete all Video Player Block posts and settings when the plugin is uninstalled.",
+          "video-player-block",
         ),
       );
 
@@ -41,13 +41,13 @@ const Settings = ({ deleteDataOnUninstall, uninstallNonce, adminUrl }) => {
         } else {
           setNotice(
             res.data?.message ||
-              __("Failed to save setting.", "video-player"),
+              __("Failed to save setting.", "video-player-block"),
           );
         }
       })
       .catch(() => {
         setNotice(
-          __("Failed to save setting. Network error.", "video-player"),
+          __("Failed to save setting. Network error.", "video-player-block"),
         );
       })
       .finally(() => {
@@ -57,26 +57,26 @@ const Settings = ({ deleteDataOnUninstall, uninstallNonce, adminUrl }) => {
 
   return (
     <div className="bPlDashboardSettings bPlDashboardCard">
-      <h2>{__("Delete Data on Uninstall", "video-player")}</h2>
+      <h2>{__("Delete Data on Uninstall", "video-player-block")}</h2>
 
       <p>
         {__(
           "When enabled, all plugin data will be permanently deleted when you uninstall (delete) the plugin. This includes:",
-          "video-player",
+          "video-player-block",
         )}
       </p>
 
       <ul>
-        <li>{__("All video player block posts", "video-player")}</li>
+        <li>{__("All video player block posts", "video-player-block")}</li>
         <li>
-          {__("All plugin settings and configurations", "video-player")}
+          {__("All plugin settings and configurations", "video-player-block")}
         </li>
       </ul>
 
       <p className="settingsWarning">
         {__(
           "⚠️ This action cannot be undone. Your data will be safe if you only deactivate the plugin.",
-          "video-player",
+          "video-player-block",
         )}
       </p>
 
@@ -94,8 +94,8 @@ const Settings = ({ deleteDataOnUninstall, uninstallNonce, adminUrl }) => {
 
         <span className="toggleLabel">
           {enabled
-            ? __("Data will be deleted on uninstall", "video-player")
-            : __("Data will be preserved on uninstall", "video-player")}
+            ? __("Data will be deleted on uninstall", "video-player-block")
+            : __("Data will be preserved on uninstall", "video-player-block")}
         </span>
       </div>
 

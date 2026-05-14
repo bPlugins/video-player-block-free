@@ -1,8 +1,8 @@
 import { __ } from "@wordpress/i18n";
 
 export const generalStyleTabs = [
-  { name: "general", title: __("General", "video-player") },
-  { name: "style", title: __("Style", "video-player") },
+  { name: "general", title: __("General", "video-player-block") },
+  { name: "style", title: __("Style", "video-player-block") },
 ];
 
 export const videoSizeOptions = [

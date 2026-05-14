@@ -11,9 +11,6 @@ const slug = "video-player-block";
 export const dashboardInfo = (info) => {
   const {
     version,
-    isPremium,
-    hasPro,
-    licenseActiveNonce,
     vpbpDisabledBlocks,
     disabledBlocksNonce,
     adminUrl,
@@ -21,18 +18,13 @@ export const dashboardInfo = (info) => {
     deleteDataOnUninstall,
   } = info;
 
-  const proSuffix = isPremium ? " Pro" : "";
-
   return {
-    name: `Video Player Block${proSuffix}`,
-    displayName: `Video Player Block${proSuffix} - Display your videos as a gallery in a professional way`,
+    name: "Video Player Block",
+    displayName: "Video Player Block - Display your videos as a gallery in a professional way",
     description:
       "A lightweight Gutenberg block plugin for WordPress that lets you easily create responsive video galleries with albums, filters, captions, and lightbox support. Showcase YouTube, Vimeo, Wistia, or self hosted videos in a lightbox grid layout directly in the block editor.",
     slug,
     version,
-    isPremium,
-    hasPro,
-    licenseActiveNonce,
     uninstallNonce,
     deleteDataOnUninstall,
     disabledBlocks: vpbpDisabledBlocks,

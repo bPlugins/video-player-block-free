@@ -9,7 +9,7 @@
     "mp4 ogg player",
     "any video play"
   ],
-  "textdomain": "video-player",
+  "textdomain": "video-player-block",
   "attributes": {
     "align": {
       "type": "string",

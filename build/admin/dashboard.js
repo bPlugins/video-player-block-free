@@ -8413,7 +8413,7 @@ const Settings = ({
 
     // Show confirm dialog when enabling (destructive action)
     if (newValue) {
-      const confirmed = window.confirm((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Are you sure? This will permanently delete all Video Gallery Block posts and settings when the plugin is uninstalled.", "video-player"));
+      const confirmed = window.confirm((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Are you sure? This will permanently delete all Video Player Block posts and settings when the plugin is uninstalled.", "video-player-block"));
       if (!confirmed) return;
     }
     setIsLoading(true);
@@ -8430,19 +8430,19 @@ const Settings = ({
         setEnabled(res.data.enabled);
         setNotice(res.data.message);
       } else {
-        setNotice(res.data?.message || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Failed to save setting.", "video-player"));
+        setNotice(res.data?.message || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Failed to save setting.", "video-player-block"));
       }
     }).catch(() => {
-      setNotice((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Failed to save setting. Network error.", "video-player"));
+      setNotice((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Failed to save setting. Network error.", "video-player-block"));
     }).finally(() => {
       setIsLoading(false);
     });
   };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "bPlDashboardSettings bPlDashboardCard"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Delete Data on Uninstall", "video-player")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("When enabled, all plugin data will be permanently deleted when you uninstall (delete) the plugin. This includes:", "video-player")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("All video player block posts", "video-player")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("All plugin settings and configurations", "video-player"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Delete Data on Uninstall", "video-player-block")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("When enabled, all plugin data will be permanently deleted when you uninstall (delete) the plugin. This includes:", "video-player-block")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("All video player block posts", "video-player-block")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("All plugin settings and configurations", "video-player-block"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "settingsWarning"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("⚠️ This action cannot be undone. Your data will be safe if you only deactivate the plugin.", "video-player")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("⚠️ This action cannot be undone. Your data will be safe if you only deactivate the plugin.", "video-player-block")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "settingsControl"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "toggleControl"
@@ -8455,7 +8455,7 @@ const Settings = ({
     className: "toggleSlider"
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "toggleLabel"
-  }, enabled ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Data will be deleted on uninstall", "video-player") : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Data will be preserved on uninstall", "video-player"))), notice && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, enabled ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Data will be deleted on uninstall", "video-player-block") : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Data will be preserved on uninstall", "video-player-block"))), notice && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `settingsNotice ${enabled ? "warning" : "success"}`
   }, notice));
 };
@@ -8575,25 +8575,18 @@ const slug = "video-player-block";
 const dashboardInfo = info => {
   const {
     version,
-    isPremium,
-    hasPro,
-    licenseActiveNonce,
     vpbpDisabledBlocks,
     disabledBlocksNonce,
     adminUrl,
     uninstallNonce,
     deleteDataOnUninstall
   } = info;
-  const proSuffix = isPremium ? " Pro" : "";
   return {
-    name: `Video Player Block${proSuffix}`,
-    displayName: `Video Player Block${proSuffix} - Display your videos as a gallery in a professional way`,
+    name: "Video Player Block",
+    displayName: "Video Player Block - Display your videos as a gallery in a professional way",
     description: "A lightweight Gutenberg block plugin for WordPress that lets you easily create responsive video galleries with albums, filters, captions, and lightbox support. Showcase YouTube, Vimeo, Wistia, or self hosted videos in a lightbox grid layout directly in the block editor.",
     slug,
     version,
-    isPremium,
-    hasPro,
-    licenseActiveNonce,
     uninstallNonce,
     deleteDataOnUninstall,
     disabledBlocks: vpbpDisabledBlocks,

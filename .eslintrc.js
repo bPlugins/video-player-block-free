@@ -21,6 +21,7 @@ module.exports = {
     Chart: "readonly",
     vpbpPipecheck: "readonly",
     vpbpDisabledBlocks: "readonly",
+    vpbpPricingUrl: "readonly",
   },
   parserOptions: {
     ecmaFeatures: {

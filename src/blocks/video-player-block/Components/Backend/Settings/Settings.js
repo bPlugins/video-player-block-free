@@ -1,5 +1,6 @@
 import { __ } from "@wordpress/i18n";
 import { InspectorControls } from "@wordpress/block-editor";
+import { AdvertiseCard } from "../../../../../../../bpl-tools/ProControls";
 import {
   TabPanel,
   PanelBody,
@@ -17,6 +18,7 @@ import {
   perUnit,
   emUnit,
 } from "../../../../../../../bpl-tools/utils/options";
+import { pricingUrl } from "../../../utils/data";
 
 const Settings = ({ attributes, setAttributes }) => {
   const {
@@ -268,6 +270,7 @@ const Settings = ({ attributes, setAttributes }) => {
           </>
         )}
       </TabPanel>
+      <AdvertiseCard planLink={pricingUrl} />
     </InspectorControls>
   );
 };

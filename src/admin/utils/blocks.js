@@ -21,7 +21,7 @@ export default [
     name: "vpbp/react-video-player",
     title: "React Video Player",
     icon: reactVideoPlayerIcon,
-    demo: `${demoLink}/video-gallery-block-lightbox-video-gallery/`,
+    demo: `${demoLink}/video-player-block-react-video-player/`,
     status: "published",
     isPremium: true,
   },
@@ -29,7 +29,7 @@ export default [
     name: "vpbp/videojs-player",
     title: "VideoJs Player",
     icon: videojsPlayerIcon,
-    demo: `${demoLink}/video-gallery-block-masonry-video-grid/`,
+    demo: `${demoLink}/video-player-block-videojs-player/`,
     status: "published",
     isPremium: true,
   },
@@ -37,8 +37,8 @@ export default [
     name: "vpbp/vidstack-video-player",
     title: "Vidstack Player",
     icon: vidstackPlayerIcon,
-    demo: `${demoLink}/video-gallery-block-parallax-row-video-gallery/`,
+    demo: `${demoLink}/video-player-block-vidstack-player/`,
     status: "published",
     isPremium: true,
-  }
+  },
 ];

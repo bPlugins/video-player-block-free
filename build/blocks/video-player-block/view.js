@@ -93,9 +93,11 @@ const plyrConfig = attributes => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   prefix: () => (/* binding */ prefix)
+/* harmony export */   prefix: () => (/* binding */ prefix),
+/* harmony export */   pricingUrl: () => (/* binding */ pricingUrl)
 /* harmony export */ });
-const prefix = 'vpbpVideoPlayer';
+const prefix = "vpbpVideoPlayer";
+const pricingUrl = typeof vpbpPricingUrl !== "undefined" ? vpbpPricingUrl : "https://bplugins.com/products/video-player-block/pricing";
 
 /***/ }),
 

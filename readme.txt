@@ -9,60 +9,94 @@ Requires PHP: 7.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-A Simple, accessible, Easy-to-use & fully Customizable video player that works perfectly on all devices. 
+Embed and play videos easily in the Gutenberg editor with a customizable and responsive Video Player Block for WordPress.
 
 == Description ==
 
-Play various video files in the Gutenberg editor. A Simple, accessible, Easy-to-use & fully Customizable video player that works on all devices. You can play/embed awesome video players in posts, pages, widget areas as well as template files. It has tons of options that fit your video player needs.
+Video Player Block is a powerful and versatile WordPress plugin that lets you embed and play videos with style. Beyond the standard HTML5 player, it offers support for industry-leading engines like **React Video Player**, **Video.js**, and **Vidstack**, making it the ultimate tool for professional video sites.
 
+Whether you are showcasing self-hosted MP4s, HLS streams, or external media from services like Amazon S3 or BunnyCDN, this plugin provides a clean, responsive, and highly customizable video experience directly within the Gutenberg editor.
 
-**[Demos](https://links.bplugins.com/h5vp)**
+**[Demos](https://bplugins.com/demo/video-player-block-all-demos/)**
 
+=== Key Features – Free Version ===
+- **Default HTML5 Video Player:** A clean, lightweight, and responsive player for standard MP4, WebM, and OGG files.
 
-= Features =
-* The video player is compact so it does not take a lot of real estate on your webpage
-* HTML5 compatible so the video files embedded with this plugin will play on iOS devices
-* Works on all major browsers - IE7, IE8, IE9, Safari, Firefox, Chrome
-* The video player is responsive.
-* Use the autoplay option to play a video file as soon as the page loads
-* You can play unlimited video
-* User-friendly interface
-* Powered by html5
+- **Native Gutenberg Block:** Add videos directly from the WordPress editor with a dedicated, easy-to-use block.
 
+- **Fully Responsive Design:** Automatically adjusts the video player for seamless viewing on desktops, tablets, and mobile devices.
 
-= Pro Version Features =
-What's New in PRO?
+- **Customizable Player Controls:** Easily show or hide basic player controls like play, volume, and fullscreen.
 
-* Color changing Option.
-* Add Videos from external sources such as Amazon S3 / other hosts.
-* Support Multiple Subtitle
-* Video Quality Switcher 
-* Increase Page load speed by changing Preload option. 
-* Added Restart, Fast forward, Rewind button 
-* No ads
-* Show / Hide download button
-* Show / Hide Every button and controls 
-* Control Video speed And Quality Like YouTube
-* Added Shortcode Generator in the text editor of post / Page
+- **Autoplay & Mute Options:** Control video behavior on page load with simple toggle settings.
 
+- **Lightweight & Fast:** Built for performance to ensure your pages stay fast and user-friendly.
 
-= How to use =
-- First, install the Video Player Block plugin
-- Add the Video Player Block from the block category called "Media" in the Gutenberg editor.
-- You can change block settings from the right-side settings sidebar.
-- Enjoy!
+- **Unlimited Video Players:** Add multiple video players anywhere on your website without any restrictions.
 
-* For installation help click on Installation Tab
+- **Cross-Browser & iOS Friendly:** Fully compatible with Chrome, Firefox, Safari, Edge, and mobile devices (iPhone/Android).
 
+=== Pro Version – Unlock Professional Video Power ===
+The Pro version adds advanced player engines, streaming support, and deep customization for professional video websites.
+
+== What's New in PRO? ==
+
+- **3 Advanced Player Engines:** Unlock the **React Video Player**, **Video.js**, and **Vidstack** engines for a superior viewing experience.
+
+- **HLS (.m3u8) Streaming:** Support for professional HLS streaming to deliver high-quality video efficiently.
+
+- **External Video Sources:** Support for Amazon S3, DigitalOcean Spaces, BunnyCDN, and other external hosting services.
+
+- **Advanced Color & UI Styling:** Change player colors, border radius, and typography to perfectly match your brand.
+
+- **Multiple Subtitle Support:** Add multilingual subtitle tracks (VTT) for global accessibility.
+
+- **Playback Speed Control:** Let users control video speed (0.5x to 2.0x) for better learning and viewing.
+
+- **Advanced Playback Buttons:** Add **Restart**, **Rewind**, and **Fast-Forward** controls for better navigation.
+
+- **Custom Control Visibility:** Granularly show or hide every individual button in the player interface.
+
+- **Optimized Preloading:** Advanced media loading strategies to improve site performance and Core Web Vitals.
+
+- **Download Button Toggle:** Easily enable or disable the video download option for your viewers.
+
+- **Shortcode Generator:** Generate and insert video players anywhere using shortcodes for maximum flexibility.
+
+Try the Pro Version – Unlock the full potential of your video content today!
+
+=== How to Use – Step-by-Step Setup ===
+Getting started is easy!
+
+1. Install and activate the Video Player Block plugin.
+2. Open the Gutenberg editor.
+3. Search for “Video Player Block”.
+4. Add the block to your post or page.
+5. Upload or select a video.
+6. Customize the player settings from the right sidebar.
+7. Publish the page and enjoy your responsive video player.
+
+For installation help click on Installation Tab
+
+[Live Demo](https://bplugins.com/demo/video-player-block-all-demos/) | [Upgrade to Pro](https://bplugins.com/products/video-player-block-pro/)
+
+=== Perfect For ===
+- Video tutorials
+- Online courses
+- Product demonstrations
+- Marketing videos
+- Educational websites
+- Portfolio websites
+- Media websites
+- Podcast video episodes
+- Membership platforms
 
 = Feedback =
 - Did you like this plugin? Dislike it? Do you have a feature request? [Please share your feedback with us](mailto:support@bplugins.com 'Send feedback')
 
-
 ### Check out the Parent Plugin of this plugin-
 
 [**B Blocks**](https://bblockswp.com) – A blocks collection and page building tool for Gutenberg.
-
 
 ### Check out our other WordPress Plugins-
 
@@ -77,6 +111,7 @@ What's New in PRO?
 [**3D Viewer**](https://bplugins.com/products/3d-viewer/) – Embed 3D models and 3D products with interaction.
 
 [**Advanced Post Block**](https://bplugins.com/products/advanced-post-block/) – Show posts and custom posts in different layouts.
+
 
 
 == Third-Party Libraries ==
@@ -140,7 +175,6 @@ Build Tools Used: Webpack, Babel, PostCSS.
 1. Download and upload the **Video Player** plugin to the **`/wp-content/plugins/`** directory
 2. Activate the plugin through the Plugins menu in WordPress
 
-
 == Frequently Asked Questions ==
 
 = How do I install this plugin? =
@@ -171,21 +205,16 @@ If you find a conflict between our plugin and a third-party plugin, please let u
 
 You can post your questions on the [support forum here](https://wordpress.org/support/plugin/video-player-block/)
 
-
 == Screenshots ==
 
 1. Video Player
 2. Settings
 
-
 == Changelog ==
 
 = 1.0.7 - 14 May 26 =
-* Compliance updates and security enhancements for directory guidelines.
-* Standardized text domain and prefixes to match plugin slug.
-* Enhanced shortcode output escaping with wp_kses_post.
-* Removed locked premium features from free version to comply with Trialware guidelines.
-* Updated documentation for build process and source code availability.
+* Add 3 new advanced video player blocks (React, Video.js, Vidstack)
+* Support for HLS streaming in premium engines
 
 = 1.0.6 - 20 Nov 24 =
 * Fix multiple render issue

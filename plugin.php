@@ -88,6 +88,12 @@ if (function_exists('vpb_fs')) {
                     '
                 );
 
+                	
+                wp_add_inline_script( 'vpbp-video-player-block-editor-script', sprintf(
+                    'const vpbpPricingUrl = %s;',
+                    wp_json_encode( admin_url( 'edit.php?post_type=video-player-block&page=vpbp-help-demo#/pricing' ) )
+                ), 'before' );
+
                 $disabledBlocks = get_option( 'vpbpDisabledBlocks', [] );
                 $disabledBlocks = is_array( $disabledBlocks ) ? $disabledBlocks : [];
                 $editor_scripts = ['vpbp-video-player-block-editor-script'];

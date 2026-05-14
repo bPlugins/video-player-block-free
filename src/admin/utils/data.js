@@ -62,9 +62,12 @@ export const dashboardInfo = (info) => {
     },
     changelogs: [
       {
-        version: "1.1.2 - 10 May 2026",
+        version: "1.0.7 - 14 May 2026",
         list: [
           "Compliance updates and security enhancements for directory guidelines.",
+          "Standardized text domain and prefixes.",
+          "Enhanced shortcode output escaping.",
+          "Removed locked premium features from free version.",
         ],
         type: "update",
       },

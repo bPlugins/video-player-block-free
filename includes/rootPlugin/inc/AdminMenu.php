@@ -1,6 +1,10 @@
 <?php
 namespace VPBP;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class AdminMenu  {
     function __construct() {
         add_action('admin_menu', [$this, 'adminMenu']);
@@ -8,8 +12,8 @@ class AdminMenu  {
     function adminMenu(){
         add_submenu_page(
             'edit.php?post_type=video-player-block',
-            __('Help - bPlugins', 'video-player'),
-            __('Help & Demos', 'video-player'),
+            __('Help - bPlugins', 'video-player-block'),
+            __('Help & Demos', 'video-player-block'),
             'manage_options',
             'vpbp-help-demo',
             [$this, 'renderDashboardPage']

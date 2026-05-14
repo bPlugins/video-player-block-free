@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Video Player Block Free
  * Description: A Simple, accessible, Easy to Use & fully Customizable video player. 
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: bPlugins
  * Author URI: https://bplugins.com
  * License: GPLv3
@@ -19,7 +19,7 @@ if (function_exists('vpb_fs')) {
     vpb_fs()->set_basename(true, __FILE__);
 } else {
     // Constants
-    define('VPBP_PLUGIN_VERSION', (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'localhost') ? time() : '1.0.6');
+    define('VPBP_PLUGIN_VERSION', (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'localhost') ? time() : '1.0.7');
     define('VPBP_DIR_URL', plugin_dir_url(__FILE__));
     define('VPBP_PUBLIC_DIR', VPBP_DIR_URL . 'public/');
     define('VPBP_DIR_PATH', plugin_dir_path(__FILE__));
@@ -98,7 +98,7 @@ if (function_exists('vpb_fs')) {
                             'vpbpDisabledBlocks',
                             $disabledBlocks
                         );
-                        wp_set_script_translations( $handle, 'video-player', VPBP_DIR_PATH . 'languages' );
+                        wp_set_script_translations( $handle, 'video-player-block', VPBP_DIR_PATH . 'languages' );
                     }
                 }
             }
@@ -111,7 +111,7 @@ if (function_exists('vpb_fs')) {
 add_filter('block_categories_all', function ($categories, $post) {
     array_unshift($categories, [
         'slug'  => 'vpbpblocks',
-        'title' => __('Video Player Block', 'video-player'),
+        'title' => __('Video Player Block', 'video-player-block'),
         'icon' => 'categories-icon dashicons dashicons-media-video',
     ]);
     return $categories;

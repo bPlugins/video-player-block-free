@@ -13,7 +13,7 @@ export default [
     name: "vpbp/video-player-block",
     title: "Video Player",
     icon: videoPlayerIcon,
-    demo: `${demoLink}/video-gallery-block-default/`,
+    demo: `${demoLink}/video-player-block-default/`,
     status: "published",
     required: true,
   },

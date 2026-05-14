@@ -1,5 +1,10 @@
 <?php
 namespace VPBP;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Enqueue {
     function __construct() {
         add_action( 'admin_enqueue_scripts', [$this, 'adminEnqueueScripts']);
@@ -15,7 +20,7 @@ class Enqueue {
         if ($screen === "video-player-block_page_vpbp-help-demo") {
             wp_enqueue_script('vpbp-admin-dashboard-js', VPBP_DIR_URL . 'build/admin/dashboard.js', ['react', 'react-dom', 'wp-util'], VPBP_PLUGIN_VERSION, true);
             wp_enqueue_style('vpbp-admin-dashboard-css', VPBP_DIR_URL . 'build/admin/dashboard.css', [], VPBP_PLUGIN_VERSION);
-            wp_set_script_translations( 'vpbp-admin-dashboard-js', 'video-player', VPBP_DIR_PATH . 'languages' );
+            wp_set_script_translations( 'vpbp-admin-dashboard-js', 'video-player-block', VPBP_DIR_PATH . 'languages' );
             wp_localize_script('vpbp-admin-dashboard-js', 'vpbpAdmin', [
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('vpbp_activation_nonce'),

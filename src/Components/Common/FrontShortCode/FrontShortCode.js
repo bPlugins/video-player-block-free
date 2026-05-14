@@ -16,13 +16,13 @@ const FrontShortCode = ({ postType, shortCode, currentPostType }) => {
         if (tooltip.current) {
           tooltip.current.innerHTML = __(
             "Copied Successfully!",
-            "video-gallery-block",
+            "video-player-block",
           );
           setTimeout(() => {
             if (tooltip.current) {
               tooltip.current.innerHTML = __(
                 "Copy To Clipboard",
-                "video-gallery-block",
+                "video-player-block",
               );
             }
           }, 1500);
@@ -55,12 +55,12 @@ const FrontShortCode = ({ postType, shortCode, currentPostType }) => {
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
             </svg>
             <span ref={tooltip} className="vgb-tooltip">
-              {__("Copy To Clipboard", "video-gallery-block")}
+              {__("Copy To Clipboard", "video-player-block")}
             </span>
           </button>
         </div>
         <span className="vgb-shortcode-label">
-          {__("Copy the shortcode and use it anywhere.", "video-gallery-block")}
+          {__("Copy the shortcode and use it anywhere.", "video-player-block")}
         </span>
       </div>
     )

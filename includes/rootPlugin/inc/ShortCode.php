@@ -1,12 +1,19 @@
 <?php
 namespace VPBP;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class ShortCode {
     function __construct() {
         add_shortcode('video_player', [$this, 'vpbp_shortcode']);
     }
     function vpbp_shortcode($atts){
-        $post_id = $atts['id'];
+        $post_id = isset( $atts['id'] ) ? intval( $atts['id'] ) : 0;
+        if ( !$post_id ) {
+            return '';
+        }
         $post = get_post( $post_id );
         if ( !$post ) {
             return '';
@@ -38,6 +45,10 @@ class ShortCode {
     }
     function displayContent( $post ){
         $blocks = parse_blocks( $post->post_content );
-        return render_block( $blocks[0] );
+        if ( empty( $blocks ) ) {
+            return '';
+        }
+        $content = render_block( $blocks[0] );
+        return wp_kses_post( $content );
     }
 }

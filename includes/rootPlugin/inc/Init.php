@@ -1,7 +1,9 @@
 <?php
 namespace VPBP;
 
-if ( ! defined( 'ABSPATH' ) ) { exit; }
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class Init {
     function __construct() {
@@ -9,7 +11,7 @@ class Init {
         add_filter( 'block_editor_settings_all', [ $this, 'vpbp_dynamic_template_lock' ], 10, 2 );
     }
     function onInit() {
-		load_plugin_textdomain( 'video-player', false, dirname( plugin_basename( VPBP_DIR_PATH . 'plugin.php' ) ) . '/languages' );
+		load_plugin_textdomain( 'video-player-block', false, dirname( plugin_basename( VPBP_DIR_PATH . 'plugin.php' ) ) . '/languages' );
 		register_setting(
 			'vpbpPluginSettings',
 			'vpbpAPIKey',
@@ -22,21 +24,21 @@ class Init {
 		);
 		$this->vpbp_register_blocks();
 		register_post_type('video-player-block', [
-			'label' => __('Video Player', 'video-player'),
+			'label' => __('Video Player', 'video-player-block'),
 			'labels' => [
-				'name'                  => __('Video Player', 'video-player'),
-				'singular_name'         => __('Video Player', 'video-player'),
-				'add_new'               => __('Add New', 'video-player'),
-				'add_new_item'          => __('Add New Video Player', 'video-player'),
-				'edit_item'             => __('Edit Video Player', 'video-player'),
-				'new_item'              => __('New Video Player', 'video-player'),
-				'view_item'             => __('View Video Player', 'video-player'),
-				'view_items'            => __('View Video Players', 'video-player'),
-				'search_items'          => __('Search Video Players', 'video-player'),
-				'not_found'             => __('No Video Player found.', 'video-player'),
-				'not_found_in_trash'    => __('No Video Player found in Trash.', 'video-player'),
-				'all_items'             => __('All Video Players', 'video-player'),
-				'archives'              => __('Video Player Archives', 'video-player'),
+				'name'                  => __('Video Player', 'video-player-block'),
+				'singular_name'         => __('Video Player', 'video-player-block'),
+				'add_new'               => __('Add New', 'video-player-block'),
+				'add_new_item'          => __('Add New Video Player', 'video-player-block'),
+				'edit_item'             => __('Edit Video Player', 'video-player-block'),
+				'new_item'              => __('New Video Player', 'video-player-block'),
+				'view_item'             => __('View Video Player', 'video-player-block'),
+				'view_items'            => __('View Video Players', 'video-player-block'),
+				'search_items'          => __('Search Video Players', 'video-player-block'),
+				'not_found'             => __('No Video Player found.', 'video-player-block'),
+				'not_found_in_trash'    => __('No Video Player found in Trash.', 'video-player-block'),
+				'all_items'             => __('All Video Players', 'video-player-block'),
+				'archives'              => __('Video Player Archives', 'video-player-block'),
 			],
             'show_in_rest' => true,
             'public' => true,
@@ -48,7 +50,7 @@ class Init {
             'template_lock' => 'all',
         ]);
 
-		wp_set_script_translations( 'vpbp-video-player-block-editor-script', 'video-player', VPBP_DIR_PATH . 'languages' );
+		wp_set_script_translations( 'vpbp-video-player-block-editor-script', 'video-player-block', VPBP_DIR_PATH . 'languages' );
 	}
 
 	function vpbp_register_blocks() {

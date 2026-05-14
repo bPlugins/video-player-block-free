@@ -4,7 +4,7 @@ Donate link: https://www.buymeacoffee.com/abuhayat
 Tags: block, video embed, any video play, video play, Gutenberg block
 Requires at least: 6.5+
 Tested up to: 6.9
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 Requires PHP: 7.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -111,6 +111,17 @@ As the external service functionality is handled by bpl-tools as a third-party l
 * **Privacy Policy:** [https://wordpress.org/about/privacy/](https://wordpress.org/about/privacy/)
 
 
+== Build Process ==
+
+This plugin uses a build process to generate the production assets (JS/CSS) located in the `build/` directory. The human-readable source code is available in the `src/` directory.
+
+To build the plugin from source:
+1. Clone the repository: https://github.com/bPlugins/video-player-block
+2. Install dependencies: `npm install`
+3. Run the build command: `npm run build`
+
+Build Tools Used: Webpack, Babel, PostCSS.
+
 
 == Installation ==
 
@@ -170,7 +181,11 @@ You can post your questions on the [support forum here](https://wordpress.org/su
 == Changelog ==
 
 = 1.0.7 - 14 May 26 =
-* Update the video player 
+* Compliance updates and security enhancements for directory guidelines.
+* Standardized text domain and prefixes to match plugin slug.
+* Enhanced shortcode output escaping with wp_kses_post.
+* Removed locked premium features from free version to comply with Trialware guidelines.
+* Updated documentation for build process and source code availability.
 
 = 1.0.6 - 20 Nov 24 =
 * Fix multiple render issue

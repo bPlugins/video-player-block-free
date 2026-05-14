@@ -16,7 +16,7 @@ const Welcome = (props) => {
         <Changelog
           {...props}
           limit={1}
-          loadMoreLabel={__("View More Changelogs", "video-gallery-block")}
+          loadMoreLabel={__("View More Changelogs", "video-player-block")}
         />
 
         <ProAds {...props} />

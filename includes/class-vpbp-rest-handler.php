@@ -40,11 +40,11 @@ class VPBP_REST_Handler {
 	public function handle_uninstall_option() {
 		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : null;
 		if ( ! wp_verify_nonce( $nonce, 'vpbp_activation_nonce' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid security token.', 'video-player' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid security token.', 'video-player-block' ) ) );
 		}
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You do not have permission to perform this action.', 'video-player' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to perform this action.', 'video-player-block' ) ) );
 		}
 
 		// Support both string 'true' and actual boolean/numeric values
@@ -53,7 +53,7 @@ class VPBP_REST_Handler {
 
 		wp_send_json_success( array(
 			'enabled' => $enabled,
-			'message' => __( 'Setting saved successfully.', 'video-player' ),
+			'message' => __( 'Setting saved successfully.', 'video-player-block' ),
 		) );
 	}
 

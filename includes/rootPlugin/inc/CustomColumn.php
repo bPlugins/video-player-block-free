@@ -1,5 +1,10 @@
 <?php
 namespace VPBP;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class CustomColumn {
     function __construct() {
         add_filter(
@@ -16,8 +21,8 @@ class CustomColumn {
     
     function manageColumns($columns) {
         unset($columns['date']);
-        $columns['shortcode'] = __('Shortcode', 'video-player');
-        $columns['date'] = __('Date', 'video-player');
+        $columns['shortcode'] = __('Shortcode', 'video-player-block');
+        $columns['date'] = __('Date', 'video-player-block');
         return $columns;
     }
 
@@ -32,7 +37,7 @@ class CustomColumn {
                 esc_attr( $post_id ),
                 esc_attr( $shortcode ),
                 esc_js( $post_id ),
-                esc_html__( 'Copy To Clipboard', 'video-player' )
+                esc_html__( 'Copy To Clipboard', 'video-player-block' )
             );
         }
     }

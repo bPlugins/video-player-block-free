@@ -63,9 +63,9 @@ const Settings = ({ attributes, setAttributes }) => {
         className="bPlTabPanel"
         activeClass="activeTab"
         tabs={[
-          { name: "settings", title: __("Settings", "video-player") },
-          { name: "controls", title: __("Controls", "video-player") },
-          { name: "style", title: __("Style", "video-player") },
+          { name: "settings", title: __("Settings", "video-player-block") },
+          { name: "controls", title: __("Controls", "video-player-block") },
+          { name: "style", title: __("Style", "video-player-block") },
         ]}>
         {(tab) => (
           <>
@@ -78,58 +78,58 @@ const Settings = ({ attributes, setAttributes }) => {
 
                 <PanelBody
                   className="bPlPanelBody"
-                  title={__("Settings", "video-player")}>
+                  title={__("Settings", "video-player-block")}>
                   <InlineMediaUpload
                     value={source}
                     types={["video"]}
                     onChange={(val) => setAttributes({ source: val })}
-                    placeholder={__("Video url", "video-player")}
+                    placeholder={__("Video url", "video-player-block")}
                   />
 
                   <InlineMediaUpload
                     value={poster}
                     types={["image"]}
                     onChange={(val) => setAttributes({ poster: val })}
-                    placeholder={__("Poster url", "video-player")}
+                    placeholder={__("Poster url", "video-player-block")}
                   />
 
                   <ToggleControl
                     className="mt20"
-                    label={__("Repeat", "video-player")}
+                    label={__("Repeat", "video-player-block")}
                     checked={repeat}
                     onChange={(val) => setAttributes({ repeat: val })}
                   />
 
                   <ToggleControl
                     className="mt20"
-                    label={__("Autoplay", "video-player")}
+                    label={__("Autoplay", "video-player-block")}
                     checked={autoplay}
                     onChange={(val) => setAttributes({ autoplay: val })}
                   />
                   <small>
                     {__(
                       "Autoplay might require muting based on the browser.",
-                      "video-player",
+                      "video-player-block",
                     )}
                   </small>
 
                   <ToggleControl
                     className="mt20"
-                    label={__("Muted", "video-player")}
+                    label={__("Muted", "video-player-block")}
                     checked={muted}
                     onChange={(val) => setAttributes({ muted: val })}
                   />
 
                   <ToggleControl
                     className="mt20"
-                    label={__("Reset On End", "video-player")}
+                    label={__("Reset On End", "video-player-block")}
                     checked={resetOnEnd}
                     onChange={(val) => setAttributes({ resetOnEnd: val })}
                   />
 
                   <ToggleControl
                     className="mt20"
-                    label={__("Auto Hide Control", "video-player")}
+                    label={__("Auto Hide Control", "video-player-block")}
                     checked={autoHideControl}
                     onChange={(val) => setAttributes({ autoHideControl: val })}
                   />
@@ -140,105 +140,105 @@ const Settings = ({ attributes, setAttributes }) => {
             {"controls" === tab.name && (
               <PanelBody className="bPlPanelBody">
                 <ToggleControl
-                  label={__("Play Large", "video-player")}
+                  label={__("Play Large", "video-player-block")}
                   checked={controls["play-large"]}
                   onChange={(val) => updateControls("play-large", val)}
                 />
 
                 <ToggleControl
                   className="mt20"
-                  label={__("Restart", "video-player")}
+                  label={__("Restart", "video-player-block")}
                   checked={restart}
                   onChange={(val) => updateControls("restart", val)}
                 />
 
                 <ToggleControl
                   className="mt20"
-                  label={__("Rewind", "video-player")}
+                  label={__("Rewind", "video-player-block")}
                   checked={rewind}
                   onChange={(val) => updateControls("rewind", val)}
                 />
 
                 <ToggleControl
                   className="mt20"
-                  label={__("Play", "video-player")}
+                  label={__("Play", "video-player-block")}
                   checked={play}
                   onChange={(val) => updateControls("play", val)}
                 />
 
                 <ToggleControl
                   className="mt20"
-                  label={__("Fast Forward", "video-player")}
+                  label={__("Fast Forward", "video-player-block")}
                   checked={controls["fast-forward"]}
                   onChange={(val) => updateControls("fast-forward", val)}
                 />
 
                 <ToggleControl
                   className="mt20"
-                  label={__("Progress", "video-player")}
+                  label={__("Progress", "video-player-block")}
                   checked={progress}
                   onChange={(val) => updateControls("progress", val)}
                 />
 
                 <ToggleControl
                   className="mt20"
-                  label={__("Current Time", "video-player")}
+                  label={__("Current Time", "video-player-block")}
                   checked={controls["current-time"]}
                   onChange={(val) => updateControls("current-time", val)}
                 />
 
                 <ToggleControl
                   className="mt20"
-                  label={__("Duration", "video-player")}
+                  label={__("Duration", "video-player-block")}
                   checked={duration}
                   onChange={(val) => updateControls("duration", val)}
                 />
 
                 <ToggleControl
                   className="mt20"
-                  label={__("Mute", "video-player")}
+                  label={__("Mute", "video-player-block")}
                   checked={mute}
                   onChange={(val) => updateControls("mute", val)}
                 />
 
                 <ToggleControl
                   className="mt20"
-                  label={__("Volume", "video-player")}
+                  label={__("Volume", "video-player-block")}
                   checked={volume}
                   onChange={(val) => updateControls("volume", val)}
                 />
 
                 <ToggleControl
                   className="mt20"
-                  label={__("PIP", "video-player")}
+                  label={__("PIP", "video-player-block")}
                   checked={pip}
                   onChange={(val) => updateControls("pip", val)}
                 />
 
                 <ToggleControl
                   className="mt20"
-                  label={__("Airplay", "video-player")}
+                  label={__("Airplay", "video-player-block")}
                   checked={airplay}
                   onChange={(val) => updateControls("airplay", val)}
                 />
 
                 <ToggleControl
                   className="mt20"
-                  label={__("Settings", "video-player")}
+                  label={__("Settings", "video-player-block")}
                   checked={settings}
                   onChange={(val) => updateControls("settings", val)}
                 />
 
                 <ToggleControl
                   className="mt20"
-                  label={__("Download", "video-player")}
+                  label={__("Download", "video-player-block")}
                   checked={download}
                   onChange={(val) => updateControls("download", val)}
                 />
 
                 <ToggleControl
                   className="mt20"
-                  label={__("Fullscreen", "video-player")}
+                  label={__("Fullscreen", "video-player-block")}
                   checked={fullscreen}
                   onChange={(val) => updateControls("fullscreen", val)}
                 />
@@ -248,7 +248,7 @@ const Settings = ({ attributes, setAttributes }) => {
             {"style" === tab.name && (
               <PanelBody className="bPlPanelBody">
                 <UnitControl
-                  label={__("Width:", "video-player")}
+                  label={__("Width:", "video-player-block")}
                   labelPosition="left"
                   value={width}
                   onChange={(val) => setAttributes({ width: val })}
@@ -257,7 +257,7 @@ const Settings = ({ attributes, setAttributes }) => {
 
                 <UnitControl
                   className="mt20"
-                  label={__("Round Corner:", "video-player")}
+                  label={__("Round Corner:", "video-player-block")}
                   labelPosition="left"
                   value={radius}
                   onChange={(val) => setAttributes({ radius: val })}

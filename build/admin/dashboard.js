@@ -8498,7 +8498,7 @@ const Welcome = props => {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_bpl_tools_Admin_Changelog__WEBPACK_IMPORTED_MODULE_3__["default"], {
     ...props,
     limit: 1,
-    loadMoreLabel: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("View More Changelogs", "video-gallery-block")
+    loadMoreLabel: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("View More Changelogs", "video-player-block")
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_bpl_tools_Admin_ProAds__WEBPACK_IMPORTED_MODULE_4__["default"], {
     ...props
   })));
@@ -8526,7 +8526,7 @@ const demoLink = `${siteURL}/demo`;
   name: "vpbp/video-player-block",
   title: "Video Player",
   icon: _Components_Common_utils_icons__WEBPACK_IMPORTED_MODULE_0__.videoPlayerIcon,
-  demo: `${demoLink}/video-gallery-block-default/`,
+  demo: `${demoLink}/video-player-block-default/`,
   status: "published",
   required: true
 }, {
@@ -8622,8 +8622,8 @@ const dashboardInfo = info => {
       public_key: "pk_24433ae07b8acef1ebd1c99de9fa5"
     },
     changelogs: [{
-      version: "1.1.2 - 10 May 2026",
-      list: ["Compliance updates and security enhancements for directory guidelines."],
+      version: "1.0.7 - 14 May 2026",
+      list: ["Compliance updates and security enhancements for directory guidelines.", "Standardized text domain and prefixes.", "Enhanced shortcode output escaping.", "Removed locked premium features from free version."],
       type: "update"
     }, {
       version: "1.1.1 - 12 Aug 2025",

@@ -15,12 +15,12 @@ Embed and play videos easily in the Gutenberg editor with a customizable and res
 
 Video Player Block is a powerful and versatile WordPress plugin that lets you embed and play videos with style. Beyond the standard HTML5 player, it offers support for industry-leading engines like **React Video Player**, **Video.js**, and **Vidstack**, making it the ultimate tool for professional video sites.
 
-Whether you are showcasing self-hosted MP4s, HLS streams, or external media from services like Amazon S3 or BunnyCDN, this plugin provides a clean, responsive, and highly customizable video experience directly within the Gutenberg editor.
+Whether you are showcasing YouTube, Vimeo, self-hosted MP4s, HLS streams, or external media from services like Amazon S3 or BunnyCDN, this plugin provides a clean, responsive, and highly customizable video experience directly within the Gutenberg editor.
 
 **[Demos](https://bplugins.com/demo/video-player-block-all-demos/)**
 
 === Key Features – Free Version ===
-- **Default HTML5 Video Player:** A clean, lightweight, and responsive player for standard MP4, WebM, and OGG files.
+- **Default HTML5 Video Player:** A clean, lightweight, and responsive player for standard MP4, WebM, OGG, YouTube, and Vimeo.
 
 - **Native Gutenberg Block:** Add videos directly from the WordPress editor with a dedicated, easy-to-use block.
 
@@ -183,7 +183,11 @@ You can install as other regular WordPress plugins. No different way. Please see
 
 = What Video type can I play? =
 
-You can play MP4 and OGG video files.
+You can play MP4, OGG, YouTube, and Vimeo video files.
+
+= Does it support YouTube or Vimeo? =
+
+Yes, the Video Player Block fully supports YouTube and Vimeo. Simply paste the video URL, and the block will automatically handle the embedding using the integrated player engine for a consistent and professional experience.
 
 = How many players I can publish on my site? =
 

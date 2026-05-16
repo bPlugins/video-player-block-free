@@ -54,8 +54,10 @@ export const dashboardInfo = (info) => {
     },
     changelogs: [
       {
-        version: "1.0.7 - 14 May 2026",
-        list: ["Add 3 new video player blocks"],
+        version: "1.0.6 - 20 Nov 24",
+        list: [
+          " Add 3 new advanced video player blocks (React, Video.js, Vidstack)",
+        ],
         type: "new",
       },
       {
@@ -87,7 +89,6 @@ export const dashboardInfo = (info) => {
       "Quality Switcher & Multiple Subtitles Support",
       "Custom Playback Speeds (0.5x to 2x)",
       "External Media Sources (Amazon S3, DigitalOcean, etc.)",
-      "Advanced Playback Buttons (Restart, Rewind, Fast-Forward)",
       "Optimized Preload & Media Load Strategies",
       "Custom Border Radius & Player UI Styling",
       "Show/Hide Specific Player Controls",

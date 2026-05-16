@@ -4,7 +4,7 @@ Donate link: https://www.buymeacoffee.com/abuhayat
 Tags: block, video embed, any video play, video play, Gutenberg block
 Requires at least: 6.5+
 Tested up to: 6.9
-Stable tag: 1.0.7
+Stable tag: 1.0.6
 Requires PHP: 7.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -216,12 +216,10 @@ You can post your questions on the [support forum here](https://wordpress.org/su
 
 == Changelog ==
 
-= 1.0.7 - 14 May 26 =
-* Add 3 new advanced video player blocks (React, Video.js, Vidstack)
-* Support for HLS streaming in premium engines
 
 = 1.0.6 - 20 Nov 24 =
 * Fix multiple render issue
+* Add 3 new advanced video player blocks (React, Video.js, Vidstack)
 
 = 1.0.5 - 8 Jan 24 =
 * Fix autoplay

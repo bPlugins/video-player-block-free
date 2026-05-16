@@ -57,9 +57,6 @@ const Settings = ({ attributes, setAttributes }) => {
 
   return (
     <InspectorControls>
-      <div className="bPlInspectorInfo">
-        <BBlocksAds />
-      </div>
 
       <TabPanel
         className="bPlTabPanel"

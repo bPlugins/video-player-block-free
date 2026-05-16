@@ -5,7 +5,7 @@ import { useRefEffect } from "@wordpress/compose";
 import { MediaPlaceholder } from "../../../../../../bpl-tools/Components";
 import Settings from "./Settings/Settings";
 import Style from "../Common/Style";
-import { getExtension } from "../../utils/functions";
+import { getExtension, isYoutube, isVimeo, getYoutubeId, getVimeoId } from "../../utils/functions";
 import { plyrConfig } from "../../utils/config";
 import { cameraIcon } from "../../utils/icons";
 import { prefix } from "../../utils/data";
@@ -58,7 +58,7 @@ const Edit = (props) => {
       if (!PlyrConstructor || destroyed) return;
 
       const videoWrapper = element.querySelector(".videoWrapper");
-      const videoTemplate = element.querySelector(".videoTemplate video");
+      const videoTemplate = element.querySelector(".videoTemplate .media-source");
 
       if (!videoWrapper || !videoTemplate) return;
 
@@ -154,20 +154,32 @@ const Edit = (props) => {
               <div className="videoWrapper"></div>
 
               <div className="videoTemplate" style={{ display: "none" }}>
-                {/* eslint-disable-next-line react/no-unknown-property */}
-                <video
-                  controls
-                  playsInline
-                  data-poster={poster}
-                  preload="metadata"
-                  {...autoplayProps}
-                  {...mutedProps}>
-                  Your browser does not support the video tag.
-                  <source
-                    src={source}
-                    type={`video/${getExtension(source) || "mp4"}`}
-                  />
-                </video>
+                {isYoutube(source) || isVimeo(source) ? (
+                  <div
+                    className="media-source"
+                    data-plyr-provider={isYoutube(source) ? "youtube" : "vimeo"}
+                    data-plyr-embed-id={
+                      isYoutube(source)
+                        ? getYoutubeId(source)
+                        : getVimeoId(source)
+                    }></div>
+                ) : (
+                  /* eslint-disable-next-line react/no-unknown-property */
+                  <video
+                    className="media-source"
+                    controls
+                    playsInline
+                    data-poster={poster}
+                    preload="metadata"
+                    {...autoplayProps}
+                    {...mutedProps}>
+                    Your browser does not support the video tag.
+                    <source
+                      src={source}
+                      type={`video/${getExtension(source) || "mp4"}`}
+                    />
+                  </video>
+                )}
               </div>
             </div>
           </>

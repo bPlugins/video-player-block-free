@@ -8584,7 +8584,7 @@ const dashboardInfo = info => {
   return {
     name: "Video Player Block",
     displayName: "Video Player Block - Embed and Play Videos in Custom Player",
-    description: "Enhance your WordPress site with 4 distinct video player blocks – default, React, Video.js, and Vidstack. Embed YouTube, Vimeo, self-hosted, or HLS videos with extensive customization for play icons, backgrounds, player skins, and playback controls.",
+    description: "Enhance your WordPress site with professional video player blocks. Embed YouTube, Vimeo, self-hosted, or HLS videos with extensive customization. The Pro version unlocks 3 additional advanced engines: React, Video.js, and Vidstack.",
     slug,
     version,
     uninstallNonce,

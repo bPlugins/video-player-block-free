@@ -110,7 +110,11 @@ const pricingUrl = typeof vpbpPricingUrl !== "undefined" ? vpbpPricingUrl : "htt
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   controlsHandler: () => (/* binding */ controlsHandler),
-/* harmony export */   getExtension: () => (/* binding */ getExtension)
+/* harmony export */   getExtension: () => (/* binding */ getExtension),
+/* harmony export */   getVimeoId: () => (/* binding */ getVimeoId),
+/* harmony export */   getYoutubeId: () => (/* binding */ getYoutubeId),
+/* harmony export */   isVimeo: () => (/* binding */ isVimeo),
+/* harmony export */   isYoutube: () => (/* binding */ isYoutube)
 /* harmony export */ });
 const controlsHandler = controls => {
   const newControls = [];
@@ -122,6 +126,22 @@ const controlsHandler = controls => {
   return newControls;
 };
 const getExtension = fileName => fileName.substring(fileName.lastIndexOf('.') + 1);
+const isYoutube = url => {
+  return url.match(/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/);
+};
+const isVimeo = url => {
+  return url.match(/^(https?:\/\/)?(www\.)?(vimeo\.com)\/.+$/);
+};
+const getYoutubeId = url => {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return match && match[2].length === 11 ? match[2] : null;
+};
+const getVimeoId = url => {
+  const regExp = new RegExp('^.*(vimeo\\.com/)((channels/[^/]+/)|(groups/[^/]+/videos/)|(album/[^/]+/video/))?([0-9]+)');
+  const match = url.match(regExp);
+  return match ? match[6] : null;
+};
 
 /***/ }),
 
@@ -317,11 +337,18 @@ const RenderVideo = ({
   const mutedProps = muted ? {
     muted
   } : {};
+  const isYT = (0,_utils_functions__WEBPACK_IMPORTED_MODULE_4__.isYoutube)(source);
+  const isVM = (0,_utils_functions__WEBPACK_IMPORTED_MODULE_4__.isVimeo)(source);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: _utils_data__WEBPACK_IMPORTED_MODULE_6__.prefix
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "videoWrapper"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("video", {
+  }, isYT || isVM ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    ref: videoEl,
+    "data-plyr-provider": isYT ? 'youtube' : 'vimeo',
+    "data-plyr-embed-id": isYT ? (0,_utils_functions__WEBPACK_IMPORTED_MODULE_4__.getYoutubeId)(source) : (0,_utils_functions__WEBPACK_IMPORTED_MODULE_4__.getVimeoId)(source)
+  }) : /* eslint-disable-next-line react/no-unknown-property */
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("video", {
     controls: true,
     playsinline: true,
     "data-poster": poster,

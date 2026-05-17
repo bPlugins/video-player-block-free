@@ -1,5 +1,5 @@
 === Video Player Block – Embed and Play Videos in Custom Player ===
-Contributors: bplugins, abuhayat, charlescormier
+Contributors: bplugins, abuhayat, himur98
 Donate link: https://www.buymeacoffee.com/abuhayat
 Tags: block, video embed, any video play, video play, Gutenberg block
 Requires at least: 6.5+
@@ -17,7 +17,7 @@ Video Player Block is a powerful and versatile WordPress plugin that lets you em
 
 Whether you are showcasing YouTube, Vimeo, self-hosted MP4s, HLS streams, or external media from services like Amazon S3 or BunnyCDN, this plugin provides a clean, responsive, and highly customizable video experience directly within the Gutenberg editor.
 
-**[Demos](https://bplugins.com/demo/video-player-block-all-demos/)**
+**[Demos](https://bblockswp.com/demo/video-player-block-all-demos/)**
 
 === Key Features – Free Version ===
 - **Default HTML5 Video Player:** A clean, lightweight, and responsive player for standard MP4, WebM, OGG, YouTube, and Vimeo.
@@ -27,6 +27,18 @@ Whether you are showcasing YouTube, Vimeo, self-hosted MP4s, HLS streams, or ext
 - **Fully Responsive Design:** Automatically adjusts the video player for seamless viewing on desktops, tablets, and mobile devices.
 
 - **Customizable Player Controls:** Easily show or hide basic player controls like play, volume, and fullscreen.
+
+- **Rewind & Fast-Forward Buttons:** Toggle dedicated seek backward and seek forward buttons on the player.
+
+- **Player Restart Button:** Add a dedicated button to easily restart the video from the beginning.
+
+- **Download Button Toggle:** Easily enable or disable the video download option for your viewers.
+
+- **Picture-in-Picture & AirPlay:** Toggle PiP and AirPlay options directly from the settings panel.
+
+- **Shortcode Generator:** Generate and insert video players anywhere using shortcodes for maximum flexibility.
+
+- **Poster Image Selection:** Choose and display custom video poster images directly from the WordPress media library.
 
 - **Autoplay & Mute Options:** Control video behavior on page load with simple toggle settings.
 
@@ -41,27 +53,33 @@ The Pro version adds advanced player engines, streaming support, and deep custom
 
 == What's New in PRO? ==
 
-- **3 Advanced Player Engines:** Unlock the **React Video Player**, **Video.js**, and **Vidstack** engines for a superior viewing experience.
+- **React Video Player Engine:** Access a cutting-edge player with complete customization based on React and Media Chrome.
+
+- **Video.js Player Support:** Deliver industry-standard, high-compatibility media player layouts for professional websites.
+
+- **Vidstack Player Engine:** Experience a premium, state-of-the-art player layout optimized for high performance.
 
 - **HLS (.m3u8) Streaming:** Support for professional HLS streaming to deliver high-quality video efficiently.
 
+- **DASH (.mpd) Streaming:** Support for professional MPEG-DASH streaming to deliver modern adaptive video.
+
+- **Mux Video Integration:** Custom integration with Mux video servers for high-performance direct playback.
+
 - **External Video Sources:** Support for Amazon S3, DigitalOcean Spaces, BunnyCDN, and other external hosting services.
 
-- **Advanced Color & UI Styling:** Change player colors, border radius, and typography to perfectly match your brand.
+- **Custom Aspect Ratios:** Change player layouts dynamically between 16:9, 4:3, 21:9, and custom dimensions.
+
+- **Glassmorphism UI Controls:** Apply stunning blur and glassmorphic styling effects to player control backdrops.
+
+- **Advanced Shadow & Borders:** Configure custom player box shadows, border styles, and inner/outer border radius.
 
 - **Multiple Subtitle Support:** Add multilingual subtitle tracks (VTT) for global accessibility.
 
-- **Playback Speed Control:** Let users control video speed (0.5x to 2.0x) for better learning and viewing.
+- **Playback Speed Control:** Custom granular playback speed options (0.5x to 2.0x) for professional viewers.
 
-- **Advanced Playback Buttons:** Add **Restart**, **Rewind**, and **Fast-Forward** controls for better navigation.
+- **Lazy Loading & Preloading:** Defer video loading until visible in viewport to maximize Core Web Vitals.
 
-- **Custom Control Visibility:** Granularly show or hide every individual button in the player interface.
-
-- **Optimized Preloading:** Advanced media loading strategies to improve site performance and Core Web Vitals.
-
-- **Download Button Toggle:** Easily enable or disable the video download option for your viewers.
-
-- **Shortcode Generator:** Generate and insert video players anywhere using shortcodes for maximum flexibility.
+- **Google Cast & Chromecast:** Wirelessly stream video content from the browser player to any Chromecast-enabled TV.
 
 Try the Pro Version – Unlock the full potential of your video content today!
 
@@ -78,7 +96,7 @@ Getting started is easy!
 
 For installation help click on Installation Tab
 
-[Live Demo](https://bplugins.com/demo/video-player-block-all-demos/) | [Upgrade to Pro](https://bplugins.com/products/video-player-block-pro/)
+[Live Demo](https://bblockswp.com/demo/video-player-block-all-demos/) | [Upgrade to Pro](https://bplugins.com/products/video-player-block-pro/)
 
 === Perfect For ===
 - Video tutorials
@@ -213,6 +231,9 @@ You can post your questions on the [support forum here](https://wordpress.org/su
 
 1. Video Player
 2. Settings
+3. Videojs Player
+4. Vidstack Player
+5. React Video Player
 
 == Changelog ==
 

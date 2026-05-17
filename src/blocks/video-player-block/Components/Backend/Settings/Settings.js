@@ -9,7 +9,6 @@ import {
 } from "@wordpress/components";
 
 import {
-  BBlocksAds,
   HelpPanel,
   InlineMediaUpload,
 } from "../../../../../../../bpl-tools/Components";

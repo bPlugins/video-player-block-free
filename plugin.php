@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Video Player Block Free
+ * Plugin Name: Video Player Block
  * Description: A Simple, accessible, Easy to Use & fully Customizable video player. 
  * Version: 1.0.6
  * Author: bPlugins

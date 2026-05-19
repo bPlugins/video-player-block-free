@@ -17,7 +17,7 @@ Video Player Block is a powerful and versatile WordPress plugin that lets you em
 
 Whether you are showcasing YouTube, Vimeo, self-hosted MP4s, HLS streams, or external media from services like Amazon S3 or BunnyCDN, this plugin provides a clean, responsive, and highly customizable video experience directly within the Gutenberg editor.
 
-**[Demos](https://bblockswp.com/demo/video-player-block-all-demos/)**
+**[Video Player Block](https://bplugins.com/products/video-player-block/) | **[Demos](https://bblockswp.com/demo/video-player-block-all-demos/)**
 
 === Key Features – Free Version ===
 - **Default HTML5 Video Player:** A clean, lightweight, and responsive player for standard MP4, WebM, OGG, YouTube, and Vimeo.
@@ -96,7 +96,7 @@ Getting started is easy!
 
 For installation help click on Installation Tab
 
-[Live Demo](https://bblockswp.com/demo/video-player-block-all-demos/) | [Upgrade to Pro](https://bplugins.com/products/video-player-block-pro/)
+[Live Demo](https://bblockswp.com/demo/video-player-block-all-demos/) | [Upgrade to Pro](https://bplugins.com/products/video-player-block/pricing/)
 
 === Perfect For ===
 - Video tutorials

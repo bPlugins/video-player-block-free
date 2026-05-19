@@ -114,19 +114,19 @@ export const demoInfo = {
     },
     {
       icon: reactVideoPlayerIcon,
-      title: "React Video Player",
+      title: "React Video Player (Pro)",
       type: "iframe",
       url: "https://bblockswp.com/demo/video-player-block-react-video-player/",
     },
     {
       icon: videojsPlayerIcon,
-      title: "Videojs Player",
+      title: "Video.js Player (Pro)",
       type: "iframe",
       url: "https://bblockswp.com/demo/video-player-block-videojs-player/",
     },
     {
       icon: vidstackPlayerIcon,
-      title: "Vidstack Player",
+      title: "VidStack Player (Pro)",
       type: "iframe",
       url: "https://bblockswp.com/demo/video-player-block-vidstack-player/",
     },

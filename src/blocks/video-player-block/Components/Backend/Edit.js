@@ -1,22 +1,23 @@
-import { useState } from "react";
 import { useSelect } from "@wordpress/data";
 import { useBlockProps } from "@wordpress/block-editor";
 import { useRefEffect } from "@wordpress/compose";
 import { MediaPlaceholder } from "../../../../../../bpl-tools/Components/MediaControl/MediaControl";
 import Settings from "./Settings/Settings";
 import Style from "../Common/Style";
-import { getExtension, isYoutube, isVimeo, getYoutubeId, getVimeoId } from "../../utils/functions";
+import {
+  getExtension,
+  isYoutube,
+  isVimeo,
+  getYoutubeId,
+  getVimeoId,
+} from "../../utils/functions";
 import { plyrConfig } from "../../utils/config";
 import { cameraIcon } from "../../utils/icons";
 import { prefix } from "../../utils/data";
 import { FrontShortCode } from "../../../../Components/Common/FrontShortCode/FrontShortCode";
 
 const Edit = (props) => {
-  const {
-    attributes,
-    setAttributes,
-    clientId,
-  } = props;
+  const { attributes, setAttributes, clientId } = props;
   const {
     source,
     poster,
@@ -29,19 +30,22 @@ const Edit = (props) => {
   } = attributes;
 
   // Replace deprecated withSelect HOC with the useSelect hook (WP 5.7+).
-  const { currentPostId, currentPostType } = useSelect( (select) => ({
-    currentPostId:
-      select("core/editor").getCurrentPostId() ||
-      select("core").getEditedPostAttribute("id"),
-    currentPostType:
-      select("core/editor").getCurrentPostType() ||
-      select("core").getEditedPostAttribute("type"),
-  }), [] );
-
-  const [autoplayProps, setAutoplayProps] = useState(
-    autoplay ? { autoplay } : {},
+  const { currentPostId, currentPostType } = useSelect(
+    (select) => ({
+      currentPostId:
+        select("core/editor").getCurrentPostId() ||
+        select("core").getEditedPostAttribute("id"),
+      currentPostType:
+        select("core/editor").getCurrentPostType() ||
+        select("core").getEditedPostAttribute("type"),
+    }),
+    [],
   );
-  const [mutedProps, setMutedProps] = useState(muted ? { muted } : {});
+
+  // const [autoplayProps, setAutoplayProps] = useState(
+  //   autoplay ? { autoplay } : {},
+  // );
+  // const [mutedProps, setMutedProps] = useState(muted ? { muted } : {});
 
   /**
    * apiVersion 3 iframe compatibility:
@@ -66,7 +70,9 @@ const Edit = (props) => {
       if (!PlyrConstructor || destroyed) return;
 
       const videoWrapper = element.querySelector(".videoWrapper");
-      const videoTemplate = element.querySelector(".videoTemplate .media-source");
+      const videoTemplate = element.querySelector(
+        ".videoTemplate .media-source",
+      );
 
       if (!videoWrapper || !videoTemplate) return;
 
@@ -179,8 +185,8 @@ const Edit = (props) => {
                     playsInline
                     data-poster={poster}
                     preload="metadata"
-                    {...autoplayProps}
-                    {...mutedProps}>
+                    {...(autoplay ? { autoplay } : {})}
+                    {...(muted ? { muted } : {})}>
                     Your browser does not support the video tag.
                     <source
                       src={source}

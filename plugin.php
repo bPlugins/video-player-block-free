@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Video Player Block
+ * Plugin Name: Video Player Block Free
  * Description: A Simple, accessible, Easy to Use & fully Customizable video player.
  * Version: 1.0.6
  * Requires at least: 6.5

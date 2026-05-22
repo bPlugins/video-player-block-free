@@ -1,6 +1,6 @@
 import { __ } from "@wordpress/i18n";
 import { InspectorControls } from "@wordpress/block-editor";
-import { AdvertiseCard } from "../../../../../../../bpl-tools/ProControls";
+import AdvertiseCard from "../../../../../../../bpl-tools/ProControls/AdvertiseCard";
 import {
   TabPanel,
   PanelBody,
@@ -8,10 +8,8 @@ import {
   __experimentalUnitControl as UnitControl,
 } from "@wordpress/components";
 
-import {
-  HelpPanel,
-  InlineMediaUpload,
-} from "../../../../../../../bpl-tools/Components";
+import HelpPanel from "../../../../../../../bpl-tools/Components/HelpPanel/HelpPanel";
+import { InlineMediaUpload } from "../../../../../../../bpl-tools/Components/MediaControl/MediaControl";
 import {
   pxUnit,
   perUnit,

@@ -1,12 +1,12 @@
 <?php
 if ( !defined( 'ABSPATH' ) ) { exit; }
 
- if (!function_exists('vpb_fs')) {
-        function vpb_fs() {
-            global $vpb_fs;
-            if (!isset($vpb_fs)) {
+ if (!function_exists('vpbp_fs')) {
+        function vpbp_fs() {
+            global $vpbp_fs;
+            if (!isset($vpbp_fs)) {
                 require_once VPBP_DIR_PATH . 'vendor/freemius-lite/start.php';
-                $vpb_fs = fs_lite_dynamic_init([
+                $vpbp_fs = fs_lite_dynamic_init([
                 'id'                  => '20181',
                 'slug'                => 'video-player-block',
                 '__FILE__'            => VPBP_DIR_PATH . 'plugin.php',
@@ -26,8 +26,8 @@ if ( !defined( 'ABSPATH' ) ) { exit; }
                 ),
                 ]);
             }
-            return $vpb_fs;
+            return $vpbp_fs;
         }
-        vpb_fs();
-        do_action('vpb_fs_loaded');
+        vpbp_fs();
+        do_action('vpbp_fs_loaded');
     }

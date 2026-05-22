@@ -1,13 +1,13 @@
-=== Video Player Block – Embed and Play Videos in Custom Player ===
+=== Video Player Block ===
 Contributors: bplugins, abuhayat, himur98
 Donate link: https://www.buymeacoffee.com/abuhayat
 Tags: block, video embed, any video play, video play, Gutenberg block
-Requires at least: 6.5+
-Tested up to: 6.9
+Requires at least: 6.5
+Tested up to: 7.0
 Stable tag: 1.0.6
-Requires PHP: 7.1
+Requires PHP: 7.4
 License: GPLv3 or later
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Embed and play videos easily in the Gutenberg editor with a customizable and responsive Video Player Block for WordPress.
 
@@ -17,10 +17,12 @@ Video Player Block is a powerful and versatile WordPress plugin that lets you em
 
 Whether you are showcasing YouTube, Vimeo, self-hosted MP4s, HLS streams, or external media from services like Amazon S3 or BunnyCDN, this plugin provides a clean, responsive, and highly customizable video experience directly within the Gutenberg editor.
 
-**[Video Player Block](https://bplugins.com/products/video-player-block/)** | **[Demos](https://bblockswp.com/demo/video-player-block-all-demos/)**
+**[Demos](https://bblockswp.com/demo/video-player-block-all-demos/)**
 
 === Key Features – Free Version ===
-- **Default HTML5 Video Player:** A clean, lightweight, and responsive player for standard MP4, WebM, OGG, YouTube, and Vimeo.
+- **Default HTML5 Video Player:** A clean, lightweight, and responsive player for standard self-hosted MP4, WebM, and OGG formats.
+
+- **YouTube & Vimeo Native Support:** Easily embed and play YouTube and Vimeo videos within the customizable player skin.
 
 - **Native Gutenberg Block:** Add videos directly from the WordPress editor with a dedicated, easy-to-use block.
 
@@ -96,7 +98,7 @@ Getting started is easy!
 
 For installation help click on Installation Tab
 
-[Live Demo](https://bblockswp.com/demo/video-player-block-all-demos/) | [Upgrade to Pro](https://bplugins.com/products/video-player-block/pricing/)
+[Live Demo](https://bblockswp.com/demo/video-player-block-all-demos/) | [Upgrade to Pro](https://bplugins.com/products/video-player-block-pro/)
 
 === Perfect For ===
 - Video tutorials
@@ -136,8 +138,11 @@ For installation help click on Installation Tab
 
 This plugin uses the following third-party libraries:
 
-* [Plyr](https://plyr.io/) - MIT License
-* [Isotope](https://isotope.metafizzy.co/) - GNU GPL license v3
+= Plyr =
+* Source / GitHub: https://github.com/sampotts/plyr
+* License: MIT – https://github.com/sampotts/plyr/blob/master/LICENSE.md
+* Purpose: Media player control wrapper for YouTube, Vimeo, and self-hosted HTML5 video files.
+
 
 = bpl-tools =
 * Source / GitHub: https://github.com/bPlugins/bpl-tools
@@ -145,23 +150,14 @@ This plugin uses the following third-party libraries:
 * Purpose: Shared utility library providing admin dashboard components and common Gutenberg editor controls.
 * External Services: The library may connect to bPlugins, WordPress.org, and Freemius services for product data and checkout functionality. See full details: https://github.com/bPlugins/bpl-tools#external-requests--why-they-are-made
 
-As the external service functionality is handled by bpl-tools as a third-party library, the following services are utilized:
 
-= bPlugins API =
+= Freemius Lite SDK =
+* **Source:** [https://bplugins.com/](https://bplugins.com/)
+* **GitHub:** [https://github.com/bPlugins/freemius-lite-sdk](https://github.com/bPlugins/freemius-lite-sdk)
+* **License:** GPL-2.0-or-later – [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)
+* **Purpose:** Provides an opt-in consent form for usage tracking and analytics to help improve the plugin. No data is sent before explicit user consent.
+* **External Services:** Communicates with `api.bplugins.com` (activation events) and `wp.freemius.com` (opt-in processing) only after user opt-in. See [bPlugins Privacy Policy](https://bplugins.com/privacy-policy) and [Freemius Privacy Policy](https://freemius.com/privacy/).
 
-* **Service URL:** [https://api.bplugins.com](https://api.bplugins.com)
-* **Purpose:** The plugin's admin dashboard fetches product comparison data and pricing information to display relevant upgrade options and feature details.
-* **Data Sent:** Only the plugin slug is transmitted; no personal or site data is collected.
-* **Terms of Service:** [https://bplugins.com/terms-of-service/](https://bplugins.com/terms-of-service/)
-* **Privacy Policy:** [https://bplugins.com/privacy-policy/](https://bplugins.com/privacy-policy/)
-
-= WordPress.org Plugins API =
-
-* **Service URL:** [https://api.wordpress.org/plugins/info/1.2/](https://api.wordpress.org/plugins/info/1.2/)
-* **Purpose:** The admin dashboard queries the official WordPress.org Plugins API to retrieve and display a curated list of other plugins by the same author ("Our Plugins" section).
-* **Data Sent:** Plugin slugs and author name; no personal or site data is collected.
-* **Terms of Service:** [https://wordpress.org/about/tos/](https://wordpress.org/about/tos/)
-* **Privacy Policy:** [https://wordpress.org/about/privacy/](https://wordpress.org/about/privacy/)
 
 
 == Build Process ==
@@ -227,6 +223,14 @@ If you find a conflict between our plugin and a third-party plugin, please let u
 
 You can post your questions on the [support forum here](https://wordpress.org/support/plugin/video-player-block/)
 
+== Shortcodes ==
+
+This plugin provides a shortcode to embed a saved Video Player anywhere in classic content, widgets, or page builders that do not support Gutenberg blocks.
+
+`[video_player id="123"]`
+
+Replace `123` with the ID of the Video Player post you have created via the **Video Player** custom post type menu.
+
 == Screenshots ==
 
 1. Video Player
@@ -238,25 +242,27 @@ You can post your questions on the [support forum here](https://wordpress.org/su
 == Changelog ==
 
 
-= 1.0.6 - 20 Nov 24 =
+
+= 1.0.6 - 20 Nov 2024 =
 * Fix multiple render issue
 * Add 3 new advanced video player blocks (React, Video.js, Vidstack)
+* Fix build error
 
-= 1.0.5 - 8 Jan 24 =
+= 1.0.5 - 8 Jan 2024 =
 * Fix autoplay
 
-= 1.0.4 =
+= 1.0.4 - 1 Oct 2023 =
 * Not loading the assets where the block is not added
 
-= 1.0.3 =
+= 1.0.3 - 1 Aug 2023 =
 * Add translate feature
 
-= 1.0.2 =
+= 1.0.2 - 1 Jun 2023 =
 * Reduce PHP Code.
 * Performance Improvement
 
-= 1.0.1 =
+= 1.0.1 - 1 Apr 2023 =
 * Reduce PHP Code.
 
-= 1.0.0 =
+= 1.0.0 - 1 Feb 2023 =
 * Initial Release.

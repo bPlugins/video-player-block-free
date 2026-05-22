@@ -12,8 +12,6 @@ const slug = "video-player-block";
 export const dashboardInfo = (info) => {
   const {
     version,
-    vpbpDisabledBlocks,
-    disabledBlocksNonce,
     adminUrl,
     uninstallNonce,
     deleteDataOnUninstall,
@@ -28,8 +26,6 @@ export const dashboardInfo = (info) => {
     version,
     uninstallNonce,
     deleteDataOnUninstall,
-    disabledBlocks: vpbpDisabledBlocks,
-    disabledBlocksNonce,
     adminUrl,
     allBlocks: blocks,
     displayOurPlugins: true,
@@ -58,6 +54,7 @@ export const dashboardInfo = (info) => {
         version: "1.0.6 - 20 Nov 24",
         list: [
           " Add 3 new advanced video player blocks (React, Video.js, Vidstack)",
+          " Fix build error",
         ],
         type: "new",
       },

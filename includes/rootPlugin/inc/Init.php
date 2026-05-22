@@ -11,17 +11,6 @@ class Init {
         add_filter( 'block_editor_settings_all', [ $this, 'vpbp_dynamic_template_lock' ], 10, 2 );
     }
     function onInit() {
-		load_plugin_textdomain( 'video-player-block', false, dirname( plugin_basename( VPBP_DIR_PATH . 'plugin.php' ) ) . '/languages' );
-		register_setting(
-			'vpbpPluginSettings',
-			'vpbpAPIKey',
-			[
-				'default'		=> '',
-				'show_in_rest'	=> true,
-				'type'			=> 'string',
-				'sanitize_callback' => 'sanitize_text_field'
-			]
-		);
 		$this->vpbp_register_blocks();
 		register_post_type('video-player-block', [
 			'label' => __('Video Player', 'video-player-block'),
@@ -39,18 +28,17 @@ class Init {
 				'not_found_in_trash'    => __('No Video Player found in Trash.', 'video-player-block'),
 				'all_items'             => __('All Video Players', 'video-player-block'),
 				'archives'              => __('Video Player Archives', 'video-player-block'),
+				'item_published'        => __('Video Player Published', 'video-player-block'),
+				'item_updated'          => __('Video Player Updated', 'video-player-block'),
 			],
             'show_in_rest' => true,
             'public' => true,
 			'menu_icon' => 'dashicons-controls-play',
             'publicly_queryable' => false,
-            'item_published' => __('Video Player Published', 'video-player-block'),
-            'item_updated' => __('Video Player Updated', 'video-player-block'),
             'template' => [['vpbp/video-player-block']],
             'template_lock' => 'all',
         ]);
 
-		wp_set_script_translations( 'vpbp-video-player-block-editor-script', 'video-player-block', VPBP_DIR_PATH . 'languages' );
 	}
 
 	function vpbp_register_blocks() {
@@ -61,33 +49,13 @@ class Init {
             return;
         }
 
-        $disabled_blocks = get_option( 'vpbpDisabledBlocks', [] );
-        if ( ! is_array( $disabled_blocks ) ) {
-            $disabled_blocks = [];
-        }
-
         foreach ( $all_blocks as $block_path ) {
-            $block_name = basename( $block_path );
-
-            if ( $block_name === 'video-player-block' ) {
-                register_block_type( $block_path );
-                continue;
-            }
-
-            $full_block_name = 'vpbp/' . $block_name;
-
-            if ( in_array( $full_block_name, $disabled_blocks, true ) ) {
-                continue;
-            }
-
 			register_block_type( $block_path );
         }
     }
 
-    /**
+     /**
      * Dynamically lock the block editor once a video gallery layout has been selected.
-     * This allows the initial selection block to replace itself, but prevents further
-     * modifications once the layout is set.
      */
     function vpbp_dynamic_template_lock( $settings, $context ) {
         if ( ! empty( $context->post ) && $context->post->post_type === 'video-player-block' ) {

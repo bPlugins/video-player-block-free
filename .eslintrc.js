@@ -19,8 +19,6 @@ module.exports = {
     Plyr: "readonly",
     lodash: "readonly",
     Chart: "readonly",
-    vpbpPipecheck: "readonly",
-    vpbpDisabledBlocks: "readonly",
     vpbpPricingUrl: "readonly",
   },
   parserOptions: {

@@ -1,0 +1,213 @@
+# Copyright (C) 2026 bPlugins
+# This file is distributed under the GPLv3.
+msgid ""
+msgstr ""
+"Project-Id-Version: Video Player Block 1.0.6\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/video-player-block-free\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-05-21T08:52:18+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: video-player-block\n"
+
+#. Plugin Name of the plugin
+#: plugin.php
+#: plugin.php:120
+msgid "Video Player Block"
+msgstr ""
+
+#. Description of the plugin
+#: plugin.php
+msgid "A Simple, accessible, Easy to Use & fully Customizable video player."
+msgstr ""
+
+#. Author of the plugin
+#: plugin.php
+msgid "bPlugins"
+msgstr ""
+
+#. Author URI of the plugin
+#: plugin.php
+msgid "https://bplugins.com"
+msgstr ""
+
+#: includes/class-vpbp-rest-handler.php:43
+msgid "Invalid security token."
+msgstr ""
+
+#: includes/class-vpbp-rest-handler.php:47
+msgid "You do not have permission to perform this action."
+msgstr ""
+
+#: includes/class-vpbp-rest-handler.php:56
+msgid "Setting saved successfully."
+msgstr ""
+
+#: includes/rootPlugin/inc/AdminMenu.php:15
+msgid "Help - bPlugins"
+msgstr ""
+
+#: includes/rootPlugin/inc/AdminMenu.php:16
+msgid "Help & Demos"
+msgstr ""
+
+#: includes/rootPlugin/inc/CustomColumn.php:24
+msgid "Shortcode"
+msgstr ""
+
+#: includes/rootPlugin/inc/CustomColumn.php:25
+msgid "Date"
+msgstr ""
+
+#: includes/rootPlugin/inc/CustomColumn.php:40
+#: build/admin/post.js:73
+#: build/admin/post.js:45
+msgid "Copy To Clipboard"
+msgstr ""
+
+#: includes/rootPlugin/inc/Init.php:27
+#: includes/rootPlugin/inc/Init.php:29
+#: includes/rootPlugin/inc/Init.php:30
+msgid "Video Player"
+msgstr ""
+
+#: includes/rootPlugin/inc/Init.php:31
+msgid "Add New"
+msgstr ""
+
+#: includes/rootPlugin/inc/Init.php:32
+msgid "Add New Video Player"
+msgstr ""
+
+#: includes/rootPlugin/inc/Init.php:33
+msgid "Edit Video Player"
+msgstr ""
+
+#: includes/rootPlugin/inc/Init.php:34
+msgid "New Video Player"
+msgstr ""
+
+#: includes/rootPlugin/inc/Init.php:35
+msgid "View Video Player"
+msgstr ""
+
+#: includes/rootPlugin/inc/Init.php:36
+msgid "View Video Players"
+msgstr ""
+
+#: includes/rootPlugin/inc/Init.php:37
+msgid "Search Video Players"
+msgstr ""
+
+#: includes/rootPlugin/inc/Init.php:38
+msgid "No Video Player found."
+msgstr ""
+
+#: includes/rootPlugin/inc/Init.php:39
+msgid "No Video Player found in Trash."
+msgstr ""
+
+#: includes/rootPlugin/inc/Init.php:40
+msgid "All Video Players"
+msgstr ""
+
+#: includes/rootPlugin/inc/Init.php:41
+msgid "Video Player Archives"
+msgstr ""
+
+#: includes/rootPlugin/inc/Init.php:47
+msgid "Video Player Published"
+msgstr ""
+
+#: includes/rootPlugin/inc/Init.php:48
+msgid "Video Player Updated"
+msgstr ""
+
+#: build/admin/dashboard.js:8416
+#: build/admin/dashboard.js:7246
+msgid "Are you sure? This will permanently delete all Video Player Block posts and settings when the plugin is uninstalled."
+msgstr ""
+
+#: build/admin/dashboard.js:8433
+#: build/admin/dashboard.js:7275
+msgid "Failed to save setting."
+msgstr ""
+
+#: build/admin/dashboard.js:8436
+#: build/admin/dashboard.js:7281
+msgid "Failed to save setting. Network error."
+msgstr ""
+
+#: build/admin/dashboard.js:8443
+#: build/admin/dashboard.js:7291
+msgid "Delete Data on Uninstall"
+msgstr ""
+
+#: build/admin/dashboard.js:8443
+#: build/admin/dashboard.js:7294
+msgid "When enabled, all plugin data will be permanently deleted when you uninstall (delete) the plugin. This includes:"
+msgstr ""
+
+#: build/admin/dashboard.js:8443
+#: build/admin/dashboard.js:7301
+msgid "All video player block posts"
+msgstr ""
+
+#: build/admin/dashboard.js:8443
+#: build/admin/dashboard.js:7303
+msgid "All plugin settings and configurations"
+msgstr ""
+
+#: build/admin/dashboard.js:8445
+#: build/admin/dashboard.js:7308
+msgid "⚠️ This action cannot be undone. Your data will be safe if you only deactivate the plugin."
+msgstr ""
+
+#: build/admin/dashboard.js:8458
+#: build/admin/dashboard.js:7328
+msgid "Data will be deleted on uninstall"
+msgstr ""
+
+#: build/admin/dashboard.js:8458
+#: build/admin/dashboard.js:7329
+msgid "Data will be preserved on uninstall"
+msgstr ""
+
+#: build/admin/dashboard.js:8501
+#: build/admin/dashboard.js:7361
+msgid "View More Changelogs"
+msgstr ""
+
+#: build/admin/post.js:71
+#: build/admin/post.js:43
+msgid "Copied Successfully!"
+msgstr ""
+
+#: build/blocks/video-player-block/block.json
+msgctxt "block title"
+msgid "Video Player"
+msgstr ""
+
+#: build/blocks/video-player-block/block.json
+msgctxt "block description"
+msgid "A Simple, accessible, Easy to Use & fully Customizable video player."
+msgstr ""
+
+#: build/blocks/video-player-block/block.json
+msgctxt "block keyword"
+msgid "video embed"
+msgstr ""
+
+#: build/blocks/video-player-block/block.json
+msgctxt "block keyword"
+msgid "mp4 ogg player"
+msgstr ""
+
+#: build/blocks/video-player-block/block.json
+msgctxt "block keyword"
+msgid "any video play"
+msgstr ""

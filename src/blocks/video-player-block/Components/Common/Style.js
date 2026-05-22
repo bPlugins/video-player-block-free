@@ -8,6 +8,7 @@ const Style = ({ attributes, id }) => {
 		#${id} .${prefix}{
 			width: ${['0px', '0%', '0em'].includes(width) ? '100%' : width};
 			border-radius: ${radius};
+			overflow: hidden;
 		}
 		`.replace(/\s+/g, ' ')
 	}} />

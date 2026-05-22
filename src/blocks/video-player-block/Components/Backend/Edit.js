@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { withSelect } from "@wordpress/data";
+import { useSelect } from "@wordpress/data";
 import { useBlockProps } from "@wordpress/block-editor";
 import { useRefEffect } from "@wordpress/compose";
-import { MediaPlaceholder } from "../../../../../../bpl-tools/Components";
+import { MediaPlaceholder } from "../../../../../../bpl-tools/Components/MediaControl/MediaControl";
 import Settings from "./Settings/Settings";
 import Style from "../Common/Style";
 import { getExtension, isYoutube, isVimeo, getYoutubeId, getVimeoId } from "../../utils/functions";
@@ -16,8 +16,6 @@ const Edit = (props) => {
     attributes,
     setAttributes,
     clientId,
-    currentPostId,
-    currentPostType,
   } = props;
   const {
     source,
@@ -27,8 +25,18 @@ const Edit = (props) => {
     autoplay,
     muted,
     resetOnEnd,
-    autoHideControl
+    autoHideControl,
   } = attributes;
+
+  // Replace deprecated withSelect HOC with the useSelect hook (WP 5.7+).
+  const { currentPostId, currentPostType } = useSelect( (select) => ({
+    currentPostId:
+      select("core/editor").getCurrentPostId() ||
+      select("core").getEditedPostAttribute("id"),
+    currentPostType:
+      select("core/editor").getCurrentPostType() ||
+      select("core").getEditedPostAttribute("type"),
+  }), [] );
 
   const [autoplayProps, setAutoplayProps] = useState(
     autoplay ? { autoplay } : {},
@@ -75,6 +83,9 @@ const Edit = (props) => {
       // document.body with id="sprite-plyr". Icon <use> references in the iframe
       // need the sprite in the iframe document to resolve.
       let spriteInterval = null;
+      let spriteAttempts = 0;
+      const MAX_SPRITE_ATTEMPTS = 50; // ~5 seconds at 100ms intervals
+
       const copySprite = () => {
         const parentSprite = document.getElementById("sprite-plyr");
         if (parentSprite && !ownerDocument.getElementById("sprite-plyr")) {
@@ -86,10 +97,12 @@ const Edit = (props) => {
       };
 
       player.on("ready", () => {
-        // Try immediately, then poll until the async CDN sprite loads
+        // Try immediately, then poll until the async CDN sprite loads.
+        // Cap at MAX_SPRITE_ATTEMPTS to prevent indefinite polling.
         if (!copySprite()) {
           spriteInterval = setInterval(() => {
-            if (copySprite()) {
+            spriteAttempts++;
+            if (copySprite() || spriteAttempts >= MAX_SPRITE_ATTEMPTS) {
               clearInterval(spriteInterval);
               spriteInterval = null;
             }
@@ -99,9 +112,6 @@ const Edit = (props) => {
           player.play();
         }
       });
-
-      autoplay ? setAutoplayProps({ autoplay }) : {};
-      muted ? setMutedProps({ muted }) : {};
 
       return () => {
         destroyed = true;
@@ -131,9 +141,7 @@ const Edit = (props) => {
 
   const id = `${prefix}-${clientId}`;
   const blockProps = useBlockProps({ ref });
-  const isPlayerPostType = ["video-player-block"].includes(
-    currentPostType,
-  );
+  const isPlayerPostType = ["video-player-block"].includes(currentPostType);
 
   return (
     <>
@@ -195,12 +203,4 @@ const Edit = (props) => {
   );
 };
 
-export default withSelect((select) => {
-  const { getCurrentPostId, getCurrentPostType } = select("core/editor");
-  return {
-    currentPostId:
-      getCurrentPostId() || select("core").getEditedPostAttribute("id"),
-    currentPostType:
-      getCurrentPostType() || select("core").getEditedPostAttribute("type"),
-  };
-})(Edit);
+export default Edit;

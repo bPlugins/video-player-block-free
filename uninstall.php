@@ -13,15 +13,16 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-$isDeleteData = get_option( 'vpbp_delete_data_on_uninstall', false );
+$vpbp_is_delete_data = get_option( 'vpbp_delete_data_on_uninstall', false );
 
-if ( ! $isDeleteData ) {
+if ( ! $vpbp_is_delete_data ) {
 	return;
 }
 
 global $wpdb;
 
 // 1. Delete all 'video-player-block' custom post type posts and their meta/revisions efficiently.
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query is required in uninstall.php; caching is irrelevant as data is being permanently deleted.
 $vpbp_post_ids = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s", 'video-player-block' ) );
 
 if ( ! empty( $vpbp_post_ids ) ) {
@@ -32,7 +33,3 @@ if ( ! empty( $vpbp_post_ids ) ) {
 
 // 2. Delete plugin options.
 delete_option( 'vpbp_delete_data_on_uninstall' );
-delete_option( 'vpbpDisabledBlocks' );
-delete_option( 'vpbpAPIKey' );
-delete_option( 'vpbpUtils' );
-

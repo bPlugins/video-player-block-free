@@ -10,22 +10,15 @@ import { prefix } from './utils/data';
 document.addEventListener('DOMContentLoaded', () => {
 	const videoEls = document.querySelectorAll(".wp-block-vpbp-video-player-block");
 	videoEls.forEach(videoEl => {
-		// Safely parse data-attributes; malformed JSON must not crash other players.
-		let attributes = {};
-		try {
-			attributes = JSON.parse( videoEl.dataset.attributes || '{}' );
-		} catch ( e ) {
-			// eslint-disable-next-line no-console
-			console.warn( '[vpbp] Could not parse block attributes', e );
-			return;
-		}
+		const attributes = JSON.parse(videoEl.dataset.attributes);
 
 		createRoot(videoEl).render(<>
 			<Style attributes={attributes} id={videoEl.id} />
+
 			<RenderVideo attributes={attributes} />
 		</>);
 
-		videoEl?.removeAttribute('data-attributes');
+		videoEl?.removeAttribute('data-attributes')
 	});
 });
 
@@ -35,14 +28,6 @@ const RenderVideo = ({ attributes }) => {
 	const videoEl = useRef(null);
 
 	useEffect(() => {
-		// Guard against Plyr not being loaded (CDN failure, ad-blocker, etc.).
-		if ( typeof Plyr === 'undefined' ) { // eslint-disable-line no-undef
-			// eslint-disable-next-line no-console
-			console.warn( '[vpbp] Plyr library not loaded.' );
-			return;
-		}
-
-		// eslint-disable-next-line no-undef
 		const player = new Plyr(videoEl.current, plyrConfig(attributes));
 
 		player.on('ready', () => {
@@ -50,14 +35,6 @@ const RenderVideo = ({ attributes }) => {
 				player.play();
 			}
 		});
-
-		return () => {
-			try {
-				player.destroy();
-			} catch (e) {
-				/* ignore */
-			}
-		};
 	}, []);
 
 	const autoplayProps = autoplay ? { autoplay } : {};

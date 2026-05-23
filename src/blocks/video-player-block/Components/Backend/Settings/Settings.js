@@ -1,6 +1,5 @@
 import { __ } from "@wordpress/i18n";
 import { InspectorControls } from "@wordpress/block-editor";
-import AdvertiseCard from "../../../../../../../bpl-tools/ProControls/AdvertiseCard";
 import {
   TabPanel,
   PanelBody,
@@ -8,14 +7,15 @@ import {
   __experimentalUnitControl as UnitControl,
 } from "@wordpress/components";
 
-import HelpPanel from "../../../../../../../bpl-tools/Components/HelpPanel/HelpPanel";
-import { InlineMediaUpload } from "../../../../../../../bpl-tools/Components/MediaControl/MediaControl";
+import {
+  HelpPanel,
+  InlineMediaUpload,
+} from "../../../../../../../bpl-tools/Components";
 import {
   pxUnit,
   perUnit,
   emUnit,
 } from "../../../../../../../bpl-tools/utils/options";
-import { pricingUrl } from "../../../utils/data";
 
 const Settings = ({ attributes, setAttributes }) => {
   const {
@@ -54,6 +54,7 @@ const Settings = ({ attributes, setAttributes }) => {
 
   return (
     <InspectorControls>
+
 
       <TabPanel
         className="bPlTabPanel"
@@ -264,7 +265,7 @@ const Settings = ({ attributes, setAttributes }) => {
           </>
         )}
       </TabPanel>
-      <AdvertiseCard planLink={pricingUrl} />
+      
     </InspectorControls>
   );
 };

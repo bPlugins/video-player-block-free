@@ -66,6 +66,10 @@
     "autoHideControl": {
       "type": "boolean",
       "default": true
+    },
+    "isSetup": {
+      "type": "boolean",
+      "default": false
     }
   },
   "supports": {
@@ -81,6 +85,7 @@
   },
   "editorScript": ["file:./index.js", "plyr"],
   "editorStyle": ["file:./index.css", "plyr"],
+  "script": "file:./iframe-init.js",
   "style": ["file:./view.css", "plyr"],
   "render": "file:./render.php",
   "viewScript": ["file:./view.js", "plyr"]

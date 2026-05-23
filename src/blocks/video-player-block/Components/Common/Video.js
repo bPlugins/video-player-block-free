@@ -7,7 +7,10 @@ const Video = ({ attributes }) => {
 
 	const videoEl = useRef(null);
 
+
+
 	useEffect(() => {
+
 		new Plyr(videoEl.current, plyrConfig(attributes));
 	}, []);
 

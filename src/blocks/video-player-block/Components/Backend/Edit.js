@@ -1,7 +1,8 @@
-import { useSelect } from "@wordpress/data";
+import { useState } from "react";
+import { withSelect } from "@wordpress/data";
 import { useBlockProps } from "@wordpress/block-editor";
 import { useRefEffect } from "@wordpress/compose";
-import { MediaPlaceholder } from "../../../../../../bpl-tools/Components/MediaControl/MediaControl";
+import { MediaPlaceholder } from "../../../../../../bpl-tools/Components";
 import Settings from "./Settings/Settings";
 import Style from "../Common/Style";
 import {
@@ -17,7 +18,13 @@ import { prefix } from "../../utils/data";
 import { FrontShortCode } from "../../../../Components/Common/FrontShortCode/FrontShortCode";
 
 const Edit = (props) => {
-  const { attributes, setAttributes, clientId } = props;
+  const {
+    attributes,
+    setAttributes,
+    clientId,
+    currentPostId,
+    currentPostType,
+  } = props;
   const {
     source,
     poster,
@@ -29,98 +36,101 @@ const Edit = (props) => {
     autoHideControl,
   } = attributes;
 
-  // Replace deprecated withSelect HOC with the useSelect hook (WP 5.7+).
-  const { currentPostId, currentPostType } = useSelect(
-    (select) => ({
-      currentPostId:
-        select("core/editor").getCurrentPostId() ||
-        select("core").getEditedPostAttribute("id"),
-      currentPostType:
-        select("core/editor").getCurrentPostType() ||
-        select("core").getEditedPostAttribute("type"),
-    }),
-    [],
+  const [autoplayProps, setAutoplayProps] = useState(
+    autoplay ? { autoplay } : {},
   );
+  const [mutedProps, setMutedProps] = useState(muted ? { muted } : {});
 
-  // const [autoplayProps, setAutoplayProps] = useState(
-  //   autoplay ? { autoplay } : {},
-  // );
-  // const [mutedProps, setMutedProps] = useState(muted ? { muted } : {});
-
-  /**
-   * apiVersion 3 iframe compatibility:
-   * - Editor scripts (including Plyr from editorScript) run in the parent window
-   * - DOM elements render inside the iframe
-   * - Plyr is loaded via editorScript in the parent window
-   * - We use parent window's Plyr but copy the SVG sprite into the iframe
-   */
   const ref = useRefEffect(
     (element) => {
       if (!source) return;
 
       let player = null;
       let destroyed = false;
+      let pollTimer = null;
+      let spriteInterval = null;
 
       const { ownerDocument } = element;
+      const iframeWindow = ownerDocument?.defaultView;
 
-      // Use parent window's Plyr (loaded via editorScript, always available)
-      // eslint-disable-next-line no-undef
-      const PlyrConstructor = typeof Plyr !== "undefined" ? Plyr : null;
+      const initPlyr = () => {
+        if (destroyed) return;
 
-      if (!PlyrConstructor || destroyed) return;
-
-      const videoWrapper = element.querySelector(".videoWrapper");
-      const videoTemplate = element.querySelector(
-        ".videoTemplate .media-source",
-      );
-
-      if (!videoWrapper || !videoTemplate) return;
-
-      videoWrapper.innerHTML = "";
-      videoWrapper.innerHTML = videoTemplate.outerHTML;
-
-      player = new PlyrConstructor(
-        videoWrapper.children[0],
-        plyrConfig(attributes),
-      );
-
-      // Fix cross-document SVG sprite issue for iframe editor:
-      // Plyr loads its SVG sprite from CDN (async) and injects it into parent
-      // document.body with id="sprite-plyr". Icon <use> references in the iframe
-      // need the sprite in the iframe document to resolve.
-      let spriteInterval = null;
-      let spriteAttempts = 0;
-      const MAX_SPRITE_ATTEMPTS = 50; // ~5 seconds at 100ms intervals
-
-      const copySprite = () => {
-        const parentSprite = document.getElementById("sprite-plyr");
-        if (parentSprite && !ownerDocument.getElementById("sprite-plyr")) {
-          const cloned = ownerDocument.importNode(parentSprite, true);
-          ownerDocument.body.insertAdjacentElement("afterbegin", cloned);
-          return true;
+        // CRITICAL: Only use the iframe window's Plyr constructor.
+        // The parent window's Plyr has `document` closured to the parent
+        // document, so controls/events would be created in the wrong
+        // document context — they render but clicks don't work.
+        const PlyrConstructor = iframeWindow?.Plyr;
+        if (!PlyrConstructor) {
+          // iframe-init.js hasn't executed yet, poll until ready
+          pollTimer = setTimeout(initPlyr, 50);
+          return;
         }
-        return !!ownerDocument.getElementById("sprite-plyr");
+
+        const videoWrapper = element.querySelector(".videoWrapper");
+        const videoTemplate = element.querySelector(
+          ".videoTemplate .media-source",
+        );
+
+        if (!videoWrapper || !videoTemplate) return;
+
+        videoWrapper.innerHTML = "";
+        videoWrapper.innerHTML = videoTemplate.outerHTML;
+
+        player = new PlyrConstructor(
+          videoWrapper.children[0],
+          // CRITICAL: Re-create config in the iframe's object space.
+          // Plyr's extend() uses `is.object()` which checks `input.constructor === Object`.
+          // Objects created in the parent frame have parent's Object constructor,
+          // not the iframe's — so Plyr silently ignores the config and uses defaults.
+          // JSON round-trip via the iframe's JSON creates objects with the correct constructor.
+          iframeWindow.JSON.parse(
+            iframeWindow.JSON.stringify(plyrConfig(attributes)),
+          ),
+        );
+
+        // Copy SVG sprite from iframe document (where Plyr injected it)
+        // or from parent document as fallback
+        const copySprite = () => {
+          if (ownerDocument.getElementById("sprite-plyr")) return true;
+          // Check both iframe and parent for the sprite
+          const sprite =
+            ownerDocument.getElementById("sprite-plyr") ||
+            document.getElementById("sprite-plyr");
+          if (sprite && !ownerDocument.getElementById("sprite-plyr")) {
+            const cloned = ownerDocument.importNode(sprite, true);
+            ownerDocument.body.insertAdjacentElement("afterbegin", cloned);
+            return true;
+          }
+          return false;
+        };
+
+        player.on("ready", () => {
+          if (!copySprite()) {
+            spriteInterval = setInterval(() => {
+              if (copySprite()) {
+                clearInterval(spriteInterval);
+                spriteInterval = null;
+              }
+            }, 100);
+          }
+          if (muted && autoplay) {
+            player.play();
+          }
+        });
       };
 
-      player.on("ready", () => {
-        // Try immediately, then poll until the async CDN sprite loads.
-        // Cap at MAX_SPRITE_ATTEMPTS to prevent indefinite polling.
-        if (!copySprite()) {
-          spriteInterval = setInterval(() => {
-            spriteAttempts++;
-            if (copySprite() || spriteAttempts >= MAX_SPRITE_ATTEMPTS) {
-              clearInterval(spriteInterval);
-              spriteInterval = null;
-            }
-          }, 100);
-        }
-        if (muted && autoplay) {
-          player.play();
-        }
-      });
+      // Start initialization (may poll if iframe Plyr isn't ready yet)
+      initPlyr();
+
+      autoplay ? setAutoplayProps({ autoplay }) : {};
+      muted ? setMutedProps({ muted }) : {};
 
       return () => {
         destroyed = true;
+        if (pollTimer) {
+          clearTimeout(pollTimer);
+        }
         if (spriteInterval) {
           clearInterval(spriteInterval);
         }
@@ -148,6 +158,28 @@ const Edit = (props) => {
   const id = `${prefix}-${clientId}`;
   const blockProps = useBlockProps({ ref });
   const isPlayerPostType = ["video-player-block"].includes(currentPostType);
+
+  // useEffect(() => {
+  //   if (
+  //     typeof vpbpPipecheck !== "undefined" &&
+  //     !vpbpPipecheck &&
+  //     isPlayerPostType &&
+  //     !isSetup
+  //   ) {
+  //     setAttributes({ isSetup: true });
+  //   }
+  // }, [vpbpPipecheck, isPlayerPostType, isSetup]);
+
+  // if (isPlayerPostType && !isSetup) {
+  //   return (
+  //     <div>
+  //       <FrontShortCode
+  //         postType={currentPostType}
+  //         shortCode={`[video_player id=${currentPostId}]`}
+  //       />
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
@@ -185,8 +217,8 @@ const Edit = (props) => {
                     playsInline
                     data-poster={poster}
                     preload="metadata"
-                    {...(autoplay ? { autoplay } : {})}
-                    {...(muted ? { muted } : {})}>
+                    {...autoplayProps}
+                    {...mutedProps}>
                     Your browser does not support the video tag.
                     <source
                       src={source}
@@ -209,4 +241,12 @@ const Edit = (props) => {
   );
 };
 
-export default Edit;
+export default withSelect((select) => {
+  const { getCurrentPostId, getCurrentPostType } = select("core/editor");
+  return {
+    currentPostId:
+      getCurrentPostId() || select("core").getEditedPostAttribute("id"),
+    currentPostType:
+      getCurrentPostType() || select("core").getEditedPostAttribute("type"),
+  };
+})(Edit);

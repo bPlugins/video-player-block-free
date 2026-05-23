@@ -29,11 +29,11 @@ const Style = ({
     dangerouslySetInnerHTML: {
       __html: `
 		#${id} .${_utils_data__WEBPACK_IMPORTED_MODULE_1__.prefix}{
-			width: ${['0px', '0%', '0em'].includes(width) ? '100%' : width};
+			width: ${["0px", "0%", "0em"].includes(width) ? "100%" : width};
 			border-radius: ${radius};
 			overflow: hidden;
 		}
-		`.replace(/\s+/g, ' ')
+		`.replace(/\s+/g, " ")
     }
   });
 };
@@ -69,6 +69,14 @@ const plyrConfig = attributes => {
     },
     volume: 0
   } : {};
+  let currentOrigin = typeof window !== "undefined" ? window.location.origin : "*";
+  if (currentOrigin === "null" || currentOrigin === "about:blank") {
+    try {
+      currentOrigin = window.top?.location?.origin || "*";
+    } catch (e) {
+      currentOrigin = "*";
+    }
+  }
   return {
     controls: (0,_functions__WEBPACK_IMPORTED_MODULE_0__.controlsHandler)(controls),
     clickToPlay: false,
@@ -80,7 +88,15 @@ const plyrConfig = attributes => {
     ...mutedProps,
     resetOnEnd,
     hideControls: autoHideControl,
-    playsinline: true
+    playsinline: true,
+    youtube: {
+      noCookie: false,
+      rel: 0,
+      showinfo: 0,
+      iv_load_policy: 3,
+      modestbranding: 1,
+      origin: currentOrigin
+    }
   };
 };
 
@@ -94,15 +110,9 @@ const plyrConfig = attributes => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   prefix: () => (/* binding */ prefix),
-/* harmony export */   pricingUrl: () => (/* binding */ pricingUrl)
+/* harmony export */   prefix: () => (/* binding */ prefix)
 /* harmony export */ });
 const prefix = "vpbpVideoPlayer";
-
-// Build the pricing URL in JS — no PHP injection needed.
-// wpApiSettings.root is always available in the block editor and gives us the site root.
-const _adminBase = typeof window !== "undefined" && window.wpApiSettings?.root ? window.wpApiSettings.root.replace(/\/wp-json\/?$/, "") + "/wp-admin/" : "/wp-admin/";
-const pricingUrl = _adminBase + "edit.php?post_type=video-player-block&page=vpbp-help-demo#/pricing";
 
 /***/ }),
 
@@ -162,10 +172,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "../plugin-slug/node_modules/react-dom/client.js":
-/*!*******************************************************!*\
-  !*** ../plugin-slug/node_modules/react-dom/client.js ***!
-  \*******************************************************/
+/***/ "./node_modules/react-dom/client.js":
+/*!******************************************!*\
+  !*** ./node_modules/react-dom/client.js ***!
+  \******************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -291,7 +301,7 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "../plugin-slug/node_modules/react-dom/client.js");
+/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
 /* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./style.scss */ "./src/blocks/video-player-block/style.scss");
 /* harmony import */ var _Components_Common_Style__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Components/Common/Style */ "./src/blocks/video-player-block/Components/Common/Style.js");
 /* harmony import */ var _utils_functions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils/functions */ "./src/blocks/video-player-block/utils/functions.js");
@@ -308,15 +318,7 @@ __webpack_require__.r(__webpack_exports__);
 document.addEventListener('DOMContentLoaded', () => {
   const videoEls = document.querySelectorAll(".wp-block-vpbp-video-player-block");
   videoEls.forEach(videoEl => {
-    // Safely parse data-attributes; malformed JSON must not crash other players.
-    let attributes = {};
-    try {
-      attributes = JSON.parse(videoEl.dataset.attributes || '{}');
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.warn('[vpbp] Could not parse block attributes', e);
-      return;
-    }
+    const attributes = JSON.parse(videoEl.dataset.attributes);
     (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(videoEl).render((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_Common_Style__WEBPACK_IMPORTED_MODULE_3__["default"], {
       attributes: attributes,
       id: videoEl.id
@@ -337,28 +339,12 @@ const RenderVideo = ({
   } = attributes;
   const videoEl = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    // Guard against Plyr not being loaded (CDN failure, ad-blocker, etc.).
-    if (typeof Plyr === 'undefined') {
-      // eslint-disable-line no-undef
-      // eslint-disable-next-line no-console
-      console.warn('[vpbp] Plyr library not loaded.');
-      return;
-    }
-
-    // eslint-disable-next-line no-undef
     const player = new Plyr(videoEl.current, (0,_utils_config__WEBPACK_IMPORTED_MODULE_5__.plyrConfig)(attributes));
     player.on('ready', () => {
       if (muted && autoplay) {
         player.play();
       }
     });
-    return () => {
-      try {
-        player.destroy();
-      } catch (e) {
-        /* ignore */
-      }
-    };
   }, []);
   const autoplayProps = autoplay ? {
     autoplay

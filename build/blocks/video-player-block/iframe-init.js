@@ -2,10 +2,10 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./node_modules/plyr/dist/plyr.mjs":
-/*!*****************************************!*\
-  !*** ./node_modules/plyr/dist/plyr.mjs ***!
-  \*****************************************/
+/***/ "../../../../test/wp-content/plugins/plugin-slug/node_modules/plyr/dist/plyr.mjs":
+/*!***************************************************************************************!*\
+  !*** ../../../../test/wp-content/plugins/plugin-slug/node_modules/plyr/dist/plyr.mjs ***!
+  \***************************************************************************************/
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -8874,7 +8874,7 @@ var __webpack_exports__ = {};
   !*** ./src/blocks/video-player-block/iframe-init.js ***!
   \******************************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var plyr__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! plyr */ "./node_modules/plyr/dist/plyr.mjs");
+/* harmony import */ var plyr__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! plyr */ "../../../../test/wp-content/plugins/plugin-slug/node_modules/plyr/dist/plyr.mjs");
 // Loaded via block.json "script" field.
 // With apiVersion 3, "script" executes inside the editor's iframe canvas,
 // so window.Plyr here is the iframe's window.Plyr — Edit.js reads it via

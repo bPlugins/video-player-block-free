@@ -1,26 +1,26 @@
-/*!*****************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/video-player-block/style.scss ***!
-  \*****************************************************************************************************************************************************************************************************************************************************************/
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ../../../../test/wp-content/plugins/plugin-slug/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!../../../../test/wp-content/plugins/plugin-slug/node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!../../../../test/wp-content/plugins/plugin-slug/node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/video-player-block/style.scss ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 .dashicons {
   font-family: dashicons !important;
 }
 
-.wp-block-vpbp-video-player-block * {
+.wp-block-vpb-video * {
   box-sizing: border-box;
 }
-.wp-block-vpbp-video-player-block .vpbVideoPlayer {
+.wp-block-vpb-video .vpbVideoPlayer {
   overflow: hidden;
   margin: 0 auto;
   max-width: 100%;
 }
-.wp-block-vpbp-video-player-block .vpbVideoPlayer .videoWrapper button {
+.wp-block-vpb-video .vpbVideoPlayer .videoWrapper button {
   color: #fff !important;
 }
-.wp-block-vpbp-video-player-block .vpbVideoPlayer .plyr {
+.wp-block-vpb-video .vpbVideoPlayer .plyr {
   position: relative !important;
   pointer-events: all !important;
 }
-.wp-block-vpbp-video-player-block .vpbVideoPlayer .plyr .plyr__controls {
+.wp-block-vpb-video .vpbVideoPlayer .plyr .plyr__controls {
   position: absolute !important;
   bottom: 0 !important;
   left: 0 !important;
@@ -28,21 +28,21 @@
   z-index: 3;
   pointer-events: all !important;
 }
-.wp-block-vpbp-video-player-block .vpbVideoPlayer .plyr .plyr__control--overlaid {
+.wp-block-vpb-video .vpbVideoPlayer .plyr .plyr__control--overlaid {
   z-index: 4;
   pointer-events: all !important;
 }
-.wp-block-vpbp-video-player-block .vpbVideoPlayer .plyr .plyr__video-wrapper {
+.wp-block-vpb-video .vpbVideoPlayer .plyr .plyr__video-wrapper {
   position: relative !important;
   width: 100% !important;
 }
-.wp-block-vpbp-video-player-block .vpbVideoPlayer .plyr input[type=range]::-webkit-slider-runnable-track {
+.wp-block-vpb-video .vpbVideoPlayer .plyr input[type=range]::-webkit-slider-runnable-track {
   box-shadow: none;
 }
-.wp-block-vpbp-video-player-block .vpbVideoPlayer .plyr input[type=range]::-moz-range-track {
+.wp-block-vpb-video .vpbVideoPlayer .plyr input[type=range]::-moz-range-track {
   box-shadow: none;
 }
-.wp-block-vpbp-video-player-block .vpbVideoPlayer .plyr input[type=range]::-ms-track {
+.wp-block-vpb-video .vpbVideoPlayer .plyr input[type=range]::-ms-track {
   box-shadow: none;
 }
 

@@ -1,6 +1,6 @@
 {
   "apiVersion": 3,
-  "name": "vpbp/video-player-block",
+  "name": "vpb/video",
   "title": "Video Player",
   "description": "A Simple, accessible, Easy to Use & fully Customizable video player.",
   "category": "vpbpblocks",

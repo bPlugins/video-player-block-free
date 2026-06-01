@@ -35,7 +35,7 @@ class Init {
             'public' => true,
 			'menu_icon' => 'dashicons-controls-play',
             'publicly_queryable' => false,
-            'template' => [['vpbp/video-player-block']],
+            'template' => [['vpb/video']],
             'template_lock' => 'all',
         ]);
 

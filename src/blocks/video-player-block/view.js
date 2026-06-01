@@ -8,7 +8,9 @@ import { plyrConfig } from './utils/config';
 import { prefix } from './utils/data';
 
 document.addEventListener('DOMContentLoaded', () => {
-	const videoEls = document.querySelectorAll(".wp-block-vpbp-video-player-block");
+	const videoEls = document.querySelectorAll(
+    ".wp-block-vpb-video",
+  );
 	videoEls.forEach(videoEl => {
 		const attributes = JSON.parse(videoEl.dataset.attributes);
 

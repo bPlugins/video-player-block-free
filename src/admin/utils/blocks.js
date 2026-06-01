@@ -10,7 +10,7 @@ const demoLink = `${siteURL}/demo`;
 
 export default [
   {
-    name: "vpbp/video-player-block",
+    name: "vpb/video",
     title: "Video Player",
     icon: videoPlayerIcon,
     demo: `${demoLink}/video-player-block-default/`,

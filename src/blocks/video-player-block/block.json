@@ -1,5 +1,5 @@
 {
-  "apiVersion": 3,
+  "apiVersion": 2,
   "name": "vpb/video",
   "title": "Video Player",
   "description": "A Simple, accessible, Easy to Use & fully Customizable video player.",

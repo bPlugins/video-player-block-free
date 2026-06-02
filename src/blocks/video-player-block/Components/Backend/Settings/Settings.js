@@ -16,6 +16,8 @@ import {
   perUnit,
   emUnit,
 } from "../../../../../../../bpl-tools/utils/options";
+import { AdvertiseCard } from "../../../../../../../bpl-tools/ProControls";
+import { pricingUrl } from "../../../utils/data";
 
 const Settings = ({ attributes, setAttributes }) => {
   const {
@@ -54,8 +56,6 @@ const Settings = ({ attributes, setAttributes }) => {
 
   return (
     <InspectorControls>
-
-
       <TabPanel
         className="bPlTabPanel"
         activeClass="activeTab"
@@ -265,7 +265,8 @@ const Settings = ({ attributes, setAttributes }) => {
           </>
         )}
       </TabPanel>
-      
+
+      <AdvertiseCard planLink={pricingUrl} />
     </InspectorControls>
   );
 };

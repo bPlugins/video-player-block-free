@@ -20,8 +20,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-if (function_exists('vpbp_fs')) {
-    vpbp_fs()->set_basename(true, __FILE__);
+if (function_exists('vpb_fs')) {
+    vpb_fs()->set_basename(true, __FILE__);
 } else {
 
 // Constants
@@ -73,6 +73,9 @@ if (!class_exists('VPBPPlugin')) {
             wp_enqueue_style('plyr');
         }
 
+        
+          	
+
         /**
          * Parent frame only (admin chrome around the iframe).
          * Plyr here is NOT accessible to iframeWindow.Plyr, but is
@@ -93,29 +96,15 @@ if (!class_exists('VPBPPlugin')) {
                 '
             );
 
-            $disabledBlocks = get_option('vpbpDisabledBlocks', []);
-            $disabledBlocks = is_array($disabledBlocks) ? $disabledBlocks : [];
-            $editor_scripts = [
-                'vpbp-video-player-block-editor-script',
-                'vpbp-react-video-player-editor-script',
-                'vpbp-videojs-player-editor-script',
-                'vpbp-vidstack-video-player-editor-script',
-            ];
-            foreach ($editor_scripts as $handle) {
-                if (wp_script_is($handle, 'registered')) {
-                    wp_localize_script(
-                        $handle,
-                        'vpbpDisabledBlocks',
-                        $disabledBlocks
-                    );
-                    wp_add_inline_script(
-                        $handle,
-                        'var vpbpPipecheck = ' . wp_json_encode(vpbp_IsPremium()) . ';',
-                        'before'
-                    );
-                    wp_set_script_translations($handle, 'video-player', VPBP_DIR_PATH . 'languages');
-                }
-            }
+            $handle = 'vpbp-video-player-block-editor-script';
+            wp_set_script_translations($handle, 'video-player-block', VPBP_DIR_PATH . 'languages'); 
+
+
+            wp_add_inline_script( 'vpbp-video-player-block-editor-script', sprintf(
+					'const vpbpPricingUrl = %s;',
+					wp_json_encode( admin_url( 'edit.php?post_type=video-player-block&page=vpbp-help-demo#pricing' ) )
+				), 'before' );
+
         }
     }
     new VPBPPlugin();

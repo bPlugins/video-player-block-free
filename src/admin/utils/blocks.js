@@ -3,10 +3,21 @@ import {
   videoPlayerIcon,
   videojsPlayerIcon,
   vidstackPlayerIcon,
+  interactiveVideoIcon,
+  stickyVideoIcon,
+  videoComparisonIcon,
+  videoHeroIcon,
+  videoLightboxIcon,
+  videoPlaylistIcon,
+  videoTestimonialIcon,
+  videoGalleryIcon,
+  videoReelsIcon,
+  videoTranscriptIcon,
 } from "../../Components/Common/utils/icons";
 
 const siteURL = "https://bblockswp.com";
 const demoLink = `${siteURL}/demo`;
+
 
 export default [
   {
@@ -18,7 +29,7 @@ export default [
     required: true,
   },
   {
-    name: "vpbp/react-video-player",
+    name: "vpb/react-video-player",
     title: "React Video Player",
     icon: reactVideoPlayerIcon,
     demo: `${demoLink}/video-player-block-react-video-player/`,
@@ -26,7 +37,7 @@ export default [
     isPremium: true,
   },
   {
-    name: "vpbp/videojs-player",
+    name: "vpb/videojs-player",
     title: "VideoJs Player",
     icon: videojsPlayerIcon,
     demo: `${demoLink}/video-player-block-videojs-player/`,
@@ -34,11 +45,68 @@ export default [
     isPremium: true,
   },
   {
-    name: "vpbp/vidstack-video-player",
+    name: "vpb/vidstack-video-player",
     title: "Vidstack Player",
     icon: vidstackPlayerIcon,
     demo: `${demoLink}/video-player-block-vidstack-player/`,
     status: "published",
     isPremium: true,
   },
+  {
+    name: "vpb/video-gallery",
+    title: "Video Gallery",
+    icon: videoGalleryIcon,
+    demo: `${demoLink}/video-player-block-video-gallery/`,
+    status: "published",
+    isPremium: true,
+  },
+  {
+    name: "vpb/video-lightbox",
+    title: "Video Lightbox",
+    icon: videoLightboxIcon,
+    demo: `${demoLink}/video-player-block-video-lightbox/`,
+    status: "published",
+    isPremium: true,
+  },
+  {
+    name: "vpb/video-comparison",
+    title: "Video Comparison",
+    icon: videoComparisonIcon,
+    demo: `${demoLink}/video-player-block-video-comparison/`,
+    status: "published",
+    isPremium: true,
+  },
+  {
+    name: "vpb/video-testimonial",
+    title: "Video Testimonial Card",
+    icon: videoTestimonialIcon,
+    demo: `${demoLink}/video-player-block-video-testimonial-card/`,
+    status: "published",
+    isPremium: true,
+  },
+  {
+    name: "vpb/video-playlist",
+    title: "Video Playlist",
+    icon: videoPlaylistIcon,
+    demo: `${demoLink}/video-player-block-video-playlist/#video=0&t=10`,
+    status: "published",
+    isPremium: true,
+  },
+  {
+    name: "vpb/video-reels",
+    title: "Video Reels",
+    icon: videoReelsIcon,
+    demo: `${demoLink}/video-player-block-video-reels/#reel=0`,
+    status: "published",
+    isPremium: true,
+  },
+  {
+    name: "vpb/video-transcript",
+    title: "Video Transcript",
+    icon: videoTranscriptIcon,
+    demo: `${demoLink}/video-player-block-video-transcript/`,
+    status: "published",
+    isPremium: true,
+  },
 ];
+

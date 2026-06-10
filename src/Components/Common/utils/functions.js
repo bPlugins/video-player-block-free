@@ -22,16 +22,3 @@ export const updateData = (attr, value, ...props) => {
   });
 };
 
-export const disabledBlocks = [
-  "vpbp/react-video-player",
-  "vpbp/videojs-player",
-  "vpbp/vidstack-video-player",
-];
-
-export const isBlockEnabled = (name) => {
-  const checkDisabledBlock = disabledBlocks.includes(name);
-  if (checkDisabledBlock) {
-    return false;
-  }
-  return !disabledBlocks.includes(name);
-};

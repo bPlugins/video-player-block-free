@@ -1,5 +1,29 @@
 const iconColor = "#136EF5";
 
+export const videoGalleryIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="200"
+    height="200"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={iconColor}
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round">
+    <rect x="3" y="3" width="7" height="7" rx="1.5" />
+    <rect x="14" y="3" width="7" height="7" rx="1.5" />
+    <rect x="3" y="14" width="7" height="7" rx="1.5" />
+    <rect x="14" y="14" width="7" height="7" rx="1.5" />
+    <polygon points="6,5.5 6,7.5 7.5,6.5" fill={iconColor} stroke="none" />
+    <polygon
+      points="17,16.5 17,18.5 18.5,17.5"
+      fill={iconColor}
+      stroke="none"
+    />
+  </svg>
+);
+
 export const reactVideoPlayerIcon = (
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="red">
     <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -77,6 +101,127 @@ export const videojsPlayerIcon = (
   </svg>
 );
 
+
+export const videoComparisonIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="200"
+    height="200"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={iconColor}
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round">
+    <rect x="2" y="4" width="20" height="16" rx="2" />
+    <line x1="12" y1="4" x2="12" y2="20" />
+    <polyline points="9,9 6,12 9,15" />
+    <polyline points="15,9 18,12 15,15" />
+  </svg>
+);
+
+export const videoTestimonialIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="200"
+    height="200"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={iconColor}
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round">
+    <rect x="2" y="3" width="20" height="14" rx="2" />
+    <polygon points="10,7 10,13 15,10" fill={iconColor} stroke="none" />
+    <circle cx="6" cy="20" r="1.5" fill={iconColor} stroke="none" />
+    <line x1="9" y1="20" x2="22" y2="20" strokeWidth="1.5" />
+  </svg>
+);
+
+export const videoLightboxIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="200"
+    height="200"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={iconColor}
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round">
+    <rect x="2" y="4" width="20" height="16" rx="2" />
+    <circle cx="12" cy="12" r="5" fill={iconColor} stroke="none" />
+    <polygon points="11,10 11,14 14,12" fill="#ffffff" stroke="none" />
+  </svg>
+);
+
+export const videoPlaylistIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="200"
+    height="200"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={iconColor}
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="video-playlist-icon">
+    <rect x="2" y="4" width="13" height="14" rx="2" />
+    <polygon points="7,8 7,14 12,11" fill={iconColor} stroke="none" />
+    <line x1="17" y1="6" x2="22" y2="6" />
+    <line x1="17" y1="10" x2="22" y2="10" />
+    <line x1="17" y1="14" x2="22" y2="14" />
+    <line x1="17" y1="18" x2="20" y2="18" />
+  </svg>
+);
+
+export const videoReelsIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="200"
+    height="200"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={iconColor}
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="video-reels-icon">
+    <rect x="7" y="2" width="10" height="20" rx="2.5" />
+    <polygon points="10,8 10,16 16,12" fill={iconColor} stroke="none" />
+    <line x1="2" y1="8" x2="4" y2="8" />
+    <line x1="2" y1="12" x2="4" y2="12" />
+    <line x1="2" y1="16" x2="4" y2="16" />
+    <line x1="20" y1="8" x2="22" y2="8" />
+    <line x1="20" y1="12" x2="22" y2="12" />
+    <line x1="20" y1="16" x2="22" y2="16" />
+  </svg>
+);
+
+
+export const videoTranscriptIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="200"
+    height="200"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={iconColor}
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="video-transcript-icon">
+    <rect x="2" y="3" width="9" height="14" rx="1.5" />
+    <polygon points="5.5,7.5 5.5,12.5 9,10" fill={iconColor} stroke="none" />
+    <line x1="13" y1="5" x2="22" y2="5" />
+    <line x1="13" y1="9" x2="22" y2="9" />
+    <line x1="13" y1="13" x2="22" y2="13" />
+    <line x1="13" y1="17" x2="19" y2="17" />
+    <line x1="2" y1="20" x2="22" y2="20" strokeWidth="1" opacity="0.4" />
+  </svg>
+);
+
 export const vidstackPlayerIcon = (
   <svg
     // fill="#000000"
@@ -90,14 +235,12 @@ export const vidstackPlayerIcon = (
     xmlSpace="preserve"
     fill={iconColor}
     style={{ fill: iconColor }}
-    className="vidstack-icon"
-  >
+    className="vidstack-icon">
     <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
     <g
       id="SVGRepo_tracerCarrier"
       strokeLinecap="round"
-      strokeLinejoin="round"
-    ></g>
+      strokeLinejoin="round"></g>
     <g id="SVGRepo_iconCarrier">
       <path d="M294,48c0-8.284-6.716-15-15-15H15C6.716,33,0,39.716,0,48v198c0,8.284,6.716,15,15,15h264c8.284,0,15-6.716,15-15V48z M124,113.134c0-2.68,1.596-5.155,3.917-6.495c2.32-1.34,5.263-1.34,7.583,0l37.046,21.364c2.32,1.34,3.771,3.815,3.771,6.495 s-1.419,5.155-3.74,6.495l-36.999,21.364c-1.16,0.67-2.452,1.005-3.747,1.005s-2.755-0.335-3.915-1.005 c-2.32-1.34-3.915-3.815-3.915-6.495V113.134z M263.333,232H89v1c0,4.143-3.357,7.5-7.5,7.5S74,237.143,74,233v-1H30.333 c-4.143,0-7.5-3.357-7.5-7.5s3.357-7.5,7.5-7.5h44c0-4.143,3.357-7.5,7.5-7.5s7.5,3.357,7.5,7.5h174c4.143,0,7.5,3.357,7.5,7.5 S267.476,232,263.333,232z"></path>{" "}
     </g>

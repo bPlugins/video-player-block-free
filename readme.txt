@@ -4,7 +4,7 @@ Donate link: https://www.buymeacoffee.com/abuhayat
 Tags: block, video embed, any video play, video play, Gutenberg block
 Requires at least: 6.5
 Tested up to: 7.0
-Stable tag: 1.0.6
+Stable tag: 2.0.0
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -13,9 +13,9 @@ Embed and play videos easily in the Gutenberg editor with a customizable and res
 
 == Description ==
 
-Video Player Block is a powerful and versatile WordPress plugin that lets you embed and play videos with style. Beyond the standard HTML5 player, it offers support for industry-leading engines like **React Video Player**, **Video.js**, and **Vidstack**, making it the ultimate tool for professional video sites.
+Video Player Block is a powerful and versatile WordPress plugin that lets you embed and play videos with style. Beyond the standard HTML5 player, the Pro version unlocks industry-leading engines like **React Video Player**, **Video.js**, and **Vidstack**, plus a full suite of Pro blocks — **Video Gallery**, **Playlist**, **Lightbox**, **Reels**, **Comparison**, **Testimonial Card**, and **Transcript** — making it the ultimate tool for professional video sites.
 
-Whether you are showcasing YouTube, Vimeo, self-hosted MP4s, HLS streams, or external media from services like Amazon S3 or BunnyCDN, this plugin provides a clean, responsive, and highly customizable video experience directly within the Gutenberg editor.
+Whether you are showcasing YouTube, Vimeo, self-hosted MP4s, or external media from services like Amazon S3 or BunnyCDN, this plugin provides a clean, responsive, and highly customizable video experience directly within the Gutenberg editor.
 
 **[Video Player Block](https://bplugins.com/products/video-player-block/)** | **[Documentation](https://bplugins.com/docs/video-player-block/)** | **[Demos](https://bblockswp.com/demo/video-player-block-all-demos/)**
 
@@ -55,11 +55,31 @@ The Pro version adds advanced player engines, streaming support, and deep custom
 
 == What's New in PRO? ==
 
+= Advanced Player Engines & Blocks =
+
 - **React Video Player Engine:** Access a cutting-edge player with complete customization based on React and Media Chrome.
 
 - **Video.js Player Support:** Deliver industry-standard, high-compatibility media player layouts for professional websites.
 
 - **Vidstack Player Engine:** Experience a premium, state-of-the-art player layout optimized for high performance.
+
+= Pro Video Blocks =
+
+- **Video Gallery:** Showcase multiple videos in grid, masonry, carousel, and bento layouts with category filters and an integrated lightbox player.
+
+- **Video Playlist:** Pair a video player with a clickable episode queue featuring chapters, auto-advance, watched-state persistence, and Netflix/YouTube-style sequential viewing.
+
+- **Video Lightbox:** Add a click-to-play trigger (thumbnail, button, or play-icon overlay) that opens any supported video in a responsive modal, deferring heavy player assets until the visitor opts in.
+
+- **Video Reels:** Build a vertical, swipe-driven short-form video feed (TikTok / Instagram Reels / YouTube Shorts style) for any post, page, or template.
+
+- **Video Comparison:** Reveal a draggable before/after slider that synchronously plays two videos side-by-side in real time.
+
+- **Video Testimonial Card:** Create conversion-focused social-proof cards pairing a customer photo, attributed quote, star rating, and an inline-playable video clip.
+
+- **Video Transcript:** Display a synchronized, clickable transcript alongside any video so viewers can jump to any moment and search engines can index the spoken content.
+
+= Streaming, Sources & Styling =
 
 - **HLS (.m3u8) Streaming:** Support for professional HLS streaming to deliver high-quality video efficiently.
 
@@ -159,13 +179,18 @@ This plugin uses the following third-party libraries:
 * **External Services:** Communicates with `api.bplugins.com` (activation events) and `wp.freemius.com` (opt-in processing) only after user opt-in. See [bPlugins Privacy Policy](https://bplugins.com/privacy-policy) and [Freemius Privacy Policy](https://freemius.com/privacy/).
 
 
+= Video Player Block by B Plugins =
+* **Source:** [https://github.com/bPlugins/video-player-block-free](https://github.com/bPlugins/video-player-block-free)
+* **License:** GPL-2.0-or-later – [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)
+* **Purpose:** A Gutenberg block for embedding and playing videos with support for YouTube, Vimeo, and self-hosted HTML5 video files. Includes customizable controls, responsiveness, and various playback options.
+
 
 == Build Process ==
 
 This plugin uses a build process to generate the production assets (JS/CSS) located in the `build/` directory. The human-readable source code is available in the `src/` directory.
 
 To build the plugin from source:
-1. Clone the repository: https://github.com/bPlugins/video-player-block
+1. Clone the repository: https://github.com/bPlugins/video-player-block-free
 2. Install dependencies: `npm install`
 3. Run the build command: `npm run build`
 
@@ -238,10 +263,23 @@ Replace `123` with the ID of the Video Player post you have created via the **Vi
 3. Videojs Player
 4. Vidstack Player
 5. React Video Player
+6. Video Gallery
+7. Video Playlist
+8. Video Lightbox
+9. Video Reels
+10. Video Comparison
+11. Video Testimonial Card
+12. Video Transcript
 
 == Changelog ==
 
-
+= 2.0.0 - 10 Jun 2026 =
+* Add 7 new Pro video blocks: Video Gallery, Video Playlist, Video Lightbox, Video Reels, Video Comparison, Video Testimonial Card, and Video Transcript
+* Add HLS (.m3u8) and DASH (.mpd) streaming support
+* Add Mux video integration and external source support (Amazon S3, DigitalOcean Spaces, BunnyCDN)
+* Add lazy loading, preloading, and Google Cast / Chromecast support
+* Improve player styling: custom aspect ratios, glassmorphism controls, advanced shadow and border options
+* General performance improvements and bug fixes
 
 = 1.0.6 - 20 Nov 2024 =
 * Fix multiple render issue

@@ -102,6 +102,88 @@ export const welcomeInfo = (adminUrl = "") => ({
           },
         ],
       },
+      {
+        key: "shortcode",
+        label: "Shortcode",
+        steps: [
+          {
+            num: 1,
+            title: "Create a Player",
+            body: "Go to <strong>Video Player</strong> in your admin menu and click <strong>Add New</strong>.",
+            link: { url: `${adminUrl}post-new.php?post_type=video-player-block`, label: "Add New Player" },
+          },
+          {
+            num: 2,
+            title: "Customize & Publish",
+            body: "Add your video source, configure player settings, and <strong>Publish</strong> the post.",
+          },
+          {
+            num: 3,
+            title: "Copy the Shortcode",
+            body: "Go to <strong>Video Player -> All Players</strong> to find and copy your player shortcode (e.g. <code>[video_player id=\"123\"]</code>).",
+            link: { url: `${adminUrl}edit.php?post_type=video-player-block`, label: "All Players" },
+          },
+          {
+            num: 4,
+            title: "Paste & Display",
+            body: "Paste the copied shortcode into any post, page, widget, or page builder layout where you want the player to render.",
+          },
+        ],
+      },
+      {
+        key: "elementor",
+        label: "Elementor",
+        steps: [
+          {
+            num: 1,
+            title: "Create a Player",
+            body: "Go to <strong>Video Player -> Add New</strong> to configure and publish a video player, then copy its shortcode.",
+            link: { url: `${adminUrl}post-new.php?post_type=video-player-block`, label: "Add New Player" },
+          },
+          {
+            num: 2,
+            title: "Edit with Elementor",
+            body: "Open any post or page in the <strong>Elementor</strong> editor.",
+          },
+          {
+            num: 3,
+            title: "Add Shortcode Widget",
+            body: "Search for the <strong>Shortcode</strong> widget in the Elementor elements panel and drag it into your layout.",
+          },
+          {
+            num: 4,
+            title: "Paste Shortcode",
+            body: "Paste your player shortcode (e.g., <code>[video_player id=\"123\"]</code>) into the widget input field and save your changes.",
+          },
+        ],
+      },
+      {
+        key: "php",
+        label: "PHP",
+        steps: [
+          {
+            num: 1,
+            title: "Get Player ID",
+            body: "Go to <strong>Video Player -> All Players</strong> and note the <strong>ID</strong> of the player you want to embed.",
+            link: { url: `${adminUrl}edit.php?post_type=video-player-block`, label: "All Players" },
+          },
+          {
+            num: 2,
+            title: "Copy PHP Function",
+            body: "Copy the WordPress <code>do_shortcode</code> function: <pre><code>&lt;?php echo do_shortcode('[video_player id=\"YOUR_ID\"]'); ?&gt;</code></pre>",
+          },
+          {
+            num: 3,
+            title: "Insert in Template",
+            body: "Open your theme or template files (e.g., <code>single.php</code>, <code>page.php</code>) in an editor.",
+          },
+          {
+            num: 4,
+            title: "Replace ID & Save",
+            body: "Paste the code into your PHP file and replace <code>YOUR_ID</code> with the actual ID of your video player.",
+          },
+        ],
+      },
     ],
   },
 

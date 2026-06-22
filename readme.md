@@ -1,48 +1,46 @@
-## Plugin Setup
-1. Find an appropriate [plugin-slug](https://wordpress.org/plugins/) according to the solution of the plugin.
-2. Write the min 4-5 character prefix, plugin name, short description(up to 150 chars), long description (min 3-4 para), keywords(min 4), block name, and block description in a temporary notebook.
-2. If your block is not part of `b-blocks`, then the text domain should be your `plugin-slug`.
-4. Apply 1st and 2nd list data to this template with case sensitivity: uppercase for uppercase, lowercase for lowercase, title case for title case, and camel case for camel case. (for the block name try different way to search (blockname, blockName, BlockName, Block Name, block name))
-5. Complete the `readme.txt` file.
-6. The main element is `.wp-block-b-blocks-{blockname}`, and its immediate child is `.bBlocksBlockName`. Do not apply width or columns for the main element.
-7. Write appropriate class and ID names for the elements.
-8. Add the initial roadmap for the plugin in the `todo.txt`.
-9. If you skip one of these, we will not provide any support for the project.
-10. Enjoy CODING!
+# Video Player Block
 
-The folder structure that `plugin-zip` accepts is:
+Embed and play videos easily in the Gutenberg editor with a customizable and responsive Video Player Block for WordPress.
 
-```
-/plugin-name
-	plugin-name.php
-	uninstall.php
-	/languages
-	/includes
-	/admin
-		/js
-		/css
-		/images
-	/public
-		/js
-		/css
-		/images
-```
+[Video Player Block](https://bplugins.com/products/video-player-block/) is a powerful and versatile WordPress plugin that lets you embed and play videos with style — directly inside the Gutenberg block editor, with no coding required.
 
-**If you want to add custom folders, you have to add those folder names to the {files} array in the `package.json` file.**
+[![Video Player Block Banner](https://ps.w.org/video-player-block/assets/banner-772x250.png)](https://bplugins.com/products/video-player-block/)
 
-### Required packages for this project
-```json
-"dependencies": {
-	"immer": "latest"
-},
-"devDependencies": {
-	"@wordpress/scripts": "latest",
-	"eslint-webpack-plugin": "latest"
-}
-```
+## 🚀 Key Features – Free Version
+- **Default HTML5 Video Player**: A clean, lightweight, and responsive player for standard self-hosted MP4, WebM, and OGG formats.
+- **YouTube & Vimeo Native Support**: Easily embed and play YouTube and Vimeo videos within the customizable player skin.
+- **Native Gutenberg Block**: Add videos directly from the WordPress editor with a dedicated, easy-to-use block.
+- **Fully Responsive Design**: Automatically adjusts the video player for seamless viewing on desktops, tablets, and mobile devices.
+- **Customizable Player Controls**: Easily show or hide basic player controls like play, volume, and fullscreen.
+- **Shortcode Generator**: Generate and insert video players anywhere using shortcodes for maximum flexibility.
+- **Optimized Performance**: Built for performance to ensure your pages stay fast and user-friendly.
 
-## Editor Setup
-#### For this project use this setup in your IDE Editor. Preferred `Cursor`. If you want to set another setup for your personal/portfolio/example/tutorial project, use another IDE Editor. Setup the `Cursor` IDE using the provided `*.code-profile`
+## 💎 Pro Features
+Extend your video player with **Video Player Block Pro**:
+- **Advanced Player Engines**: React Video Player, Video.js, and Vidstack engines.
+- **Pro Video Blocks**: Video Gallery, Playlist, Lightbox, Reels, Comparison, Testimonial Card, and Transcript.
+- **HLS & DASH Streaming**: Professional HLS (.m3u8) and DASH (.mpd) streaming support.
+- **External Video Sources**: Support for Amazon S3, DigitalOcean Spaces, BunnyCDN, and other external hosting services.
+- **Google Cast & Chromecast**: Wirelessly stream video content to any Chromecast-enabled TV.
+- **Priority Support**: Access to expert assistance and regular updates.
 
-## Not Working after installed on Taste Wp
-#### When you run 'npm run bundle' on a block plugin, the zip file may not work properly. If any issue is encountered, please build and zip it manually.
+[Explore Pro Version →](https://bplugins.com/products/video-player-block-pro/)
+
+## 🛠️ Installation
+1. Log in to your WordPress dashboard.
+2. Go to **Plugins > Add New**.
+3. Search for "Video Player Block".
+4. Click **Install Now** and then **Activate**.
+
+## 📖 How to Use
+1. Open the Block Editor (Gutenberg) on any Page or Post.
+2. Search for the **Video Player Block**.
+3. Upload or select a video, or paste a YouTube/Vimeo URL.
+4. Customize the player settings from the right sidebar.
+5. Publish your page and enjoy your responsive video player!
+
+## 📜 License
+This project is licensed under the GPLv3 or later.
+
+---
+[bPlugins](https://bplugins.com) | [Support](https://bplugins.com/support/) | [Live Demo](https://bblockswp.com/demo/video-player-block-all-demos/) | [Documentation](https://bplugins.com/docs/video-player-block/)

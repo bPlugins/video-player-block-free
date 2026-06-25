@@ -25,18 +25,51 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const RenderVideo = ({ attributes }) => {
-	const { source, poster, muted, autoplay } = attributes;
+	const { source, poster, muted, autoplay, captions, lazyLoad } = attributes;
 
 	const videoEl = useRef(null);
 
 	useEffect(() => {
-		const player = new Plyr(videoEl.current, plyrConfig(attributes));
+		const node = videoEl.current;
+		if (!node) return;
 
-		player.on('ready', () => {
-			if (muted && autoplay) {
-				player.play();
+		let player = null;
+		let observer = null;
+
+		const init = () => {
+			player = new Plyr(node, plyrConfig(attributes));
+
+			player.on('ready', () => {
+				if (muted && autoplay) {
+					player.play();
+				}
+			});
+		};
+
+		if (lazyLoad && typeof IntersectionObserver !== 'undefined') {
+			observer = new IntersectionObserver((entries, obs) => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						init();
+						obs.disconnect();
+					}
+				});
+			}, { rootMargin: '200px' });
+			observer.observe(node);
+		} else {
+			init();
+		}
+
+		return () => {
+			if (observer) observer.disconnect();
+			if (player) {
+				try {
+					player.destroy();
+				} catch (e) {
+					/* ignore */
+				}
 			}
-		});
+		};
 	}, []);
 
 	const autoplayProps = autoplay ? { autoplay } : {};
@@ -58,6 +91,9 @@ const RenderVideo = ({ attributes }) => {
 				<video controls playsinline data-poster={poster} preload='metadata' {...autoplayProps} {...mutedProps} ref={videoEl}>
 					Your browser does not support the video tag.
 					<source src={source} type={`video/${getExtension(source) || 'mp4'}`} />
+					{captions?.map((cap, index) => cap.src ? (
+						<track key={index} kind='captions' src={cap.src} label={cap.label} srcLang={cap.srclang} default={!!cap.default} />
+					) : null)}
 				</video>
 			)}
 		</div>

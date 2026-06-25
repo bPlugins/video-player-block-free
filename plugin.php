@@ -73,9 +73,6 @@ if (!class_exists('VPBPPlugin')) {
             wp_enqueue_style('plyr');
         }
 
-        
-          	
-
         /**
          * Parent frame only (admin chrome around the iframe).
          * Plyr here is NOT accessible to iframeWindow.Plyr, but is

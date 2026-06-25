@@ -7,16 +7,26 @@ $primaryColor: #4527a4;
 
 // Video Player
 .wp-block-vpb-video {
+	overflow: visible !important;
+	contain: none !important;
+	z-index: 20;
+	position: relative;
 	* {
 		box-sizing: border-box;
 	}
 
-	.vpbVideoPlayer {
-		overflow: hidden;
+	.vpbpVideoPlayer {
+		overflow: visible !important;
+		contain: none !important;
+		z-index: 20;
+		position: relative;
 		margin: 0 auto;
 		max-width: 100%;
 
 		.videoWrapper {
+			overflow: visible !important;
+			z-index: 20;
+			position: relative;
 			button {
 				color: #fff !important;
 			}
@@ -24,7 +34,9 @@ $primaryColor: #4527a4;
 
 		// Ensure Plyr controls overlay the video in the iframe editor
 		.plyr {
+			overflow: visible !important;
 			position: relative !important;
+			z-index: 20 !important;
 			pointer-events: all !important;
 
 			// Force controls to overlay video (WordPress editor CSS can override)
@@ -58,6 +70,95 @@ $primaryColor: #4527a4;
 
 			input[type=range]::-ms-track {
 				box-shadow: none;
+			}
+		}
+
+		// Responsive Plyr controls for small viewports
+		@media (max-width: 480px) {
+			.plyr .plyr__controls {
+				padding: 5px 7px !important;
+				flex-wrap: wrap;
+				justify-content: space-between !important;
+				width: 100% !important;
+				gap: 5px;
+
+				// Every direct child stretches to fill the row
+				> * {
+					flex-shrink: 0;
+				}
+
+				// Shrink control buttons
+				.plyr__control {
+					padding: 5px !important;
+
+					svg {
+						width: 14px;
+						height: 14px;
+					}
+				}
+
+				// Progress bar takes full width on its own row
+				.plyr__progress__container {
+					flex: 1 1 100% !important;
+					order: -1;
+					margin: 0 0 5px;
+					width: 100% !important;
+				}
+
+				// Volume slider shrinks on mobile but maintains padding
+				.plyr__volume {
+					min-width: 80px;
+					max-width: 90px;
+					margin-right: 5px;
+				}
+
+				// Make the settings popup menu smaller on mobile
+				.plyr__menu__container {
+					padding: 4px;
+					
+					.plyr__control {
+						font-size: 12px;
+						// Leave extra padding on the right for the arrow
+						padding: 4px 24px 4px 8px !important;
+						
+						&::after {
+							// Shrink the little chevron but keep it vertically centered
+							transform: translateY(-50%) scale(0.8) !important;
+							right: 8px !important;
+						}
+					}
+					
+					// Shrink the back button text if inside a submenu
+					.plyr__menu__value {
+						font-size: 10px;
+					}
+				}
+
+				// Hide controls that are less important on mobile
+				[data-plyr="pip"],
+				[data-plyr="airplay"],
+				[data-plyr="download"],
+				[data-plyr="restart"] {
+					display: none !important;
+				}
+			}
+
+			.plyr .plyr__time {
+				font-size: 11px !important;
+			}
+		}
+
+		@media (max-width: 360px) {
+			.plyr .plyr__controls {
+				// Hide even more controls on very narrow screens
+				.plyr__volume {
+					display: none !important;
+				}
+
+				[data-plyr="rewind"],
+				[data-plyr="fast-forward"] {
+					display: none !important;
+				}
 			}
 		}
 	}

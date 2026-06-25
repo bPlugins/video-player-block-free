@@ -1,5 +1,5 @@
 {
-  "apiVersion": 2,
+  "apiVersion": 3,
   "name": "vpb/video",
   "title": "Video Player",
   "description": "A Simple, accessible, Easy to Use & fully Customizable video player.",
@@ -34,10 +34,27 @@
         "volume": true,
         "pip": false,
         "airplay": false,
+        "captions": false,
         "settings": true,
         "download": false,
         "fullscreen": true
       }
+    },
+    "captions": {
+      "type": "array",
+      "default": []
+    },
+    "ratio": {
+      "type": "string",
+      "default": ""
+    },
+    "accentColor": {
+      "type": "string",
+      "default": ""
+    },
+    "lazyLoad": {
+      "type": "boolean",
+      "default": false
     },
     "width": {
       "type": "string",

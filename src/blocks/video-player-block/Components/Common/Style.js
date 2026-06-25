@@ -1,7 +1,7 @@
 import { prefix } from '../../utils/data';
 
 const Style = ({ attributes, id }) => {
-	const { width, radius } = attributes;
+	const { width, radius, accentColor } = attributes;
 
 	return (
     <style
@@ -9,8 +9,15 @@ const Style = ({ attributes, id }) => {
         __html: `
 		#${id} .${prefix}{
 			width: ${["0px", "0%", "0em"].includes(width) ? "100%" : width};
+			${accentColor ? `--plyr-color-main: ${accentColor};` : ""}
+		}
+		#${id} .${prefix} .plyr,
+		#${id} .${prefix} .videoWrapper {
 			border-radius: ${radius};
-			overflow: hidden;
+		}
+		#${id} .${prefix} .plyr__video-wrapper {
+			overflow: hidden !important;
+			border-radius: ${radius};
 		}
 		`.replace(/\s+/g, " "),
       }}

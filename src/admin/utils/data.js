@@ -4,15 +4,12 @@ import {
   videojsPlayerIcon,
   vidstackPlayerIcon,
   videoGalleryIcon,
-  videoHeroIcon,
   videoLightboxIcon,
   videoComparisonIcon,
   videoTestimonialIcon,
   videoPlaylistIcon,
   videoReelsIcon,
-  interactiveVideoIcon,
-  videoTranscriptIcon,
-  stickyVideoIcon,
+  videoTranscriptIcon
 } from "../../Components/Common/utils/icons";
 import blocks from "./blocks";
 import icon from "../../../public/images/icon-128x128.png";

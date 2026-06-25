@@ -4,12 +4,14 @@ import {
   TabPanel,
   PanelBody,
   ToggleControl,
+  SelectControl,
   __experimentalUnitControl as UnitControl,
 } from "@wordpress/components";
 
 import {
   HelpPanel,
   InlineMediaUpload,
+  ColorControl,
 } from "../../../../../../../bpl-tools/Components";
 import {
   pxUnit,
@@ -18,19 +20,24 @@ import {
 } from "../../../../../../../bpl-tools/utils/options";
 import { AdvertiseCard } from "../../../../../../../bpl-tools/ProControls";
 import { pricingUrl } from "../../../utils/data";
+import Captions from "./Captions";
 
 const Settings = ({ attributes, setAttributes }) => {
   const {
     source,
     poster,
     controls,
+    captions: captionTracks,
     width,
     radius,
+    ratio,
+    accentColor,
     repeat,
     autoplay,
     muted,
     resetOnEnd,
     autoHideControl,
+    lazyLoad,
   } = attributes;
   const {
     restart,
@@ -130,6 +137,35 @@ const Settings = ({ attributes, setAttributes }) => {
                     checked={autoHideControl}
                     onChange={(val) => setAttributes({ autoHideControl: val })}
                   />
+
+                  <ToggleControl
+                    className="mt20"
+                    label={__("Lazy Load", "video-player-block")}
+                    checked={lazyLoad}
+                    onChange={(val) => setAttributes({ lazyLoad: val })}
+                  />
+                  <small>
+                    {__(
+                      "Defer loading the player until it scrolls into view.",
+                      "video-player-block",
+                    )}
+                  </small>
+                </PanelBody>
+
+                <PanelBody
+                  className="bPlPanelBody"
+                  initialOpen={false}
+                  title={__("Captions / Subtitles", "video-player-block")}>
+                  <Captions
+                    captions={captionTracks}
+                    setAttributes={setAttributes}
+                  />
+                  <small>
+                    {__(
+                      "Captions apply to self-hosted videos. YouTube and Vimeo use their own.",
+                      "video-player-block",
+                    )}
+                  </small>
                 </PanelBody>
               </>
             )}
@@ -221,6 +257,13 @@ const Settings = ({ attributes, setAttributes }) => {
 
                 <ToggleControl
                   className="mt20"
+                  label={__("Captions", "video-player-block")}
+                  checked={controls["captions"]}
+                  onChange={(val) => updateControls("captions", val)}
+                />
+
+                <ToggleControl
+                  className="mt20"
                   label={__("Settings", "video-player-block")}
                   checked={settings}
                   onChange={(val) => updateControls("settings", val)}
@@ -252,6 +295,22 @@ const Settings = ({ attributes, setAttributes }) => {
                   units={[pxUnit(), emUnit(), perUnit()]}
                 />
 
+                <SelectControl
+                  className="mt20"
+                  label={__("Aspect Ratio:", "video-player-block")}
+                  labelPosition="left"
+                  value={ratio}
+                  options={[
+                    { label: __("Auto", "video-player-block"), value: "" },
+                    { label: "16:9", value: "16:9" },
+                    { label: "4:3", value: "4:3" },
+                    { label: "1:1", value: "1:1" },
+                    { label: "9:16 (Vertical)", value: "9:16" },
+                    { label: "21:9", value: "21:9" },
+                  ]}
+                  onChange={(val) => setAttributes({ ratio: val })}
+                />
+
                 <UnitControl
                   className="mt20"
                   label={__("Round Corner:", "video-player-block")}
@@ -259,6 +318,13 @@ const Settings = ({ attributes, setAttributes }) => {
                   value={radius}
                   onChange={(val) => setAttributes({ radius: val })}
                   units={[pxUnit()]}
+                />
+
+                <ColorControl
+                  className="mt20"
+                  label={__("Accent Color:", "video-player-block")}
+                  value={accentColor}
+                  onChange={(val) => setAttributes({ accentColor: val })}
                 />
               </PanelBody>
             )}

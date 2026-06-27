@@ -451,6 +451,7 @@ const Edit = (props) => {
                     <video
                       className="media-source"
                       playsInline
+                      crossOrigin="anonymous"
                       controls={hasControls}
                       loop={repeat}
                       poster={poster}

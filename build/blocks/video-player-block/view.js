@@ -419,6 +419,7 @@ const RenderVideo = ({
   (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("video", {
     controls: true,
     playsinline: true,
+    crossOrigin: "anonymous",
     "data-poster": poster,
     preload: "metadata",
     ...autoplayProps,

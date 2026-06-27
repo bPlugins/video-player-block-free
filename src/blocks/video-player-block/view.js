@@ -88,7 +88,7 @@ const RenderVideo = ({ attributes }) => {
 				></div>
 			) : (
 				/* eslint-disable-next-line react/no-unknown-property */
-				<video controls playsinline data-poster={poster} preload='metadata' {...autoplayProps} {...mutedProps} ref={videoEl}>
+				<video controls playsinline crossOrigin='anonymous' data-poster={poster} preload='metadata' {...autoplayProps} {...mutedProps} ref={videoEl}>
 					Your browser does not support the video tag.
 					<source src={source} type={`video/${getExtension(source) || 'mp4'}`} />
 					{captions?.map((cap, index) => cap.src ? (

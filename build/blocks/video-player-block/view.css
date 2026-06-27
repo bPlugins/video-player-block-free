@@ -15,7 +15,7 @@
   box-sizing: border-box;
 }
 .wp-block-vpb-video .vpbpVideoPlayer {
-  overflow: visible !important;
+  overflow: hidden;
   contain: none !important;
   z-index: 20;
   position: relative;
@@ -61,6 +61,74 @@
 .wp-block-vpb-video .vpbpVideoPlayer .plyr input[type=range]::-ms-track {
   box-shadow: none;
 }
+.wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__volume {
+  position: relative;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+.wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__volume input[type=range] {
+  position: absolute !important;
+  bottom: calc(100% - 18px);
+  left: 50%;
+  transform: rotate(-90deg);
+  transform-origin: left center;
+  width: 100px !important;
+  height: 36px !important;
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  border-radius: 6px;
+  padding: 0 8px !important;
+  margin: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  writing-mode: horizontal-tb;
+  direction: ltr;
+}
+.wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__volume:hover input[type=range] {
+  opacity: 1;
+  pointer-events: all;
+}
+.wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__menu__container {
+  padding: clamp(2px, 0.5vw, 5px) clamp(3px, 0.8vw, 7px) !important;
+  background: rgba(28, 28, 30, 0.85) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+  color: #ffffff !important;
+}
+.wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__menu__container > div {
+  overflow: visible !important;
+  background: transparent !important;
+}
+.wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__menu__container [role=menu] {
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+}
+.wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__menu__container [role=menuitemradio],
+.wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__menu__container [role=menuitem] {
+  padding: clamp(2px, 0.4vw, 4px) clamp(16px, 4vw, 24px) clamp(2px, 0.4vw, 4px) clamp(5px, 1vw, 8px) !important;
+  font-size: clamp(11px, 2.5vw, 13px) !important;
+  color: #eeeeee !important;
+  border-radius: 4px !important;
+  transition: all 0.2s ease;
+  background: transparent !important;
+}
+.wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__menu__container [role=menuitemradio]:hover, .wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__menu__container [role=menuitemradio][aria-checked=true],
+.wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__menu__container [role=menuitem]:hover,
+.wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__menu__container [role=menuitem][aria-checked=true] {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+.wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__menu__container .plyr__menu__value {
+  font-size: clamp(9px, 2vw, 11px) !important;
+  margin-left: auto !important;
+  padding-right: 5px;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
 @media (max-width: 480px) {
   .wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__controls {
     padding: 5px 7px !important;
@@ -85,13 +153,29 @@
     margin: 0 0 5px;
     width: 100% !important;
   }
-  .wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__controls .plyr__volume {
-    min-width: 80px;
-    max-width: 90px;
-    margin-right: 5px;
-  }
   .wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__controls .plyr__menu__container {
     padding: 4px;
+    overflow: hidden !important;
+  }
+  .wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__controls .plyr__menu__container [role=menu] {
+    max-height: 35vw !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+  }
+  .wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__controls .plyr__menu__container [role=menu]::-webkit-scrollbar {
+    width: 4px;
+  }
+  .wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__controls .plyr__menu__container [role=menu]::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__controls .plyr__menu__container [role=menu]::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+  }
+  .wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__controls .plyr__menu__container [role=menu]::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.4);
   }
   .wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__controls .plyr__menu__container .plyr__control {
     font-size: 12px;
@@ -115,9 +199,6 @@
   }
 }
 @media (max-width: 360px) {
-  .wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__controls .plyr__volume {
-    display: none !important;
-  }
   .wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__controls [data-plyr=rewind],
   .wp-block-vpb-video .vpbpVideoPlayer .plyr .plyr__controls [data-plyr=fast-forward] {
     display: none !important;

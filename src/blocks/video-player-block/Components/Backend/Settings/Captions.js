@@ -62,7 +62,7 @@ const Captions = ({ captions = [], setAttributes }) => {
             </strong>
             <Button
               isDestructive
-              isSmall
+              size="small"
               variant="link"
               style={{ textDecoration: "none", padding: 0 }}
               onClick={() => remove(index)}>
@@ -71,9 +71,11 @@ const Captions = ({ captions = [], setAttributes }) => {
           </div>
 
           <InlineMediaUpload
+            label={__("Caption file (.vtt)", "video-player-block")}
             value={cap.src}
+            types={["text"]}
             onChange={(val) => update(index, "src", val)}
-            placeholder={__(".vtt file url", "video-player-block")}
+            placeholder={__("https://…/captions.vtt", "video-player-block")}
           />
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginTop: "15px" }}>

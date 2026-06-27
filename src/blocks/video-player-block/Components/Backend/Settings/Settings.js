@@ -20,6 +20,7 @@ import {
 } from "../../../../../../../bpl-tools/utils/options";
 import { AdvertiseCard } from "../../../../../../../bpl-tools/ProControls";
 import { pricingUrl } from "../../../utils/data";
+import { isYoutube, isVimeo } from "../../../utils/functions";
 import Captions from "./Captions";
 
 const Settings = ({ attributes, setAttributes }) => {
@@ -158,16 +159,25 @@ const Settings = ({ attributes, setAttributes }) => {
                   className="bPlPanelBody"
                   initialOpen={false}
                   title={__("Captions / Subtitles", "video-player-block")}>
-                  <Captions
-                    captions={captionTracks}
-                    setAttributes={setAttributes}
-                  />
-                  <small>
-                    {__(
-                      "Captions apply to self-hosted videos. YouTube and Vimeo use their own.",
-                      "video-player-block",
-                    )}
-                  </small>
+                  {isYoutube(source) || isVimeo(source) ? (
+                    <p
+                      style={{
+                        margin: 0,
+                        color: "#757575",
+                        fontStyle: "italic",
+                        fontSize: "13px",
+                      }}>
+                      {__(
+                        "Captions aren't available for YouTube and Vimeo here — they provide their own captions from the source platform. Custom .vtt tracks apply to self-hosted videos only.",
+                        "video-player-block",
+                      )}
+                    </p>
+                  ) : (
+                    <Captions
+                      captions={captionTracks}
+                      setAttributes={setAttributes}
+                    />
+                  )}
                 </PanelBody>
               </>
             )}

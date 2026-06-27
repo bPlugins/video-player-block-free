@@ -16,6 +16,7 @@ $primaryColor: #4527a4;
   }
 
   .vpbpVideoPlayer {
+    container-type: inline-size;
     overflow: hidden;
     contain: none !important;
     z-index: 20;
@@ -38,6 +39,14 @@ $primaryColor: #4527a4;
       position: relative !important;
       z-index: 20 !important;
       pointer-events: all !important;
+
+      // Plyr defaults the poster to `background-size: contain`, which letterboxes
+      // a poster whose aspect ratio differs from the player (black bars around
+      // the image). Use `cover` so the poster fills the frame like the video does.
+      .plyr__poster {
+        background-size: cover !important;
+        background-position: center !important;
+      }
 
       // Force controls to overlay video (WordPress editor CSS can override)
       .plyr__controls {
@@ -161,8 +170,8 @@ $primaryColor: #4527a4;
       }
     }
 
-    // Responsive Plyr controls for small viewports
-    @media (max-width: 480px) {
+    // Responsive Plyr controls for small containers
+    @container (max-width: 480px) {
       .plyr .plyr__controls {
         padding: 5px 7px !important;
         flex-wrap: wrap;
@@ -197,10 +206,21 @@ $primaryColor: #4527a4;
         .plyr__menu__container {
           padding: 4px;
           overflow: hidden !important;
+          // Cap the whole popup to the space above the control bar. Uses cqw
+          // (container width), NOT vw: in the editor's mobile preview `vw` still
+          // resolves to the desktop window, so a vw cap never engages and the
+          // menu overflows past the player's top edge (clipped, unreachable).
+          // cqw tracks the simulated player width in the editor and the real
+          // width on the frontend. 56cqw ≈ the player height (16:9); minus ~52px
+          // for the control bar leaves the room available above the gear button.
+          max-height: calc(56cqw - 52px) !important;
 
-          // Constrain the options list so it scrolls within the player
+          // The scrollable options list must fit *under* the fixed submenu
+          // back-header (~45px) inside the capped container, or its last row
+          // (e.g. "2×") gets clipped even when scrolled to the bottom. Subtract
+          // the header + padding so header + list always fits the container.
           [role="menu"] {
-            max-height: 35vw !important;
+            max-height: calc(56cqw - 112px) !important;
             overflow-y: auto !important;
             -webkit-overflow-scrolling: touch;
             // Modern thin scrollbar
@@ -257,7 +277,7 @@ $primaryColor: #4527a4;
       }
     }
 
-    @media (max-width: 360px) {
+    @container (max-width: 360px) {
       .plyr .plyr__controls {
         [data-plyr="rewind"],
         [data-plyr="fast-forward"] {

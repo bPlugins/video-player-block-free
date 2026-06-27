@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { withSelect } from "@wordpress/data";
+import { withSelect, useDispatch } from "@wordpress/data";
 import { useBlockProps } from "@wordpress/block-editor";
 import { MediaPlaceholder } from "../../../../../../bpl-tools/Components";
 import Settings from "./Settings/Settings";
@@ -49,27 +49,57 @@ const ensureSprite = (topDoc, PlyrConstructor) => {
     });
 };
 
-const EmbedPortal = ({ source, placeholderRef, attributes }) => {
+const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
   const [rect, setRect] = useState(null);
+  const overlayRoot = useRef(null);
   const portalRoot = useRef(null);
   const playerRef = useRef(null);
   const playerElRef = useRef(null);
+  // Keep the latest onSelect without re-binding the listener every render.
+  const onSelectRef = useRef(onSelect);
+  onSelectRef.current = onSelect;
 
-  // Create a container div in the TOP-LEVEL window's body.
+  // Create a container div in the TOP-LEVEL window's body to bypass iframe security.
   useEffect(() => {
     const topDoc = window.top?.document || window.document;
-    const div = topDoc.createElement("div");
-    div.style.cssText =
-      "position:fixed;z-index:999999;pointer-events:auto;overflow:hidden;";
-    topDoc.body.appendChild(div);
-    portalRoot.current = div;
+
+    // Outer overlay carries the `.wp-block-vpb-video` wrapper class so the
+    // block's scoped CSS — including the responsive `@container` rules — matches
+    // here, exactly as it does on the frontend. Without this wrapper the portal
+    // sits bare on <body> and the mobile control layout never kicks in.
+    const overlay = topDoc.createElement("div");
+    overlay.className = "wp-block-vpb-video vpbp-portal-overlay";
+    overlay.style.cssText =
+      "position:fixed;z-index:999999;pointer-events:auto;";
+
+    // This overlay lives in the TOP window, layered over the iframe canvas, so
+    // clicks on it never reach Gutenberg's block-selection handling — the block
+    // would stay unselected and its Inspector (controls panel) would never open.
+    // Explicitly select the block on mousedown instead. `clickToPlay` is off, so
+    // this won't trigger playback; Plyr's own control handlers still fire because
+    // we neither stop propagation nor prevent default.
+    const selectHandler = () => onSelectRef.current?.();
+    overlay.addEventListener("mousedown", selectHandler, true);
+
+    // Inner element is the actual Plyr host AND the size container that the
+    // `@container (max-width: …)` queries measure against.
+    const inner = topDoc.createElement("div");
+    inner.className = "vpbpVideoPlayer";
+    inner.style.cssText = "width:100%;height:100%;";
+    overlay.appendChild(inner);
+
+    topDoc.body.appendChild(overlay);
+    overlayRoot.current = overlay;
+    portalRoot.current = inner;
 
     return () => {
       if (playerRef.current) {
         try { playerRef.current.destroy(); } catch (_) { /* ignore */ }
         playerRef.current = null;
       }
-      div.remove();
+      overlay.removeEventListener("mousedown", selectHandler, true);
+      overlay.remove();
+      overlayRoot.current = null;
       portalRoot.current = null;
     };
   }, []);
@@ -89,6 +119,7 @@ const EmbedPortal = ({ source, placeholderRef, attributes }) => {
 
     // Create a wrapper to contain the Plyr player.
     const wrapper = topDoc.createElement("div");
+    wrapper.className = "videoWrapper";
     wrapper.style.cssText = "width:100%;height:100%;";
     wrapper.innerHTML = `<div data-plyr-provider="${provider}" data-plyr-embed-id="${embedId}"></div>`;
     portalRoot.current.appendChild(wrapper);
@@ -131,6 +162,43 @@ const EmbedPortal = ({ source, placeholderRef, attributes }) => {
       // rect in the top-level window.
       let box = el.getBoundingClientRect();
       let win = el.ownerDocument.defaultView;
+      const topDoc = window.top?.document || window.document;
+
+      // Sync block CSS from the editor iframe to the top-level window so our
+      // portal player receives the responsive media queries and custom UI.
+      if (el.ownerDocument !== topDoc && !topDoc.querySelector("#vpbp-portal-styles")) {
+        const styles = Array.from(el.ownerDocument.querySelectorAll("style"));
+        styles.forEach((style) => {
+          if (style.innerHTML.includes(".vpbpVideoPlayer")) {
+            const clone = topDoc.createElement("style");
+            clone.id = "vpbp-portal-styles";
+            clone.innerHTML = style.innerHTML;
+            topDoc.head.appendChild(clone);
+          }
+        });
+      }
+
+      // The responsive `@container` rules live in the block's compiled
+      // stylesheet (view.css), loaded as a <link> in the editor iframe but NOT
+      // in the top document where this portal renders. Clone that link across so
+      // the portal player's controls adapt on small screens (mobile preview).
+      if (el.ownerDocument !== topDoc && !topDoc.querySelector("#vpbp-portal-css")) {
+        const links = Array.from(
+          el.ownerDocument.querySelectorAll('link[rel="stylesheet"]'),
+        ).filter(
+          (l) =>
+            l.href &&
+            l.href.includes("video-player-block") &&
+            l.href.includes("view.css"),
+        );
+        links.forEach((l, i) => {
+          const clone = topDoc.createElement("link");
+          if (i === 0) clone.id = "vpbp-portal-css";
+          clone.rel = "stylesheet";
+          clone.href = l.href;
+          topDoc.head.appendChild(clone);
+        });
+      }
 
       while (win && win !== window.top) {
         const frameEl = win.frameElement;
@@ -163,10 +231,10 @@ const EmbedPortal = ({ source, placeholderRef, attributes }) => {
     return () => clearInterval(id);
   }, [placeholderRef]);
 
-  // Keep the portal container positioned over the block placeholder.
+  // Keep the portal overlay positioned over the block placeholder.
   useEffect(() => {
-    if (!portalRoot.current || !rect) return;
-    const s = portalRoot.current.style;
+    if (!overlayRoot.current || !rect) return;
+    const s = overlayRoot.current.style;
     s.top = `${rect.top}px`;
     s.left = `${rect.left}px`;
     s.width = `${rect.width}px`;
@@ -184,6 +252,7 @@ const Edit = (props) => {
     currentPostId,
     currentPostType,
   } = props;
+  const { selectBlock } = useDispatch("core/block-editor");
   const {
     source,
     poster,
@@ -380,6 +449,7 @@ const Edit = (props) => {
                       source={source}
                       placeholderRef={embedPlaceholderRef}
                       attributes={attributes}
+                      onSelect={() => selectBlock(clientId)}
                     />
                   )}
 
@@ -387,6 +457,7 @@ const Edit = (props) => {
                     ref={embedPlaceholderRef}
                     role="button"
                     tabIndex={0}
+                    onMouseDown={() => selectBlock(clientId)}
                     onClick={() => setShowEmbed(true)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === " ") setShowEmbed(true);

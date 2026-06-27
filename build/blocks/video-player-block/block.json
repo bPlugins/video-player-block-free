@@ -50,7 +50,7 @@
     },
     "ratio": {
       "type": "string",
-      "default": ""
+      "default": "16:9"
     },
     "accentColor": {
       "type": "string",

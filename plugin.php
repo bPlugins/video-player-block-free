@@ -119,5 +119,23 @@ add_filter('block_categories_all', function ($categories, $post) {
     return $categories;
 }, 10, 2);
 
+// Allow uploading WebVTT caption files (.vtt) to the media library so authors
+// can pick subtitle tracks for the Video Player block. WordPress omits this
+// mime type by default, which otherwise blocks the upload.
+add_filter('upload_mimes', function ($mimes) {
+    $mimes['vtt'] = 'text/vtt';
+    return $mimes;
+});
+
+// Ensure .vtt files are correctly identified on upload (real-mime sniffing can
+// report them as plain text/CSV, which fails WP's ext-vs-type security check).
+add_filter('wp_check_filetype_and_ext', function ($data, $file, $filename, $mimes) {
+    if (strtolower(substr($filename, -4)) === '.vtt') {
+        $data['ext']  = 'vtt';
+        $data['type'] = 'text/vtt';
+    }
+    return $data;
+}, 10, 4);
+
 
 }

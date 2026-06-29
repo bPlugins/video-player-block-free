@@ -264,6 +264,12 @@ const Settings = ({ attributes, setAttributes }) => {
                   checked={airplay}
                   onChange={(val) => updateControls("airplay", val)}
                 />
+                <small style={{ display: "block", color: "#757575", fontStyle: "italic" }}>
+                  {__(
+                    "AirPlay shows only in Safari on Apple devices (macOS/iOS) for self-hosted videos — not in Chrome/Firefox/Edge or for YouTube/Vimeo.",
+                    "video-player-block",
+                  )}
+                </small>
 
                 <h4 style={{ margin: "25px 0 10px", borderBottom: "1px solid #ccc", paddingBottom: "5px" }}>{__("Features", "video-player-block")}</h4>
                 <ToggleControl

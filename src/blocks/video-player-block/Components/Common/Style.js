@@ -10,6 +10,8 @@ const Style = ({ attributes, id }) => {
 		#${id} .${prefix}{
 			width: ${["0px", "0%", "0em"].includes(width) ? "100%" : width};
 			${accentColor ? `--plyr-color-main: ${accentColor};` : ""}
+			border-radius: ${radius};
+			overflow: hidden;
 		}
 		#${id} .${prefix} .plyr,
 		#${id} .${prefix} .videoWrapper {

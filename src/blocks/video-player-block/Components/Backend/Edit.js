@@ -69,8 +69,13 @@ const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
     // sits bare on <body> and the mobile control layout never kicks in.
     const overlay = topDoc.createElement("div");
     overlay.className = "wp-block-vpb-video vpbp-portal-overlay";
+    // z-index must stay BELOW WordPress modal layers (`.media-modal` is
+    // 160000, Gutenberg `.components-modal__screen-overlay` is 100000) so an
+    // open Media Library / modal naturally covers the embed instead of the
+    // playing video painting over it. 10000 still sits above the canvas iframe
+    // content; the clip-to-canvas logic below keeps it off the editor chrome.
     overlay.style.cssText =
-      "position:fixed;z-index:999999;pointer-events:auto;";
+      "position:fixed;z-index:10000;pointer-events:auto;";
 
     // This overlay lives in the TOP window, layered over the iframe canvas, so
     // clicks on it never reach Gutenberg's block-selection handling — the block
@@ -103,6 +108,31 @@ const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
       portalRoot.current = null;
     };
   }, []);
+
+  // Round the embed in the portal. The block's per-instance Style.js radius rule
+  // is scoped to `#blockId …`, but the portal lives in the top window OUTSIDE
+  // that block wrapper, so that rule never matches here. Mirror it with a
+  // top-window <style> targeting the portal's container (which already has
+  // overflow:hidden via the synced block CSS) so it's clipped to one clean
+  // rounded shape — rounding only the inner frame leaves the black player
+  // background poking out of the square corners.
+  useEffect(() => {
+    const topDoc = window.top?.document || window.document;
+    const styleId = "vpbp-portal-radius";
+    let styleEl = topDoc.getElementById(styleId);
+    if (!styleEl) {
+      styleEl = topDoc.createElement("style");
+      styleEl.id = styleId;
+      topDoc.head.appendChild(styleEl);
+    }
+    const r = attributes?.radius || "0px";
+    styleEl.innerHTML = `.vpbp-portal-overlay .vpbpVideoPlayer{border-radius:${r} !important;overflow:hidden !important;}`;
+
+    return () => {
+      const el = topDoc.getElementById(styleId);
+      if (el) el.remove();
+    };
+  }, [attributes?.radius]);
 
   // Initialise Plyr on the portal element once it's mounted.
   useEffect(() => {
@@ -160,8 +190,40 @@ const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
 
       // Walk up through iframe boundaries to get the correct viewport-relative
       // rect in the top-level window.
-      let box = el.getBoundingClientRect();
+      const local = el.getBoundingClientRect();
+
+      // Visibility test: the embed lives in the top window above the whole
+      // canvas, so when the placeholder is scrolled out of the canvas viewport
+      // we must hide the overlay, otherwise the playing video paints over the
+      // editor chrome. We use a pure rect/viewport check (NOT elementFromPoint
+      // hit-testing) — the transient overlays Gutenberg paints at block
+      // boundaries while editing would otherwise make this flip on/off every
+      // frame, which is what made the player blink.
+      const ownerDoc = el.ownerDocument;
+      let visible = local.width > 0 && local.height > 0;
+      if (visible) {
+        const vw = ownerDoc.documentElement.clientWidth;
+        const vh = ownerDoc.documentElement.clientHeight;
+        // Hidden only once it's fully outside the canvas viewport (allow it to
+        // straddle an edge — the clipPath below trims the off-canvas part).
+        if (
+          local.bottom <= 0 ||
+          local.right <= 0 ||
+          local.top >= vh ||
+          local.left >= vw
+        ) {
+          visible = false;
+        }
+      }
+
+      let box = {
+        top: local.top,
+        left: local.left,
+        width: local.width,
+        height: local.height,
+      };
       let win = el.ownerDocument.defaultView;
+      let clip = null;
       const topDoc = window.top?.document || window.document;
 
       // Sync block CSS from the editor iframe to the top-level window so our
@@ -210,8 +272,26 @@ const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
           width: box.width,
           height: box.height,
         };
+        // Outermost frame (the editor canvas) is in top-window coordinates —
+        // its rect is the visible bounds the overlay must stay clipped within
+        // so it never overflows the editor header/sidebar.
+        clip = {
+          top: frameBox.top,
+          left: frameBox.left,
+          right: frameBox.right,
+          bottom: frameBox.bottom,
+        };
         win = frameEl.ownerDocument.defaultView;
       }
+
+      const sameClip = (a, b) =>
+        (!a && !b) ||
+        (a &&
+          b &&
+          a.top === b.top &&
+          a.left === b.left &&
+          a.right === b.right &&
+          a.bottom === b.bottom);
 
       setRect((prev) => {
         if (
@@ -219,26 +299,78 @@ const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
           prev.top === box.top &&
           prev.left === box.left &&
           prev.width === box.width &&
-          prev.height === box.height
+          prev.height === box.height &&
+          prev.visible === visible &&
+          sameClip(prev.clip, clip)
         )
           return prev;
-        return box;
+        return { ...box, visible, clip };
       });
     };
 
+    // Coalesce bursts of scroll/resize events into one update per frame so the
+    // overlay tracks the placeholder smoothly instead of lagging behind (the
+    // old 200ms poll made the top-window video visibly trail and briefly
+    // overflow the canvas while scrolling).
+    const topWin = window.top || window;
+    const iframeWin = placeholderRef.current.ownerDocument.defaultView;
+
+    let raf = 0;
+    const schedule = () => {
+      topWin.cancelAnimationFrame(raf);
+      raf = topWin.requestAnimationFrame(update);
+    };
+
     update();
-    const id = setInterval(update, 200);
-    return () => clearInterval(id);
+
+    // Capture-phase scroll catches inner scroll containers (the canvas scrolls
+    // an inner element, not the window) in both the iframe and top realms.
+    iframeWin?.addEventListener("scroll", schedule, true);
+    iframeWin?.addEventListener("resize", schedule);
+    if (topWin !== iframeWin) {
+      topWin.addEventListener("scroll", schedule, true);
+      topWin.addEventListener("resize", schedule);
+    }
+
+    // Fallback poll (slower) for layout shifts that fire no event — e.g.
+    // toggling the settings sidebar, which reflows the canvas width.
+    const id = topWin.setInterval(update, 300);
+
+    return () => {
+      topWin.cancelAnimationFrame(raf);
+      topWin.clearInterval(id);
+      iframeWin?.removeEventListener("scroll", schedule, true);
+      iframeWin?.removeEventListener("resize", schedule);
+      if (topWin !== iframeWin) {
+        topWin.removeEventListener("scroll", schedule, true);
+        topWin.removeEventListener("resize", schedule);
+      }
+    };
   }, [placeholderRef]);
 
-  // Keep the portal overlay positioned over the block placeholder.
+  // Keep the portal overlay positioned over the block placeholder, clipped to
+  // the editor canvas so it can't overflow the editor header/sidebar, and
+  // hidden entirely when the placeholder is scrolled out of / occluded in the
+  // canvas (e.g. another block scrolled over it).
   useEffect(() => {
     if (!overlayRoot.current || !rect) return;
     const s = overlayRoot.current.style;
+    s.display = rect.visible ? "block" : "none";
     s.top = `${rect.top}px`;
     s.left = `${rect.left}px`;
     s.width = `${rect.width}px`;
     s.height = `${rect.height}px`;
+
+    const clip = rect.clip;
+    if (clip) {
+      const top = Math.max(0, clip.top - rect.top);
+      const left = Math.max(0, clip.left - rect.left);
+      const bottom = Math.max(0, rect.top + rect.height - clip.bottom);
+      const right = Math.max(0, rect.left + rect.width - clip.right);
+      s.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
+    } else {
+      s.clipPath = "none";
+    }
   }, [rect]);
 
   return null; // The DOM lives in the portal container, not in React's tree.
@@ -249,6 +381,7 @@ const Edit = (props) => {
     attributes,
     setAttributes,
     clientId,
+    isSelected,
     currentPostId,
     currentPostType,
   } = props;
@@ -276,6 +409,15 @@ const Edit = (props) => {
   // into the parent admin window (bypassing the null-origin canvas restriction).
   const [showEmbed, setShowEmbed] = useState(false);
   const embedPlaceholderRef = useRef(null);
+
+  // The live YouTube/Vimeo embed renders in a top-window overlay (z-index above
+  // the canvas). Keeping it mounted while the block is deselected makes it sit
+  // on top of whatever block you select next — its toolbar/controls then render
+  // *behind* the video. So tear the embed down on deselect: the static poster
+  // (in the canvas) takes over, and re-selecting + clicking replays it.
+  useEffect(() => {
+    if (!isSelected) setShowEmbed(false);
+  }, [isSelected]);
 
   /**
    * Self-hosted (HTML5) editor preview: drive Plyr on a native <video> inside
@@ -444,7 +586,7 @@ const Edit = (props) => {
                 <div className="videoWrapper">
                   {/* Portal-based embed overlay (rendered in the parent admin
                       window so YouTube/Vimeo get a real origin). */}
-                  {showEmbed && (
+                  {showEmbed && isSelected && (
                     <EmbedPortal
                       source={source}
                       placeholderRef={embedPlaceholderRef}
@@ -522,7 +664,9 @@ const Edit = (props) => {
                     <video
                       className="media-source"
                       playsInline
-                      crossOrigin="anonymous"
+                      {...(captions?.length
+                        ? { crossOrigin: "anonymous" }
+                        : {})}
                       controls={hasControls}
                       loop={repeat}
                       poster={poster}

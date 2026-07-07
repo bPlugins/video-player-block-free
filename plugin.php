@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Video Player Block
  * Description: A Simple, accessible, Easy to Use & fully Customizable video player. 
- * Version: 2.0.0
+ * Version: 2.1.0
  * Requires at least: 6.5
  * Tested up to: 7.0
  * Requires PHP: 7.4
@@ -25,7 +25,7 @@ if (function_exists('vpb_fs')) {
 } else {
 
 // Constants
-define('VPBP_PLUGIN_VERSION', (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'localhost') ? time() : '2.0.0');
+define('VPBP_PLUGIN_VERSION', (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'localhost') ? time() : '2.1.0');
 define('VPBP_DIR_URL', plugin_dir_url(__FILE__));
 define('VPBP_PUBLIC_DIR', VPBP_DIR_URL . 'public/');
 define('VPBP_DIR_PATH', plugin_dir_path(__FILE__));

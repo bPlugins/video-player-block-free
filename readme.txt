@@ -297,6 +297,15 @@ Replace `123` with the ID of the Video Player post you have created via the **Vi
 
 == Changelog ==
 
+= 2.1.0 - 06 Jul 2026 =
+* Add YouTube and Vimeo player supports.
+* Add custom aspect ratios.
+* UX Improved.
+* Caption Support.
+* Lazy load controls.
+* Responsive design.
+* Fix some bugs.
+
 = 2.0.0 - 10 Jun 2026 =
 * Add 7 new Pro video blocks: Video Gallery, Video Playlist, Video Lightbox, Video Reels, Video Comparison, Video Testimonial Card, and Video Transcript
 * Add HLS (.m3u8) and DASH (.mpd) streaming support

@@ -16619,6 +16619,10 @@ const welcomeInfo = (adminUrl = "") => ({
   },
   // Changelogs — each list item starts with <strong>Type:</strong> for badges
   changelogs: [{
+    version: "2.1.0 - 06 Jul 26",
+    type: "new",
+    list: ["<strong>New:</strong> Added <strong>Caption</strong> feature.", "<strong>New:</strong> Added YouTube and Vimeo player supports.", "<strong>New:</strong> Added custom aspect ratios.", "<strong>New:</strong> Added Lazy load controls.", "<strong>New:</strong> Responsive design improved.", "<strong>New:</strong> UX Improved.", "<strong>Fix:</strong> Fixed some bugs."]
+  }, {
     version: "2.0.0 - 10 Jun 26",
     type: "new",
     list: ["<strong>New:</strong> Added 7 new Pro video blocks — Video Gallery, Video Playlist, Video Lightbox, Video Reels, Video Comparison, Video Testimonial Card, and Video Transcript.", "<strong>New:</strong> Added HLS (.m3u8) and DASH (.mpd) streaming support.", "<strong>New:</strong> Added Mux video integration and external source support (Amazon S3, DigitalOcean Spaces, BunnyCDN).", "<strong>New:</strong> Added lazy loading, preloading, and Google Cast / Chromecast support.", "<strong>Improve:</strong> Improved player styling — custom aspect ratios, glassmorphism controls, advanced shadow and border options.", "<strong>Improve:</strong> General performance improvements and bug fixes."]

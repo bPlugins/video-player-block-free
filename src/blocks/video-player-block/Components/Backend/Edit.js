@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { __ } from "@wordpress/i18n";
+import { useState,useEffect,useRef } from "react";
 import { withSelect, useDispatch } from "@wordpress/data";
 import { useBlockProps } from "@wordpress/block-editor";
 import { MediaPlaceholder } from "../../../../../../bpl-tools/Components";
@@ -74,8 +75,7 @@ const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
     // open Media Library / modal naturally covers the embed instead of the
     // playing video painting over it. 10000 still sits above the canvas iframe
     // content; the clip-to-canvas logic below keeps it off the editor chrome.
-    overlay.style.cssText =
-      "position:fixed;z-index:10000;pointer-events:auto;";
+    overlay.style.cssText = "position:fixed;z-index:10000;pointer-events:auto;";
 
     // This overlay lives in the TOP window, layered over the iframe canvas, so
     // clicks on it never reach Gutenberg's block-selection handling — the block
@@ -99,7 +99,11 @@ const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
 
     return () => {
       if (playerRef.current) {
-        try { playerRef.current.destroy(); } catch (_) { /* ignore */ }
+        try {
+          playerRef.current.destroy();
+        } catch (_) {
+          /* ignore */
+        }
         playerRef.current = null;
       }
       overlay.removeEventListener("mousedown", selectHandler, true);
@@ -140,12 +144,15 @@ const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
 
     const topWin = window.top || window;
     const topDoc = topWin.document || document;
-    const PlyrConstructor = topWin.Plyr || (typeof Plyr !== "undefined" ? Plyr : null);
+    const PlyrConstructor =
+      topWin.Plyr || (typeof Plyr !== "undefined" ? Plyr : null);
     if (!PlyrConstructor) return;
 
     // Build the provider div that Plyr expects.
     const provider = isYoutube(source) ? "youtube" : "vimeo";
-    const embedId = isYoutube(source) ? getYoutubeId(source) : getVimeoId(source);
+    const embedId = isYoutube(source)
+      ? getYoutubeId(source)
+      : getVimeoId(source);
 
     // Create a wrapper to contain the Plyr player.
     const wrapper = topDoc.createElement("div");
@@ -169,7 +176,11 @@ const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
 
     return () => {
       if (playerRef.current) {
-        try { playerRef.current.destroy(); } catch (_) { /* ignore */ }
+        try {
+          playerRef.current.destroy();
+        } catch (_) {
+          /* ignore */
+        }
         playerRef.current = null;
       }
       if (playerElRef.current) {
@@ -228,7 +239,10 @@ const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
 
       // Sync block CSS from the editor iframe to the top-level window so our
       // portal player receives the responsive media queries and custom UI.
-      if (el.ownerDocument !== topDoc && !topDoc.querySelector("#vpbp-portal-styles")) {
+      if (
+        el.ownerDocument !== topDoc &&
+        !topDoc.querySelector("#vpbp-portal-styles")
+      ) {
         const styles = Array.from(el.ownerDocument.querySelectorAll("style"));
         styles.forEach((style) => {
           if (style.innerHTML.includes(".vpbpVideoPlayer")) {
@@ -244,7 +258,10 @@ const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
       // stylesheet (view.css), loaded as a <link> in the editor iframe but NOT
       // in the top document where this portal renders. Clone that link across so
       // the portal player's controls adapt on small screens (mobile preview).
-      if (el.ownerDocument !== topDoc && !topDoc.querySelector("#vpbp-portal-css")) {
+      if (
+        el.ownerDocument !== topDoc &&
+        !topDoc.querySelector("#vpbp-portal-css")
+      ) {
         const links = Array.from(
           el.ownerDocument.querySelectorAll('link[rel="stylesheet"]'),
         ).filter(
@@ -477,8 +494,8 @@ const Edit = (props) => {
       const PlyrConstructor = isIframed
         ? iframeWindow.Plyr
         : typeof Plyr !== "undefined"
-          ? Plyr
-          : null;
+        ? Plyr
+        : null;
 
       if (!PlyrConstructor) {
         tries++;
@@ -500,7 +517,8 @@ const Edit = (props) => {
       // DEFAULT controls — which is why toggles appear to do nothing in v3 but
       // work in v2 (same realm). Re-materialise the config inside the iframe
       // realm so Plyr recognises and honours it.
-      const RealmJSON = isIframed && iframeWindow.JSON ? iframeWindow.JSON : JSON;
+      const RealmJSON =
+        isIframed && iframeWindow.JSON ? iframeWindow.JSON : JSON;
       const config = RealmJSON.parse(RealmJSON.stringify(rawConfig));
 
       player = new PlyrConstructor(videoWrapper.children[0], config);
@@ -602,7 +620,8 @@ const Edit = (props) => {
                     onMouseDown={() => selectBlock(clientId)}
                     onClick={() => setShowEmbed(true)}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") setShowEmbed(true);
+                      if (e.key === "Enter" || e.key === " ")
+                        setShowEmbed(true);
                     }}
                     aria-label="Play video preview"
                     style={{
@@ -700,6 +719,7 @@ const Edit = (props) => {
         ) : (
           <MediaPlaceholder
             type="video"
+            placeholder={__("Upload or paste a video URL to get started", "video-player-block")}
             onChange={(val) => setAttributes({ source: val.url })}
             icon={cameraIcon}
           />

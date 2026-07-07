@@ -187,6 +187,19 @@ export const welcomeInfo = (adminUrl = "") => ({
   // Changelogs — each list item starts with <strong>Type:</strong> for badges
   changelogs: [
     {
+      version: "2.1.0 - 06 Jul 26",
+      type: "new",
+      list: [
+        "<strong>New:</strong> Added <strong>Caption</strong> feature.",
+        "<strong>New:</strong> Added YouTube and Vimeo player supports.",
+        "<strong>New:</strong> Added custom aspect ratios.",
+        "<strong>New:</strong> Added Lazy load controls.",
+        "<strong>New:</strong> Responsive design improved.",
+        "<strong>New:</strong> UX Improved.",
+        "<strong>Fix:</strong> Fixed some bugs.",
+      ]
+    },
+    {
       version: "2.0.0 - 10 Jun 26",
       type: "new",
       list: [

@@ -187,7 +187,7 @@ export const welcomeInfo = (adminUrl = "") => ({
   // Changelogs — each list item starts with <strong>Type:</strong> for badges
   changelogs: [
     {
-      version: "2.1.0 - 08 Jul 26",
+      version: "2.1.1 - 08 Jul 26",
       type: "new",
       list: [
         "<strong>New:</strong> Added <strong>Caption</strong> feature.",

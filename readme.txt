@@ -4,7 +4,7 @@ Donate link: https://www.buymeacoffee.com/abuhayat
 Tags: block, video embed, any video play, video play, Gutenberg block
 Requires at least: 6.5
 Tested up to: 7.0
-Stable tag: 2.0.0
+Stable tag: 2.1.1
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -297,7 +297,7 @@ Replace `123` with the ID of the Video Player post you have created via the **Vi
 
 == Changelog ==
 
-= 2.1.0 - 08 Jul 2026 =
+= 2.1.1 - 08 Jul 2026 =
 * Add custom aspect ratios.
 * UX Improved.
 * Caption Support.

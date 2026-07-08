@@ -33,3 +33,9 @@ if ( ! empty( $vpbp_post_ids ) ) {
 
 // 2. Delete plugin options.
 delete_option( 'vpbp_delete_data_on_uninstall' );
+
+// 3. Delete per-user onboarding-tour dismissal flags.
+foreach ( [ 'vpbp_onboarding_dismissed', 'vpbp_onboarding_dashboard_dismissed', 'vpbp_onboarding_adminmenu_dismissed', 'vpbp_onboarding_cpteditor_dismissed', 'vpbp_onboarding_cptlist_dismissed' ] as $vpbp_meta_key ) {
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query is required in uninstall.php; caching is irrelevant as data is being permanently deleted.
+	$wpdb->delete( $wpdb->usermeta, [ 'meta_key' => $vpbp_meta_key ] );
+}

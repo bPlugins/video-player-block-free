@@ -32,6 +32,7 @@ define('VPBP_DIR_PATH', plugin_dir_path(__FILE__));
 
 require_once VPBP_DIR_PATH . '/includes/fs-lite.php';
 require_once VPBP_DIR_PATH . '/includes/rootPlugin/plugin.php';
+require_once VPBP_DIR_PATH . '/includes/Onboarding.php';
 
 // Main plugin class
 if (!class_exists('VPBPPlugin')) {
@@ -136,6 +137,5 @@ add_filter('wp_check_filetype_and_ext', function ($data, $file, $filename, $mime
     }
     return $data;
 }, 10, 4);
-
 
 }

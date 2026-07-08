@@ -1,0 +1,52 @@
+// Branding for the Driver.js onboarding tour popovers. Scoped under
+// .vpbp-tour (the popoverClass passed to driver()), so it never leaks into
+// other Driver.js instances.
+.driver-popover.vpbp-tour {
+  max-width: 320px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+
+  .driver-popover-title {
+    margin-bottom: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .driver-popover-description {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #50575e;
+
+    a {
+      color: var(--wp-admin-theme-color, #3858e9);
+    }
+  }
+
+  .driver-popover-progress-text {
+    font-size: 11px;
+    color: #757575;
+  }
+
+  .driver-popover-navigation-btns button {
+    padding: 6px 14px;
+    border: 0;
+    border-radius: 3px;
+    font-size: 13px;
+    text-shadow: none;
+    background: var(--wp-admin-theme-color, #3858e9);
+    color: #fff;
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    &.driver-popover-prev-btn {
+      background: transparent;
+      color: var(--wp-admin-theme-color, #3858e9);
+    }
+  }
+}

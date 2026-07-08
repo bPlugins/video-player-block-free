@@ -720,7 +720,7 @@ const Edit = (props) => {
           <MediaPlaceholder
             type="video"
             placeholder={__("Upload or paste a video URL to get started", "video-player-block")}
-            onChange={(val) => setAttributes({ source: val.url })}
+            onChange={(val) => setAttributes({ source: val?.url })}
             icon={cameraIcon}
           />
         )}

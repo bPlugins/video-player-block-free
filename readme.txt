@@ -297,8 +297,7 @@ Replace `123` with the ID of the Video Player post you have created via the **Vi
 
 == Changelog ==
 
-= 2.1.0 - 06 Jul 2026 =
-* Add YouTube and Vimeo player supports.
+= 2.1.0 - 08 Jul 2026 =
 * Add custom aspect ratios.
 * UX Improved.
 * Caption Support.

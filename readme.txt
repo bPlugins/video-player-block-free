@@ -1,7 +1,7 @@
-=== Video Player Block ===
+=== Video Player Block - HTML5, MP4, YouTube & Vimeo Player ===
 Contributors: bplugins, abuhayat, himur98
 Donate link: https://www.buymeacoffee.com/abuhayat
-Tags: block, video embed, any video play, video play, Gutenberg block
+Tags: video player, video embed, html5 video, youtube video, video block
 Requires at least: 6.5
 Tested up to: 7.0
 Stable tag: 2.1.1
@@ -9,17 +9,37 @@ Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Embed and play videos easily in the Gutenberg editor with a customizable and responsive Video Player Block for WordPress.
+Video player block for Gutenberg - embed & play YouTube, Vimeo & self-hosted HTML5 videos in a responsive, customizable, mobile-friendly player.
 
 == Description ==
 
-Video Player Block is a powerful and versatile WordPress plugin that lets you embed and play videos with style. Beyond the standard HTML5 player, the Pro version unlocks industry-leading engines like **React Video Player**, **Video.js**, and **Vidstack**, plus a full suite of Pro blocks — **Video Gallery**, **Playlist**, **Lightbox**, **Reels**, **Comparison**, **Testimonial Card**, and **Transcript** — making it the ultimate tool for professional video sites.
+[Video Player Block](https://bplugins.com/products/video-player-block/) is a lightweight WordPress video player plugin that lets you embed and play videos — YouTube, Vimeo, and self-hosted HTML5 (MP4, WebM, OGG) — in a clean, responsive, and customizable player directly inside the Gutenberg block editor.
 
-Whether you are showcasing YouTube, Vimeo, self-hosted MP4s, or external media from services like Amazon S3 or BunnyCDN, this plugin provides a clean, responsive, and highly customizable video experience directly within the Gutenberg editor.
+**[Video Player Block](https://bplugins.com/products/video-player-block/)** | **[Pricing](https://bplugins.com/products/video-player-block-pro/)** | **[Support](https://bplugins.com/support/)** | **[Documentation](https://bplugins.com/docs/video-player-block/)** | **[Demo](https://bblockswp.com/demo/video-player-block-all-demos/)**
 
-**[Video Player Block](https://bplugins.com/products/video-player-block/)** | **[Documentation](https://bplugins.com/docs/video-player-block/)** | **[Demos](https://bblockswp.com/demo/video-player-block-all-demos/)**
+Beyond the standard HTML5 player, the Pro version unlocks industry-leading engines like **React Video Player**, **Video.js**, and **Vidstack**, plus a full suite of Pro blocks — **Video Gallery**, **Playlist**, **Lightbox**, **Reels**, **Comparison**, **Testimonial Card**, and **Transcript** — making it the ultimate video player tool for professional WordPress websites.
+
+Whether you are showcasing self-hosted MP4s or embedding YouTube and Vimeo videos, this Gutenberg video player block delivers a clean, responsive, and highly customizable video experience without writing any code. Pro adds HLS & DASH streaming plus external sources like Amazon S3, DigitalOcean Spaces, and BunnyCDN.
+
+This WordPress video player block is perfect for video tutorials, online courses, product demos, marketing videos, and podcast video episodes on any WordPress website.
+
+=== Perfect For ===
+
+Video Player Block is ideal for video tutorials, online courses, product demonstrations, marketing videos, educational websites, portfolio sites, media publications, podcast video episodes, and membership platforms.
+
+- Video tutorials
+- Online courses
+- Product demonstrations
+- Marketing videos
+- Educational websites
+- Portfolio websites
+- Media websites
+- Podcast video episodes
+- Membership platforms
 
 === Key Features – Free Version ===
+The free version includes everything needed to embed and play responsive videos in the Gutenberg editor.
+
 - **Default HTML5 Video Player:** A clean, lightweight, and responsive player for standard self-hosted MP4, WebM, and OGG formats.
 
 - **YouTube & Vimeo Native Support:** Easily embed and play YouTube and Vimeo videos within the customizable player skin.
@@ -119,17 +139,6 @@ Getting started is easy!
 For installation help click on Installation Tab
 
 [Live Demo](https://bblockswp.com/demo/video-player-block-all-demos/) | [Upgrade to Pro](https://bplugins.com/products/video-player-block-pro/)
-
-=== Perfect For ===
-- Video tutorials
-- Online courses
-- Product demonstrations
-- Marketing videos
-- Educational websites
-- Portfolio websites
-- Media websites
-- Podcast video episodes
-- Membership platforms
 
 = Feedback =
 - Did you like this plugin? Dislike it? Do you have a feature request? [Please share your feedback with us](mailto:support@bplugins.com 'Send feedback')
@@ -240,13 +249,29 @@ Build Tools Used: Webpack, Babel, PostCSS.
 
 == Frequently Asked Questions ==
 
+= Is Video Player Block free? =
+
+Yes. The free version includes a responsive HTML5 video player with YouTube and Vimeo support, customizable controls, poster images, autoplay, a shortcode generator, and unlimited players. A Pro version adds advanced player engines, streaming, and additional video blocks.
+
+= How do I add a video player in WordPress with Gutenberg? =
+
+Open any post or page in the Gutenberg block editor, click the + (Add Block) button, search for "Video Player Block", insert it, then upload or paste your video URL. No coding or page builder is required.
+
+= What is the best Gutenberg video player plugin? =
+
+Video Player Block lets you embed and play videos directly in the Gutenberg editor with a clean, responsive player. The Pro version adds React, Video.js, and Vidstack player engines plus advanced video blocks.
+
 = How do I install this plugin? =
 
-You can install as other regular WordPress plugins. No different way. Please see on installation tab.
+You can install it like any other WordPress plugin. Please see the Installation tab for details.
 
-= What Video type can I play? =
+= What video types can I play? =
 
-You can play MP4, OGG, YouTube, and Vimeo video files.
+You can play self-hosted MP4, WebM, and OGG files, plus YouTube and Vimeo videos. The Pro version adds HLS (.m3u8) and DASH (.mpd) streaming and external sources like Amazon S3, DigitalOcean Spaces, and BunnyCDN.
+
+= Is the video player responsive and mobile-friendly? =
+
+Yes. The player is fully responsive and works across Chrome, Firefox, Safari, and Edge, as well as iPhone and Android devices.
 
 = Does it support YouTube or Vimeo? =
 

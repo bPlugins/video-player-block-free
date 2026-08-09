@@ -1,8 +1,16 @@
 <?php
+/**
+ * @var array    $attributes Block attributes.
+ * @var string   $content    Block content.
+ * @var WP_Block $block      Block instance.
+ */
+
 if (!defined('ABSPATH')) {
     exit;
 }
-$id = wp_unique_id( 'vpbpVideoPlayer-' );
+
+$attributes = $attributes ?? [];
+$id         = wp_unique_id( 'vpbpVideoPlayer-' );
 ?>
 <div
     <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() is properly escaped ?>

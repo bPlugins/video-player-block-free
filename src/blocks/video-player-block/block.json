@@ -4,7 +4,11 @@
   "title": "Video Player",
   "description": "A Simple, accessible, Easy to Use & fully Customizable video player.",
   "category": "vpbpblocks",
-  "keywords": ["video embed", "mp4 ogg player", "any video play"],
+  "keywords": [
+    "video embed",
+    "mp4 ogg player",
+    "any video play"
+  ],
   "textdomain": "video-player-block",
   "attributes": {
     "align": {
@@ -90,20 +94,39 @@
     }
   },
   "supports": {
-    "align": ["wide", "full"],
+    "align": [
+      "wide",
+      "full"
+    ],
     "html": false,
     "layout": false
   },
   "example": {
+    "viewportWidth": 800,
     "attributes": {
-      "preview": true,
-      "sourceType": "link"
+      "source": "https://files.vidstack.io/sprite-fight/720p.mp4",
+      "poster": "data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%271280%27 height=%27720%27%3E%3Crect width=%271280%27 height=%27720%27 fill=%27%23101c2b%27/%3E%3Cpath d=%27M0 720 L560 192 L1280 720 Z%27 fill=%27%235B8DEF%27 opacity=%270.85%27/%3E%3Ccircle cx=%271012%27 cy=%27184%27 r=%2788%27 fill=%27%235B8DEF%27 opacity=%270.45%27/%3E%3C/svg%3E",
+      "ratio": "16:9",
+      "radius": "8px",
+      "accentColor": "#5B8DEF"
     }
   },
-  "editorScript": ["file:./index.js", "plyr"],
-  "editorStyle": ["file:./index.css", "plyr"],
+  "editorScript": [
+    "file:./index.js",
+    "plyr"
+  ],
+  "editorStyle": [
+    "file:./index.css",
+    "plyr"
+  ],
   "script": "file:./iframe-init.js",
-  "style": ["file:./view.css", "plyr"],
+  "style": [
+    "file:./view.css",
+    "plyr"
+  ],
   "render": "file:./render.php",
-  "viewScript": ["file:./view.js", "plyr"]
+  "viewScript": [
+    "file:./view.js",
+    "plyr"
+  ]
 }

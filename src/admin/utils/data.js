@@ -12,7 +12,8 @@ import {
   videoTranscriptIcon
 } from "../../Components/Common/utils/icons";
 import blocks from "./blocks";
-import icon from "../../../public/images/icon-128x128.png";
+import { videoPlayerBanner } from "../assets/banner";
+import { videoPlayerLogo } from "../assets/logo";
 
 const slug = "video-player-block";
 
@@ -37,9 +38,9 @@ export const dashboardInfo = (info) => {
     allBlocks: blocks,
     displayOurPlugins: true,
     media: {
-      logo: `https://ps.w.org/${slug}/assets/icon-128x128.png`,
+      logo: videoPlayerLogo,
       banner: `https://ps.w.org/${slug}/assets/banner-772x250.png`,
-      thumbnail: icon,
+      thumbnail: videoPlayerBanner,
       //   thumbnail: `https://bplugins.com/wp-content/themes/b-technologies/assets/images/products/${slug}.png`,
       // proThumbnail: `https://bplugins.com/wp-content/uploads/2026/01/3d-image-gallery.png`,
       //   video: "https://www.youtube.com/watch?v=milYZrqLJsE",
@@ -186,6 +187,18 @@ export const welcomeInfo = (adminUrl = "") => ({
 
   // Changelogs — each list item starts with <strong>Type:</strong> for badges
   changelogs: [
+    {
+      version: "2.2.0 - 13 Oct 26",
+      type: "new",
+      list: [
+        "<strong>New:</strong> Five ready-made sections under Video Players in the inserter. Each one comes finished with heading, copy, aspect ratio, corner radius, accent colour and the right controls.",
+        "<strong>Update:</strong> Freemius SDK updated to 2.13.5.",
+        "<strong>Fix:</strong> After activating the plugin, the page no longer says you are not allowed to access it. The Freemius opt-in now opens first, then the first page of the plugin.",
+        "<strong>Fix:</strong> Every bundled section showed a black player. The poster images now load correctly.",
+        "<strong>Fix:</strong> The block now has a working preview in the inserter, and it shows the poster instead of a black player.",
+        "<strong>Fix:</strong> Two column sections now use the width of the section around them instead of about half of it.",
+      ]
+    },
     {
       version: "2.1.1 - 08 Jul 26",
       type: "new",
@@ -350,7 +363,7 @@ export const demoInfo = {
 };
 
 export const pricingInfo = {
-  logo: `https://ps.w.org/${slug}/assets/icon-128x128.png`,
+  logo: videoPlayerLogo,
   pluginId: 20181,
   planId: 33471,
   licenses: [1, 3, null],

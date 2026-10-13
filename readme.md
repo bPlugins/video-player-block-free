@@ -24,7 +24,7 @@ Extend your video player with **Video Player Block Pro**:
 - **Google Cast & Chromecast**: Wirelessly stream video content to any Chromecast-enabled TV.
 - **Priority Support**: Access to expert assistance and regular updates.
 
-[Explore Pro Version →](https://bplugins.com/products/video-player-block-pro/)
+[Explore Pro Version →](https://bplugins.com/products/video-player-block/pricing/)
 
 ## 🛠️ Installation
 1. Log in to your WordPress dashboard.

@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Video Player Block: a Gutenberg block-inserter tile transforming into a video player">
+  <title>Video Player Block — insert a block, it becomes a player</title>
+  <defs>
+    <linearGradient id="vpbaBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d0156a"/>
+      <stop offset="1" stop-color="#774699"/>
+    </linearGradient>
+    <radialGradient id="vpbaGlow" cx="0.5" cy="0.42" r="0.62">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.26"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="vpbaTile"><rect x="0" y="0" width="256" height="256" rx="56"/></clipPath>
+  </defs>
+  <style>
+    :root { --vpba: 3.6s; }
+    .vpbaIns { transform-box: fill-box; transform-origin: center; animation: vpbaIns var(--vpba) ease-in-out infinite; }
+    .vpbaPlay { transform-box: fill-box; transform-origin: center; animation: vpbaPlay var(--vpba) ease-in-out infinite; }
+    .vpbaFill { transform-box: fill-box; transform-origin: left center; animation: vpbaFill var(--vpba) ease-in-out infinite; }
+    .vpbaPulse { transform-box: fill-box; transform-origin: center; animation: vpbaPulse var(--vpba) ease-out infinite; }
+    /* inserter placeholder + "+" visible early, fades as player forms; returns for loop */
+    @keyframes vpbaIns {
+      0%,18%   { opacity: 1; transform: scale(1); }
+      36%,80%  { opacity: 0; transform: scale(0.82); }
+      95%,100% { opacity: 1; transform: scale(1); } }
+    /* play button forms while inserter fades out */
+    @keyframes vpbaPlay {
+      0%,18%   { opacity: 0; transform: scale(0.7); }
+      36%,80%  { opacity: 1; transform: scale(1); }
+      95%,100% { opacity: 0; transform: scale(0.7); } }
+    /* progress fills only during the player window */
+    @keyframes vpbaFill {
+      0%,30%  { transform: scaleX(0.04); }
+      78%     { transform: scaleX(0.82); }
+      100%    { transform: scaleX(0.04); } }
+    @keyframes vpbaPulse {
+      0%,34%  { opacity: 0; transform: scale(0.7); }
+      44%     { opacity: 0.55; transform: scale(0.9); }
+      66%,100%{ opacity: 0; transform: scale(1.7); } }
+    @media (prefers-reduced-motion: reduce) {
+      .vpbaIns { animation: none !important; opacity: 0; }
+      .vpbaPlay { animation: none !important; opacity: 1; transform: none; }
+      .vpbaFill { animation: none !important; transform: scaleX(0.66); }
+      .vpbaPulse { animation: none !important; opacity: 0; }
+    }
+  </style>
+  <g clip-path="url(#vpbaTile)">
+    <rect x="0" y="0" width="256" height="256" fill="url(#vpbaBg)"/>
+    <circle cx="70" cy="56" r="98" fill="#ffffff" opacity="0.08"/>
+    <ellipse cx="128" cy="118" rx="122" ry="98" fill="url(#vpbaGlow)"/>
+    <!-- Gutenberg block chrome: drag handle dots + toolbar hint -->
+    <g fill="#ffffff" opacity="0.55">
+      <circle cx="120" cy="42" r="2.6"/><circle cx="128" cy="42" r="2.6"/><circle cx="136" cy="42" r="2.6"/>
+      <circle cx="120" cy="50" r="2.6"/><circle cx="128" cy="50" r="2.6"/><circle cx="136" cy="50" r="2.6"/>
+    </g>
+    <!-- block / video screen -->
+    <rect x="44" y="64" width="168" height="118" rx="18" fill="#1c1630"/>
+    <rect x="44" y="64" width="168" height="118" rx="18" fill="none" stroke="#ffffff" stroke-opacity="0.10" stroke-width="1.5"/>
+    <!-- INSERTER state: dashed placeholder + plus -->
+    <g class="vpbaIns">
+      <rect x="62" y="80" width="132" height="86" rx="12" fill="none" stroke="#c8b6ff" stroke-width="2.6" stroke-dasharray="9 8" opacity="0.9"/>
+      <g fill="#c8b6ff">
+        <rect x="118" y="105" width="20" height="6.5" rx="3.25"/>
+        <rect x="124.75" y="98.25" width="6.5" height="20" rx="3.25"/>
+      </g>
+    </g>
+    <!-- PLAYER state: play button + progress + pulse -->
+    <g class="vpbaPlay">
+      <circle class="vpbaPulse" cx="128" cy="112" r="30" fill="none" stroke="#ff6ba6" stroke-width="4"/>
+      <circle cx="128" cy="112" r="30" fill="#ffffff" opacity="0.10"/>
+      <circle cx="128" cy="112" r="30" fill="none" stroke="#ffffff" stroke-width="3.5"/>
+      <path d="M120 99 L145 112 L120 125 Z" fill="#ffffff"/>
+      <!-- progress bar -->
+      <rect x="62" y="158" width="132" height="7" rx="3.5" fill="#ffffff" opacity="0.16"/>
+      <rect class="vpbaFill" x="62" y="158" width="132" height="7" rx="3.5" fill="#ff6ba6"/>
+    </g>
+  </g>
+</svg>

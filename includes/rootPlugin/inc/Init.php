@@ -33,7 +33,7 @@ class Init {
 			],
             'show_in_rest' => true,
             'public' => true,
-			'menu_icon' => 'dashicons-controls-play',
+			'menu_icon' => 'data:image/svg+xml;base64,' . base64_encode('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill="#f0f6fc99" fill-rule="evenodd" d="M3.5 2h13A1.5 1.5 0 0 1 18 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 2 12.5v-9A1.5 1.5 0 0 1 3.5 2zM8 5v6l5-3z"/><rect fill="#f0f6fc99" x="2" y="16" width="16" height="2" rx="1"/></svg>'),
             'publicly_queryable' => false,
             'template' => [['vpb/video']],
             'template_lock' => 'all',

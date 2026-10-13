@@ -2,10 +2,9 @@
 /**
  * Plugin Name: Video Player Block
  * Description: A Simple, accessible, Easy to Use & fully Customizable video player. 
- * Version: 2.1.1
- * Requires at least: 6.5
- * Tested up to: 7.0
+ * Version: 2.2.0
  * Requires PHP: 7.4
+ * Requires at least: 6.5
  * Author: bPlugins
  * Author URI: https://bplugins.com
  * License: GPLv3
@@ -25,7 +24,7 @@ if (function_exists('vpb_fs')) {
 } else {
 
 // Constants
-define('VPBP_PLUGIN_VERSION', (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'localhost') ? time() : '2.1.1');
+define('VPBP_PLUGIN_VERSION', (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'localhost') ? time() : '2.2.0');
 define('VPBP_DIR_URL', plugin_dir_url(__FILE__));
 define('VPBP_PUBLIC_DIR', VPBP_DIR_URL . 'public/');
 define('VPBP_DIR_PATH', plugin_dir_path(__FILE__));
@@ -34,6 +33,9 @@ require_once VPBP_DIR_PATH . '/includes/fs-lite.php';
 require_once VPBP_DIR_PATH . '/includes/rootPlugin/plugin.php';
 require_once VPBP_DIR_PATH . '/includes/Onboarding.php';
 
+// Ready-made sections for the inserter.
+require_once VPBP_DIR_PATH . '/includes/patterns.php';
+
 // Main plugin class
 if (!class_exists('VPBPPlugin')) {
     class VPBPPlugin {
@@ -41,6 +43,44 @@ if (!class_exists('VPBPPlugin')) {
             add_action('enqueue_block_assets', [$this, 'enqueueBlockAssets']);
             add_action('wp_enqueue_scripts', [$this, 'wpEnqueueScripts']);
             add_action('enqueue_block_editor_assets', [$this, 'vpbpEnqueueBlockEditorAssets']);
+
+            // Redirect to the Help & Demos page on first activation.
+            register_activation_hook( __FILE__, [$this, 'onActivation'] );
+            add_action( 'admin_init', [$this, 'maybeRedirectAfterActivation'] );
+        }
+
+        /**
+         * Set a flag so we know a redirect is needed on the next admin page load.
+         */
+        public function onActivation() {
+            update_option( 'vpbp_activation_redirect', true );
+        }
+
+        /**
+         * Redirect to the Help & Demos dashboard page once after activation.
+         */
+        public function maybeRedirectAfterActivation() {
+            if ( ! get_option( 'vpbp_activation_redirect', false ) ) {
+                return;
+            }
+
+            delete_option( 'vpbp_activation_redirect' );
+
+            // Don't redirect on bulk activate or WP-CLI.
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            $activate_multi = isset( $_GET['activate-multi'] ) ? sanitize_text_field( wp_unslash( $_GET['activate-multi'] ) ) : '';
+            if ( wp_doing_ajax() || ( defined( 'WP_CLI' ) && WP_CLI ) || ! empty( $activate_multi ) ) {
+                return;
+            }
+
+            // The Freemius opt-in screen hides this plugin's menu until it is answered, so the page below
+            // would say "not allowed". Let Freemius show its opt-in first; it opens the first page after.
+            if ( function_exists( 'vpb_fs' ) && vpb_fs()->is_activation_mode() ) {
+                return;
+            }
+
+            wp_safe_redirect( admin_url( 'edit.php?post_type=video-player-block&page=vpbp-help-demo' ) );
+            exit;
         }
 
 

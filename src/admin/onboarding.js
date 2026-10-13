@@ -127,7 +127,7 @@ const editorSteps = [
           "That's the whole flow: insert, customize, publish.",
           "video-player-block",
         ) +
-        ' <a href="https://bplugins.com/docs/video-player-block" target="_blank" rel="noreferrer">' +
+        ' <a href="https://bplugins.com/docs/video-player-block/" target="_blank" rel="noreferrer">' +
         __("Read the documentation", "video-player-block") +
         "</a>",
     },
@@ -191,7 +191,7 @@ const adminMenuSteps = [
           "Open a post or page and insert your first video block — the editor has its own quick tour waiting.",
           "video-player-block",
         ) +
-        ' <a href="https://bplugins.com/docs/video-player-block" target="_blank" rel="noreferrer">' +
+        ' <a href="https://bplugins.com/docs/video-player-block/" target="_blank" rel="noreferrer">' +
         __("Read the documentation", "video-player-block") +
         "</a>",
     },
@@ -374,7 +374,7 @@ const dashboardSteps = [
           "Now open any page or post and insert your first video block — the editor has its own quick tour waiting.",
           "video-player-block",
         ) +
-        ' <a href="https://bplugins.com/docs/video-player-block" target="_blank" rel="noreferrer">' +
+        ' <a href="https://bplugins.com/docs/video-player-block/" target="_blank" rel="noreferrer">' +
         __("Read the documentation", "video-player-block") +
         "</a>",
     },

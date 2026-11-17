@@ -11,6 +11,16 @@ if (!defined('ABSPATH')) {
 
 $attributes = $attributes ?? [];
 $id         = wp_unique_id( 'vpbpVideoPlayer-' );
+
+static $vpbp_plyr_sprite_rendered = false;
+if ( ! $vpbp_plyr_sprite_rendered ) {
+    $vpbp_plyr_sprite_rendered = true;
+    $sprite_file = VPBP_DIR_PATH . 'public/images/plyr.svg';
+    if ( file_exists( $sprite_file ) ) {
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- trusted local Plyr SVG sprite
+        echo '<div id="sprite-plyr" hidden style="display:none">' . file_get_contents( $sprite_file ) . '</div>';
+    }
+}
 ?>
 <div
     <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() is properly escaped ?>

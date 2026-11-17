@@ -33,6 +33,7 @@ if ( ! empty( $vpbp_post_ids ) ) {
 
 // 2. Delete plugin options.
 delete_option( 'vpbp_delete_data_on_uninstall' );
+delete_option( 'vpbp_review_state' );
 
 // 3. Delete per-user onboarding-tour dismissal flags.
 foreach ( [ 'vpbp_onboarding_dismissed', 'vpbp_onboarding_dashboard_dismissed', 'vpbp_onboarding_adminmenu_dismissed', 'vpbp_onboarding_cpteditor_dismissed', 'vpbp_onboarding_cptlist_dismissed' ] as $vpbp_meta_key ) {

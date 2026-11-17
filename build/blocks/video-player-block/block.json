@@ -48,6 +48,14 @@
       "type": "array",
       "default": []
     },
+    "youtubeCaptions": {
+      "type": "boolean",
+      "default": false
+    },
+    "vimeoCaptions": {
+      "type": "boolean",
+      "default": false
+    },
     "ratio": {
       "type": "string",
       "default": "16:9"

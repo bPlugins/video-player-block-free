@@ -188,6 +188,16 @@ export const welcomeInfo = (adminUrl = "") => ({
   // Changelogs — each list item starts with <strong>Type:</strong> for badges
   changelogs: [
     {
+      version: "2.2.1 - 16 Nov 26",
+      type: "update",
+      list: [
+        "<strong>Security:</strong> Hardened block CSS output and video embed ID handling.",
+        "<strong>New:</strong> Added polite, dismissible WordPress.org review request notice.",
+        "<strong>Fix:</strong> Fixed unwanted bullet dots appearing on list items in dashboard settings danger zone.",
+        "<strong>Tweak:</strong> Improved data cleanup handling on plugin uninstall.",
+      ],
+    },
+    {
       version: "2.2.0 - 13 Oct 26",
       type: "new",
       list: [
@@ -363,7 +373,9 @@ export const demoInfo = {
 };
 
 export const pricingInfo = {
-  logo: videoPlayerLogo,
+  // Freemius puts this in the checkout iframe URL, so it has to stay a short
+  // https link. A data URI makes the URL about 11 KB and Cloudflare answers 520.
+  logo: `https://ps.w.org/${slug}/assets/icon-256x256.png`,
   pluginId: 20181,
   planId: 33471,
   licenses: [1, 3, null],

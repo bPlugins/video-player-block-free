@@ -29,6 +29,8 @@ const Settings = ({ attributes, setAttributes }) => {
     poster,
     controls,
     captions: captionTracks,
+    youtubeCaptions,
+    vimeoCaptions,
     width,
     radius,
     ratio,
@@ -40,6 +42,11 @@ const Settings = ({ attributes, setAttributes }) => {
     autoHideControl,
     lazyLoad,
   } = attributes;
+
+  const isYT = isYoutube(source);
+  const isVM = isVimeo(source);
+  const isEmbed = isYT || isVM;
+  const hasCaptions = Array.isArray(captionTracks) && captionTracks.length > 0;
   const {
     restart,
     rewind,
@@ -84,8 +91,14 @@ const Settings = ({ attributes, setAttributes }) => {
                 <PanelBody
                   className="bPlPanelBody"
                   title={__("Settings", "video-player-block")}>
-                  
-                  <h4 style={{ margin: "10px 0", borderBottom: "1px solid #ccc", paddingBottom: "5px" }}>{__("Media Source", "video-player-block")}</h4>
+                  <h4
+                    style={{
+                      margin: "10px 0",
+                      borderBottom: "1px solid #ccc",
+                      paddingBottom: "5px",
+                    }}>
+                    {__("Media Source", "video-player-block")}
+                  </h4>
                   <InlineMediaUpload
                     value={source}
                     types={["video"]}
@@ -97,20 +110,48 @@ const Settings = ({ attributes, setAttributes }) => {
                     value={poster}
                     types={["image"]}
                     onChange={(val) => setAttributes({ poster: val })}
-                    placeholder={__("Poster url", "video-player-block")}
+                    placeholder={__("Poster / Thumbnail url", "video-player-block")}
                   />
+                  <small style={{ display: "block", color: "#757575", marginTop: "4px" }}>
+                    {__(
+                      "Optional custom cover image. Overrides the default thumbnail before playback.",
+                      "video-player-block",
+                    )}
+                  </small>
 
-                  <h4 style={{ margin: "25px 0 10px", borderBottom: "1px solid #ccc", paddingBottom: "5px" }}>{__("Playback Behavior", "video-player-block")}</h4>
+                  <h4
+                    style={{
+                      margin: "25px 0 10px",
+                      borderBottom: "1px solid #ccc",
+                      paddingBottom: "5px",
+                    }}>
+                    {__("Playback Behavior", "video-player-block")}
+                  </h4>
                   <ToggleControl
                     label={__("Autoplay", "video-player-block")}
                     checked={autoplay}
-                    onChange={(val) => setAttributes({ autoplay: val })}
+                    onChange={(val) => {
+                      const next = val;
+                      setAttributes({ autoplay: next });
+                      if (next && !muted) {
+                        setAttributes({ muted: true });
+                      }
+                    }}
                   />
-                  <small>
-                    {__(
-                      "Autoplay might require muting based on the browser.",
-                      "video-player-block",
-                    )}
+                  <small
+                    style={{
+                      display: "block",
+                      color: autoplay && !muted ? "#d63638" : "#757575",
+                    }}>
+                    {autoplay && !muted
+                      ? __(
+                          "Browsers will block autoplay unless Start Muted is enabled.",
+                          "video-player-block",
+                        )
+                      : __(
+                          "Autoplay might require muting based on the browser.",
+                          "video-player-block",
+                        )}
                   </small>
 
                   <ToggleControl
@@ -120,14 +161,23 @@ const Settings = ({ attributes, setAttributes }) => {
                     onChange={(val) => setAttributes({ repeat: val })}
                   />
 
-                  <ToggleControl
-                    className="mt20"
-                    label={__("Reset On End", "video-player-block")}
-                    checked={resetOnEnd}
-                    onChange={(val) => setAttributes({ resetOnEnd: val })}
-                  />
+                  {!repeat && (
+                    <ToggleControl
+                      className="mt20"
+                      label={__("Reset On End", "video-player-block")}
+                      checked={resetOnEnd}
+                      onChange={(val) => setAttributes({ resetOnEnd: val })}
+                    />
+                  )}
 
-                  <h4 style={{ margin: "25px 0 10px", borderBottom: "1px solid #ccc", paddingBottom: "5px" }}>{__("Player Options", "video-player-block")}</h4>
+                  <h4
+                    style={{
+                      margin: "25px 0 10px",
+                      borderBottom: "1px solid #ccc",
+                      paddingBottom: "5px",
+                    }}>
+                    {__("Player Options", "video-player-block")}
+                  </h4>
                   <ToggleControl
                     label={__("Start Muted", "video-player-block")}
                     checked={muted}
@@ -159,19 +209,56 @@ const Settings = ({ attributes, setAttributes }) => {
                   className="bPlPanelBody"
                   initialOpen={false}
                   title={__("Captions / Subtitles", "video-player-block")}>
-                  {isYoutube(source) || isVimeo(source) ? (
-                    <p
-                      style={{
-                        margin: 0,
-                        color: "#757575",
-                        fontStyle: "italic",
-                        fontSize: "13px",
-                      }}>
-                      {__(
-                        "Captions aren't available for YouTube and Vimeo here — they provide their own captions from the source platform. Custom .vtt tracks apply to self-hosted videos only.",
-                        "video-player-block",
-                      )}
-                    </p>
+                  {isYT ? (
+                    <>
+                      <ToggleControl
+                        label={__(
+                          "Enable YouTube Captions",
+                          "video-player-block",
+                        )}
+                        checked={youtubeCaptions}
+                        onChange={(val) =>
+                          setAttributes({ youtubeCaptions: val })
+                        }
+                      />
+                      <small
+                        style={{
+                          display: "block",
+                          color: "#757575",
+                          fontStyle: "italic",
+                          marginTop: "5px",
+                        }}>
+                        {__(
+                          "When disabled, YouTube closed captions / subtitles are forcefully kept off. When enabled, YouTube's captions will display.",
+                          "video-player-block",
+                        )}
+                      </small>
+                    </>
+                  ) : isVM ? (
+                    <>
+                      <ToggleControl
+                        label={__(
+                          "Enable Vimeo Captions",
+                          "video-player-block",
+                        )}
+                        checked={vimeoCaptions}
+                        onChange={(val) =>
+                          setAttributes({ vimeoCaptions: val })
+                        }
+                      />
+                      <small
+                        style={{
+                          display: "block",
+                          color: "#757575",
+                          fontStyle: "italic",
+                          marginTop: "5px",
+                        }}>
+                        {__(
+                          "When disabled, Vimeo subtitles / captions are kept off. When enabled, Vimeo's captions will display if available on the video.",
+                          "video-player-block",
+                        )}
+                      </small>
+                    </>
                   ) : (
                     <Captions
                       captions={captionTracks}
@@ -184,7 +271,14 @@ const Settings = ({ attributes, setAttributes }) => {
 
             {"controls" === tab.name && (
               <PanelBody className="bPlPanelBody">
-                <h4 style={{ margin: "10px 0", borderBottom: "1px solid #ccc", paddingBottom: "5px" }}>{__("Playback", "video-player-block")}</h4>
+                <h4
+                  style={{
+                    margin: "10px 0",
+                    borderBottom: "1px solid #ccc",
+                    paddingBottom: "5px",
+                  }}>
+                  {__("Playback", "video-player-block")}
+                </h4>
                 <ToggleControl
                   label={__("Play Large", "video-player-block")}
                   checked={controls["play-large"]}
@@ -215,7 +309,14 @@ const Settings = ({ attributes, setAttributes }) => {
                   onChange={(val) => updateControls("fast-forward", val)}
                 />
 
-                <h4 style={{ margin: "25px 0 10px", borderBottom: "1px solid #ccc", paddingBottom: "5px" }}>{__("Timeline", "video-player-block")}</h4>
+                <h4
+                  style={{
+                    margin: "25px 0 10px",
+                    borderBottom: "1px solid #ccc",
+                    paddingBottom: "5px",
+                  }}>
+                  {__("Timeline", "video-player-block")}
+                </h4>
                 <ToggleControl
                   label={__("Progress Bar", "video-player-block")}
                   checked={progress}
@@ -234,7 +335,14 @@ const Settings = ({ attributes, setAttributes }) => {
                   onChange={(val) => updateControls("duration", val)}
                 />
 
-                <h4 style={{ margin: "25px 0 10px", borderBottom: "1px solid #ccc", paddingBottom: "5px" }}>{__("Audio & Display", "video-player-block")}</h4>
+                <h4
+                  style={{
+                    margin: "25px 0 10px",
+                    borderBottom: "1px solid #ccc",
+                    paddingBottom: "5px",
+                  }}>
+                  {__("Audio & Display", "video-player-block")}
+                </h4>
                 <ToggleControl
                   label={__("Volume Slider", "video-player-block")}
                   checked={volume}
@@ -252,43 +360,110 @@ const Settings = ({ attributes, setAttributes }) => {
                   checked={fullscreen}
                   onChange={(val) => updateControls("fullscreen", val)}
                 />
-                <ToggleControl
-                  className="mt20"
-                  label={__("PIP (Picture-in-Picture)", "video-player-block")}
-                  checked={pip}
-                  onChange={(val) => updateControls("pip", val)}
-                />
-                <ToggleControl
-                  className="mt20"
-                  label={__("Airplay", "video-player-block")}
-                  checked={airplay}
-                  onChange={(val) => updateControls("airplay", val)}
-                />
-                <small style={{ display: "block", color: "#757575", fontStyle: "italic" }}>
-                  {__(
-                    "AirPlay shows only in Safari on Apple devices (macOS/iOS) for self-hosted videos — not in Chrome/Firefox/Edge or for YouTube/Vimeo.",
-                    "video-player-block",
-                  )}
-                </small>
+                {!isEmbed && (
+                  <ToggleControl
+                    className="mt20"
+                    label={__("PIP (Picture-in-Picture)", "video-player-block")}
+                    checked={pip}
+                    onChange={(val) => updateControls("pip", val)}
+                  />
+                )}
+                {!isEmbed && (
+                  <>
+                    <ToggleControl
+                      className="mt20"
+                      label={__("Airplay", "video-player-block")}
+                      checked={airplay}
+                      onChange={(val) => updateControls("airplay", val)}
+                    />
+                    <small
+                      style={{
+                        display: "block",
+                        color: "#757575",
+                        fontStyle: "italic",
+                        marginTop: "5px",
+                      }}>
+                      {__(
+                        "AirPlay shows only in Safari on Apple devices (macOS/iOS) for self-hosted videos.",
+                        "video-player-block",
+                      )}
+                    </small>
+                  </>
+                )}
 
-                <h4 style={{ margin: "25px 0 10px", borderBottom: "1px solid #ccc", paddingBottom: "5px" }}>{__("Features", "video-player-block")}</h4>
-                <ToggleControl
-                  label={__("Captions Toggle", "video-player-block")}
-                  checked={controls["captions"]}
-                  onChange={(val) => updateControls("captions", val)}
-                />
+                <h4
+                  style={{
+                    margin: "25px 0 10px",
+                    borderBottom: "1px solid #ccc",
+                    paddingBottom: "5px",
+                  }}>
+                  {__("Features", "video-player-block")}
+                </h4>
+                {isYT ? (
+                  <>
+                    <ToggleControl
+                      label={__("YouTube Captions", "video-player-block")}
+                      checked={youtubeCaptions}
+                      onChange={(val) =>
+                        setAttributes({ youtubeCaptions: val })
+                      }
+                    />
+                    <small
+                      style={{
+                        display: "block",
+                        color: "#757575",
+                        fontStyle: "italic",
+                        marginTop: "5px",
+                        marginBottom: "15px",
+                      }}>
+                      {__(
+                        "Turn on or forcefully disable YouTube subtitles.",
+                        "video-player-block",
+                      )}
+                    </small>
+                  </>
+                ) : isVM ? (
+                  <>
+                    <ToggleControl
+                      label={__("Vimeo Captions", "video-player-block")}
+                      checked={vimeoCaptions}
+                      onChange={(val) => setAttributes({ vimeoCaptions: val })}
+                    />
+                    <small
+                      style={{
+                        display: "block",
+                        color: "#757575",
+                        fontStyle: "italic",
+                        marginTop: "5px",
+                        marginBottom: "15px",
+                      }}>
+                      {__(
+                        "Turn on or disable Vimeo subtitles.",
+                        "video-player-block",
+                      )}
+                    </small>
+                  </>
+                ) : hasCaptions ? (
+                  <ToggleControl
+                    label={__("Captions Toggle", "video-player-block")}
+                    checked={controls["captions"]}
+                    onChange={(val) => updateControls("captions", val)}
+                  />
+                ) : null}
                 <ToggleControl
                   className="mt20"
                   label={__("Settings Menu", "video-player-block")}
                   checked={settings}
                   onChange={(val) => updateControls("settings", val)}
                 />
-                <ToggleControl
-                  className="mt20"
-                  label={__("Download Button", "video-player-block")}
-                  checked={download}
-                  onChange={(val) => updateControls("download", val)}
-                />
+                {!isEmbed && (
+                  <ToggleControl
+                    className="mt20"
+                    label={__("Download Button", "video-player-block")}
+                    checked={download}
+                    onChange={(val) => updateControls("download", val)}
+                  />
+                )}
               </PanelBody>
             )}
 

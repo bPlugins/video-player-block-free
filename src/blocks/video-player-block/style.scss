@@ -54,13 +54,25 @@ $primaryColor: #4527a4;
         bottom: 0 !important;
         left: 0 !important;
         right: 0 !important;
-        z-index: 3;
+        z-index: 10 !important;
         pointer-events: all !important;
       }
 
       .plyr__control--overlaid {
-        z-index: 4;
+        z-index: 3 !important;
         pointer-events: all !important;
+      }
+
+      // Hide the large center play button when settings menu is open
+      // so it never overlaps or blocks menu options.
+      &.plyr--menu-open .plyr__control--overlaid {
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
+
+      .plyr__menu__container {
+        z-index: 20 !important;
       }
 
       // Ensure the video wrapper fills the plyr container

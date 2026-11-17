@@ -22,9 +22,12 @@ export const isVimeo = (url) => {
 
 export const getYoutubeId = (url) => {
 	if (!url) return null;
-	const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+	// The id itself (not just its length) is constrained to YouTube's real
+	// charset, so a crafted URL can't make this return a value containing
+	// `"`/`<`/etc. if it is ever interpolated unescaped downstream.
+	const regExp = /(?:youtube\.com\/(?:[^/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
 	const match = url.match(regExp);
-	return (match && match[2].length === 11) ? match[2] : null;
+	return match ? match[1] : null;
 };
 
 export const getVimeoId = (url) => {

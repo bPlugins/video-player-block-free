@@ -1,10 +1,20 @@
 {
-	"name": "plugin-slug",
-	"version": "0.1.0",
-	"description": "Example block scaffolded with Create Block tool.",
-	"author": "Wasek Bellah",
-	"license": "ISC",
+	"name": "video-player-block",
+	"version": "2.2.1",
+	"description": "A Simple, accessible, Easy to Use & fully Customizable video player.",
+	"author": "bPlugins",
+	"license": "GPLv3",
 	"main": "build/index.js",
+	"files": [
+		"build",
+		"includes",
+		"languages",
+		"public",
+		"vendor",
+		"plugin.php",
+		"readme.txt",
+		"uninstall.php"
+	],
 	"scripts": {
 		"packages-update": "wp-scripts packages-update",
 		"lint": "eslint src",

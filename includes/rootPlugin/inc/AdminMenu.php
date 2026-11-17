@@ -17,14 +17,14 @@ class AdminMenu  {
      */
     function highlightHelpDemoMenu() { ?>
         <style>
-            #adminmenu a[href*="page=vpbp-help-demo"],
-            #adminmenu a[href*="page=vpbp-help-demo"] *,
-            #adminmenu a[href*="page=vpbp-help-demo"]:hover,
-            #adminmenu a[href*="page=vpbp-help-demo"]:hover *,
-            #adminmenu a[href*="page=vpbp-help-demo"]:focus,
-            #adminmenu a[href*="page=vpbp-help-demo"]:focus *,
-            #adminmenu li.current a[href*="page=vpbp-help-demo"],
-            #adminmenu li.current a[href*="page=vpbp-help-demo"] * {
+            #adminmenu a[href$="page=vpbp-help-demo"],
+            #adminmenu a[href$="page=vpbp-help-demo"] *,
+            #adminmenu a[href$="page=vpbp-help-demo"]:hover,
+            #adminmenu a[href$="page=vpbp-help-demo"]:hover *,
+            #adminmenu a[href$="page=vpbp-help-demo"]:focus,
+            #adminmenu a[href$="page=vpbp-help-demo"]:focus *,
+            #adminmenu li.current a[href$="page=vpbp-help-demo"],
+            #adminmenu li.current a[href$="page=vpbp-help-demo"] * {
                 color: #f18500 !important;
             }
         </style>

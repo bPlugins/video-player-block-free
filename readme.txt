@@ -2,7 +2,7 @@
 Contributors: bplugins, abuhayat, himur98, freemius
 Tags: video player, video embed, html5 video, youtube video, video block
 Tested up to: 7.1
-Stable tag: 2.2.0
+Stable tag: 2.2.1
 Requires PHP: 7.4
 Requires at least: 6.5
 Donate link: https://www.buymeacoffee.com/abuhayat
@@ -258,6 +258,12 @@ As the external service functionality is handled by bpl-tools as a third-party l
 * **Purpose:** A Gutenberg block for embedding and playing videos with support for YouTube, Vimeo, and self-hosted HTML5 video files. Includes customizable controls, responsiveness, and various playback options.
 
 == Changelog ==
+
+= 2.2.1 - 16 November 2026 =
+* Security: Hardened block CSS output and video embed ID handling.
+* New: Added polite, dismissible WordPress.org review request notice.
+* Fix: Fixed unwanted bullet dots appearing on list items in dashboard settings danger zone.
+* Tweak: Improved data cleanup handling on plugin uninstall.
 
 = 2.2.0 - 13 October 2026 =
 * Update: Freemius SDK updated to 2.13.5.

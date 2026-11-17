@@ -6,8 +6,10 @@ import Style from './Components/Common/Style';
 import { getExtension, isYoutube, isVimeo, getYoutubeId, getVimeoId } from './utils/functions';
 import { plyrConfig } from './utils/config';
 import { prefix } from './utils/data';
+import { ensurePlyrSprite } from './utils/sprite';
 
 document.addEventListener('DOMContentLoaded', () => {
+	ensurePlyrSprite(document);
 	const videoEls = document.querySelectorAll(
     ".wp-block-vpb-video",
   );
@@ -25,9 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const RenderVideo = ({ attributes }) => {
-	const { source, poster, muted, autoplay, captions, lazyLoad } = attributes;
+	const { source, poster, muted, autoplay, captions, lazyLoad, youtubeCaptions, vimeoCaptions } = attributes;
 
 	const videoEl = useRef(null);
+	const isYT = isYoutube(source);
+	const isVM = isVimeo(source);
 
 	useEffect(() => {
 		const node = videoEl.current;
@@ -36,14 +40,44 @@ const RenderVideo = ({ attributes }) => {
 		let player = null;
 		let observer = null;
 
+		const applyCaptions = () => {
+			if (!player) return;
+			try {
+				if (isYT) {
+					if (youtubeCaptions) {
+						player.embed?.loadModule?.('captions');
+					} else {
+						player.embed?.unloadModule?.('captions');
+						player.embed?.setOption?.('captions', 'track', {});
+					}
+				} else if (isVM) {
+					if (vimeoCaptions) {
+						player.embed?.getTextTracks?.().then?.((tracks) => {
+							if (tracks && tracks.length > 0) {
+								player.embed.enableTextTrack(tracks[0].language, tracks[0].kind || 'subtitles').catch(() => {});
+							}
+						}).catch?.(() => {});
+					} else {
+						player.embed?.disableTextTrack?.().catch?.(() => {});
+					}
+				}
+			} catch (e) {
+				/* ignore */
+			}
+		};
+
 		const init = () => {
+			ensurePlyrSprite(node.ownerDocument || document);
 			player = new Plyr(node, plyrConfig(attributes));
 
 			player.on('ready', () => {
 				if (muted && autoplay) {
 					player.play();
 				}
+				applyCaptions();
+				setTimeout(applyCaptions, 500);
 			});
+			player.on('playing', applyCaptions);
 		};
 
 		if (lazyLoad && typeof IntersectionObserver !== 'undefined') {
@@ -79,9 +113,6 @@ const RenderVideo = ({ attributes }) => {
 	// doesn't send CORS headers — the video fails to load and never plays.
 	const crossOriginProps = captions?.length ? { crossOrigin: 'anonymous' } : {};
 
-	const isYT = isYoutube(source);
-	const isVM = isVimeo(source);
-
 	return <div className={prefix}>
 		<div className='videoWrapper'>
 			{isYT || isVM ? (
@@ -89,6 +120,7 @@ const RenderVideo = ({ attributes }) => {
 					ref={videoEl}
 					data-plyr-provider={isYT ? 'youtube' : 'vimeo'}
 					data-plyr-embed-id={isYT ? getYoutubeId(source) : getVimeoId(source)}
+					{...(poster ? { 'data-poster': poster } : {})}
 				></div>
 			) : (
 				/* eslint-disable-next-line react/no-unknown-property */

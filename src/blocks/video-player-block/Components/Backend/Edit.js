@@ -25,6 +25,23 @@ import { FrontShortCode } from "../../../../Components/Common/FrontShortCode/Fro
  * postMessage handshake. By portaling to the parent window we get a real HTTP
  * origin — Plyr initialises normally and its custom controls render correctly.
  */
+/**
+ * Escapes a value for use inside a double-quoted HTML attribute in the raw
+ * markup string set via wrapper.innerHTML below.
+ *
+ * embedId comes from getYoutubeId()/getVimeoId(), which only validate the
+ * extracted id's length/charset loosely - a crafted `source` URL could make
+ * them return a string containing a literal `"`, which would otherwise close
+ * the attribute early and inject new attributes/markup directly into the
+ * parent (admin) document this portals into.
+ */
+const escapeHtmlAttr = (value) =>
+  String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+
 // Ensure the Plyr SVG sprite is present in the parent document.
 // Plyr's built-in loadSprite fetches from a CDN that may be blocked;
 // we load it ourselves so the control icons render correctly.
@@ -158,7 +175,9 @@ const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
     const wrapper = topDoc.createElement("div");
     wrapper.className = "videoWrapper";
     wrapper.style.cssText = "width:100%;height:100%;";
-    wrapper.innerHTML = `<div data-plyr-provider="${provider}" data-plyr-embed-id="${embedId}"></div>`;
+    const poster = attributes?.poster;
+    const posterAttr = poster ? ` data-poster="${escapeHtmlAttr(poster)}"` : "";
+    wrapper.innerHTML = `<div data-plyr-provider="${escapeHtmlAttr(provider)}" data-plyr-embed-id="${escapeHtmlAttr(embedId)}"${posterAttr}></div>`;
     portalRoot.current.appendChild(wrapper);
     playerElRef.current = wrapper;
 
@@ -172,6 +191,37 @@ const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
         wrapper.querySelector("[data-plyr-provider]"),
         config,
       );
+
+      const applyCaptions = () => {
+        try {
+          if (isYoutube(source)) {
+            if (attributes.youtubeCaptions) {
+              playerRef.current?.embed?.loadModule?.("captions");
+            } else {
+              playerRef.current?.embed?.unloadModule?.("captions");
+              playerRef.current?.embed?.setOption?.("captions", "track", {});
+            }
+          } else if (isVimeo(source)) {
+            if (attributes.vimeoCaptions) {
+              playerRef.current?.embed?.getTextTracks?.().then?.((tracks) => {
+                if (tracks && tracks.length > 0) {
+                  playerRef.current?.embed?.enableTextTrack(tracks[0].language, tracks[0].kind || "subtitles").catch(() => {});
+                }
+              }).catch?.(() => {});
+            } else {
+              playerRef.current?.embed?.disableTextTrack?.().catch?.(() => {});
+            }
+          }
+        } catch (e) {
+          /* ignore */
+        }
+      };
+
+      playerRef.current.on("ready", () => {
+        applyCaptions();
+        setTimeout(applyCaptions, 500);
+      });
+      playerRef.current.on("playing", applyCaptions);
     });
 
     return () => {
@@ -455,6 +505,8 @@ const Edit = (props) => {
     poster,
     controls,
     captions,
+    youtubeCaptions: attributes.youtubeCaptions,
+    vimeoCaptions: attributes.vimeoCaptions,
     repeat,
     autoplay,
     muted,

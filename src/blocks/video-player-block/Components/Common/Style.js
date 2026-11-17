@@ -1,4 +1,5 @@
 import { prefix } from '../../utils/data';
+import { sanitizeStyleTag } from '../../../../Components/Common/utils/sanitizeStyleTag';
 
 const Style = ({ attributes, id }) => {
 	const { width, radius, accentColor } = attributes;
@@ -6,7 +7,7 @@ const Style = ({ attributes, id }) => {
 	return (
     <style
       dangerouslySetInnerHTML={{
-        __html: `
+        __html: sanitizeStyleTag(`
 		#${id} .${prefix}{
 			width: ${["0px", "0%", "0em"].includes(width) ? "100%" : width};
 			${accentColor ? `--plyr-color-main: ${accentColor};` : ""}
@@ -21,7 +22,7 @@ const Style = ({ attributes, id }) => {
 			overflow: hidden !important;
 			border-radius: ${radius};
 		}
-		`.replace(/\s+/g, " "),
+		`.replace(/\s+/g, " ")),
       }}
     />
   );

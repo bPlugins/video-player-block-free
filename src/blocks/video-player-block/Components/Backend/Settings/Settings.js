@@ -1,4 +1,4 @@
-import { __ } from "@wordpress/i18n";
+import { __, sprintf } from "@wordpress/i18n";
 import { InspectorControls } from "@wordpress/block-editor";
 import {
   TabPanel,
@@ -41,11 +41,16 @@ const Settings = ({ attributes, setAttributes }) => {
     resetOnEnd,
     autoHideControl,
     lazyLoad,
+    providerPlayer,
   } = attributes;
 
   const isYT = isYoutube(source);
   const isVM = isVimeo(source);
   const isEmbed = isYT || isVM;
+  // "Use YouTube's / Vimeo's own player": the provider draws its own controls,
+  // so the settings that only style this plugin's player are hidden.
+  const nativePlayer = isEmbed && Boolean(providerPlayer);
+  const providerName = isYT ? "YouTube" : "Vimeo";
   const hasCaptions = Array.isArray(captionTracks) && captionTracks.length > 0;
   const {
     restart,
@@ -76,7 +81,9 @@ const Settings = ({ attributes, setAttributes }) => {
         activeClass="activeTab"
         tabs={[
           { name: "settings", title: __("Settings", "video-player-block") },
-          { name: "controls", title: __("Controls", "video-player-block") },
+          ...(nativePlayer
+            ? []
+            : [{ name: "controls", title: __("Controls", "video-player-block") }]),
           { name: "style", title: __("Style", "video-player-block") },
         ]}>
         {(tab) => (
@@ -118,6 +125,38 @@ const Settings = ({ attributes, setAttributes }) => {
                       "video-player-block",
                     )}
                   </small>
+
+                  {isEmbed && (
+                    <ToggleControl
+                      className="mt20"
+                      label={sprintf(
+                        /* translators: %s: YouTube or Vimeo */
+                        __("Use %s's own player", "video-player-block"),
+                        providerName,
+                      )}
+                      checked={Boolean(providerPlayer)}
+                      onChange={(val) => setAttributes({ providerPlayer: val })}
+                      help={
+                        nativePlayer
+                          ? sprintf(
+                              /* translators: %s: YouTube or Vimeo */
+                              __(
+                                "Shows %s's own player with its own quality, captions and speed menus. This plugin's controls and colors don't apply.",
+                                "video-player-block",
+                              ),
+                              providerName,
+                            )
+                          : sprintf(
+                              /* translators: %s: YouTube or Vimeo */
+                              __(
+                                "Off: this plugin's player, with your controls and colors. On: %s's own player, with its own quality, captions and speed menus.",
+                                "video-player-block",
+                              ),
+                              providerName,
+                            )
+                      }
+                    />
+                  )}
 
                   <h4
                     style={{
@@ -161,7 +200,7 @@ const Settings = ({ attributes, setAttributes }) => {
                     onChange={(val) => setAttributes({ repeat: val })}
                   />
 
-                  {!repeat && (
+                  {!repeat && !nativePlayer && (
                     <ToggleControl
                       className="mt20"
                       label={__("Reset On End", "video-player-block")}
@@ -184,12 +223,14 @@ const Settings = ({ attributes, setAttributes }) => {
                     onChange={(val) => setAttributes({ muted: val })}
                   />
 
-                  <ToggleControl
-                    className="mt20"
-                    label={__("Auto-Hide Controls", "video-player-block")}
-                    checked={autoHideControl}
-                    onChange={(val) => setAttributes({ autoHideControl: val })}
-                  />
+                  {!nativePlayer && (
+                    <ToggleControl
+                      className="mt20"
+                      label={__("Auto-Hide Controls", "video-player-block")}
+                      checked={autoHideControl}
+                      onChange={(val) => setAttributes({ autoHideControl: val })}
+                    />
+                  )}
 
                   <ToggleControl
                     className="mt20"
@@ -502,12 +543,14 @@ const Settings = ({ attributes, setAttributes }) => {
                   units={[pxUnit()]}
                 />
 
-                <ColorControl
-                  className="mt20"
-                  label={__("Accent Color:", "video-player-block")}
-                  value={accentColor}
-                  onChange={(val) => setAttributes({ accentColor: val })}
-                />
+                {!nativePlayer && (
+                  <ColorControl
+                    className="mt20"
+                    label={__("Accent Color:", "video-player-block")}
+                    value={accentColor}
+                    onChange={(val) => setAttributes({ accentColor: val })}
+                  />
+                )}
               </PanelBody>
             )}
           </>

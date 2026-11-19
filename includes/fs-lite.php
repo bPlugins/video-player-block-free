@@ -6,7 +6,7 @@ if ( !defined( 'ABSPATH' ) ) { exit; }
             global $vpb_fs;
             if (!isset($vpb_fs)) {
                 require_once VPBP_DIR_PATH . 'vendor/freemius-lite/start.php';
-                $vpb_fs = fs_dynamic_init([
+                $vpb_fs = fs_lite_dynamic_init([
                 'id'                  => '20181',
                 'slug'                => 'video-player-block',
                 '__FILE__'            => VPBP_DIR_PATH . 'plugin.php',
@@ -31,7 +31,7 @@ if ( !defined( 'ABSPATH' ) ) { exit; }
         vpb_fs();
         // Show this plugin's own icon on the Freemius opt-in screen. Without it the SDK
         // looks inside its own folder and falls back to a grey plug.
-        vpb_fs()->add_filter( 'plugin_icon', function () {
+        if ( method_exists( vpb_fs(), 'add_filter' ) ) vpb_fs()->add_filter( 'plugin_icon', function () {
             return wp_normalize_path( VPBP_DIR_PATH . 'public/images/icon.svg' );
         } );
         do_action('vpb_fs_loaded');

@@ -68,6 +68,10 @@
       "type": "boolean",
       "default": false
     },
+    "providerPlayer": {
+      "type": "boolean",
+      "default": false
+    },
     "width": {
       "type": "string",
       "default": "100%"

@@ -40,7 +40,7 @@ const Captions = ({ captions = [], setAttributes }) => {
     <div className="vpbCaptions">
       {captions.length === 0 && (
         <div style={{ padding: "10px 0 15px", color: "#757575", fontStyle: "italic", fontSize: "13px" }}>
-          {__("No caption tracks added yet. Click below to add a subtitle track (.vtt).", "video-player-block")}
+          {__("No caption tracks added yet. Click below to add a subtitle track (.vtt or .srt).", "video-player-block")}
         </div>
       )}
 
@@ -71,7 +71,7 @@ const Captions = ({ captions = [], setAttributes }) => {
           </div>
 
           <InlineMediaUpload
-            label={__("Caption file (.vtt)", "video-player-block")}
+            label={__("Caption file (.vtt or .srt)", "video-player-block")}
             value={cap.src}
             types={["text"]}
             onChange={(val) => update(index, "src", val)}

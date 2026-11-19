@@ -81,7 +81,7 @@ if (!class_exists('VPBPPlugin')) {
 
             // The Freemius opt-in screen hides this plugin's menu until it is answered, so the page below
             // would say "not allowed". Let Freemius show its opt-in first; it opens the first page after.
-            if ( function_exists( 'vpb_fs' ) && vpb_fs()->is_activation_mode() ) {
+            if ( function_exists( 'vpb_fs' ) && ( method_exists( vpb_fs(), 'is_activation_mode' ) ? vpb_fs()->is_activation_mode() : ( ! get_option( 'video-player-block-redirect', false ) || ( isset( $_GET['page'] ) && 'video-player-block-opt-in' === sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) ) ) ) {
                 return;
             }
 

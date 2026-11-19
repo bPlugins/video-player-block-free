@@ -11,6 +11,7 @@ if( !class_exists( 'VPBP_VideoPlayer' ) ){
 			require_once VPBP_DIR_PATH . 'includes/rootPlugin/inc/Init.php';
 			require_once VPBP_DIR_PATH . 'includes/rootPlugin/inc/Enqueue.php';
 			require_once VPBP_DIR_PATH . 'includes/rootPlugin/inc/AdminMenu.php';
+			require_once VPBP_DIR_PATH . 'includes/rootPlugin/inc/Pricing.php';
 			require_once VPBP_DIR_PATH . 'includes/rootPlugin/inc/ShortCode.php';
 			require_once VPBP_DIR_PATH . 'includes/rootPlugin/inc/CustomColumn.php';
 			require_once VPBP_DIR_PATH . 'includes/class-vpbp-rest-handler.php';
@@ -18,6 +19,7 @@ if( !class_exists( 'VPBP_VideoPlayer' ) ){
 			new VPBP\Init();
 			new VPBP\Enqueue();
 			new VPBP\AdminMenu();
+			new VPBP\Pricing();
 			new VPBP\ShortCode();
 			new VPBP\CustomColumn();
 		}

@@ -12,12 +12,13 @@ export const getExtension = (fileName) => fileName ? fileName.substring(fileName
 
 export const isYoutube = (url) => {
 	if (!url) return null;
-	return url.match(/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/);
+	return url.match(/^(https?:\/\/)?([\w-]+\.)?(youtube\.com|youtube-nocookie\.com|youtu\.?be)\/.+$/i);
 };
 
+// vimeo.com and the player.vimeo.com/video/ID embed link.
 export const isVimeo = (url) => {
 	if (!url) return null;
-	return url.match(/^(https?:\/\/)?(www\.)?(vimeo\.com)\/.+$/);
+	return url.match(/^(https?:\/\/)?([\w-]+\.)?(vimeo\.com)\/.+$/i);
 };
 
 export const getYoutubeId = (url) => {
@@ -25,14 +26,57 @@ export const getYoutubeId = (url) => {
 	// The id itself (not just its length) is constrained to YouTube's real
 	// charset, so a crafted URL can't make this return a value containing
 	// `"`/`<`/etc. if it is ever interpolated unescaped downstream.
-	const regExp = /(?:youtube\.com\/(?:[^/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+	// /shorts/ID and /live/ID links used to give no id at all ("Invalid video id").
+	const regExp = /(?:youtube(?:-nocookie)?\.com\/(?:(?:shorts|live|v|e(?:mbed)?)\/|[^/\n\s]+\/\S+\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
 	const match = url.match(regExp);
 	return match ? match[1] : null;
 };
 
+// vimeo.com/ID, vimeo.com/ID/HASH, player.vimeo.com/video/ID, and the
+// channels/, groups/.../videos/, album/.../video/ and showcase/.../video/ forms.
+// Only digits can come back, so the id is still safe to interpolate.
 export const getVimeoId = (url) => {
 	if (!url) return null;
-	const regExp = new RegExp('^.*(vimeo\\.com/)((channels/[^/]+/)|(groups/[^/]+/videos/)|(album/[^/]+/video/))?([0-9]+)');
-	const match = url.match(regExp);
-	return match ? match[6] : null;
+	// An explicit .../video/ID or .../videos/ID wins (album and showcase links
+	// carry their own number first); otherwise the first all-digit segment.
+	const match = url.match(/vimeo\.com\/(?:[^?#]*\/)?videos?\/(\d+)(?=[/?#]|$)/i) ||
+		url.match(/vimeo\.com\/(?:[^?#]*?\/)?(\d+)(?=[/?#]|$)/i);
+	return match ? match[1] : null;
 };
+
+// The privacy hash of an unlisted Vimeo video (vimeo.com/ID/HASH or ?h=HASH).
+// Without it Vimeo refuses to play an unlisted video. Hex only.
+export const getVimeoHash = (url) => {
+	if (!url) return null;
+	const match = url.match(/vimeo\.com\/(?:video\/)?\d+\/([0-9a-f]+)(?=[/?#]|$)/i) || url.match(/vimeo\.com\/.*[?&]h=([0-9a-f]+)/i);
+	return match ? match[1] : null;
+};
+
+/**
+ * Plyr draws Vimeo captions itself (from Vimeo's cuechange). Vimeo drew them
+ * too, inside its iframe, so every line showed twice, and after "Disabled"
+ * Vimeo's copy could stay frozen on screen. Every track switch (Plyr's and
+ * ours) goes through enableTextTrack, so make it always ask Vimeo for a hidden
+ * track: cuechange still fires and only Plyr's caption is shown.
+ */
+export const hideNativeVimeoCaptions = (player) => {
+	const embed = player?.embed;
+	if (!embed || typeof embed.enableTextTrack !== 'function' || embed.vpbHiddenTracks) return;
+	const enableTextTrack = embed.enableTextTrack.bind(embed);
+	embed.enableTextTrack = (language, kind) => enableTextTrack(language, kind, false);
+	embed.vpbHiddenTracks = true;
+};
+/**
+ * Best available YouTube thumbnail for a video id, resolved the same way in the
+ * editor and on the front end so both always show the same image.
+ * Prefers maxresdefault (sharpest); YouTube answers 200 with a 120px
+ * placeholder when it doesn't exist, so fall back to hqdefault in that case.
+ */
+export const getYoutubePoster = (id) => new Promise((resolve) => {
+	if (!id) return resolve('');
+	const base = `https://i.ytimg.com/vi/${id}/`;
+	const img = new Image();
+	img.onload = () => resolve(img.naturalWidth > 120 ? `${base}maxresdefault.jpg` : `${base}hqdefault.jpg`);
+	img.onerror = () => resolve(`${base}hqdefault.jpg`);
+	img.src = `${base}maxresdefault.jpg`;
+});

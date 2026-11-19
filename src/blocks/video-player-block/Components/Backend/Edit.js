@@ -11,30 +11,21 @@ import {
   isVimeo,
   getYoutubeId,
   getVimeoId,
+  getYoutubePoster,
   controlsHandler,
+  hideNativeVimeoCaptions,
 } from "../../utils/functions";
 import { plyrConfig } from "../../utils/config";
+import {
+  usesProviderPlayer,
+  getProviderEmbedUrl,
+  PROVIDER_IFRAME_ALLOW,
+} from "../../utils/providerPlayer";
 import { cameraIcon } from "../../utils/icons";
 import { prefix } from "../../utils/data";
 import { FrontShortCode } from "../../../../Components/Common/FrontShortCode/FrontShortCode";
 
-/**
- * Renders a Plyr-driven YouTube/Vimeo player via a React portal into the
- * parent (admin) window. The apiVersion 3 editor canvas runs in a blob:/srcdoc
- * iframe whose "null" origin causes YouTube Error 153 and breaks Plyr's
- * postMessage handshake. By portaling to the parent window we get a real HTTP
- * origin — Plyr initialises normally and its custom controls render correctly.
- */
-/**
- * Escapes a value for use inside a double-quoted HTML attribute in the raw
- * markup string set via wrapper.innerHTML below.
- *
- * embedId comes from getYoutubeId()/getVimeoId(), which only validate the
- * extracted id's length/charset loosely - a crafted `source` URL could make
- * them return a string containing a literal `"`, which would otherwise close
- * the attribute early and inject new attributes/markup directly into the
- * parent (admin) document this portals into.
- */
+
 const escapeHtmlAttr = (value) =>
   String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -161,6 +152,24 @@ const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
 
     const topWin = window.top || window;
     const topDoc = topWin.document || document;
+
+    // "Use YouTube's / Vimeo's own player": the provider's player as is, no
+    // Plyr. It plays straight away: the editor only gets here after a click.
+    if (usesProviderPlayer(attributes)) {
+      const nativeWrapper = topDoc.createElement("div");
+      nativeWrapper.className = "videoWrapper";
+      nativeWrapper.style.cssText = "width:100%;height:100%;position:relative;";
+      nativeWrapper.innerHTML = `<iframe src="${escapeHtmlAttr(
+        getProviderEmbedUrl(attributes, { autoplay: true }),
+      )}" allow="${escapeHtmlAttr(PROVIDER_IFRAME_ALLOW)}" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;inset:0;width:100%;height:100%;max-width:none;border:0;"></iframe>`;
+      portalRoot.current.appendChild(nativeWrapper);
+      playerElRef.current = nativeWrapper;
+      return () => {
+        nativeWrapper.remove();
+        if (playerElRef.current === nativeWrapper) playerElRef.current = null;
+      };
+    }
+
     const PlyrConstructor =
       topWin.Plyr || (typeof Plyr !== "undefined" ? Plyr : null);
     if (!PlyrConstructor) return;
@@ -192,7 +201,16 @@ const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
         config,
       );
 
+      // Once the CC button or the Captions menu is used, that choice wins: the
+      // "playing" hook below used to switch captions back on (first track) on
+      // every play, so Disabled/another language in the gear menu never stuck.
+      let userTouched = false;
+      playerRef.current.elements?.container?.addEventListener("click", (e) => {
+        if (e.target?.closest?.('[data-plyr="captions"], [data-plyr="language"]')) userTouched = true;
+      }, true);
+
       const applyCaptions = () => {
+        if (userTouched) return;
         try {
           if (isYoutube(source)) {
             if (attributes.youtubeCaptions) {
@@ -218,6 +236,7 @@ const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
       };
 
       playerRef.current.on("ready", () => {
+        if (isVimeo(source)) hideNativeVimeoCaptions(playerRef.current);
         applyCaptions();
         setTimeout(applyCaptions, 500);
       });
@@ -608,11 +627,19 @@ const Edit = (props) => {
 
   // Poster for the YouTube/Vimeo editor façade: explicit poster wins, then the
   // YouTube thumbnail CDN (Vimeo has no static thumbnail URL, falls back to black).
-  const editorPoster =
-    poster ||
-    (isYoutube(source)
-      ? `https://i.ytimg.com/vi/${getYoutubeId(source)}/hqdefault.jpg`
-      : "");
+  const [ytPoster, setYtPoster] = useState("");
+  useEffect(() => {
+    let alive = true;
+    if (!poster && isYoutube(source)) {
+      getYoutubePoster(getYoutubeId(source)).then((u) => alive && setYtPoster(u));
+    } else {
+      setYtPoster("");
+    }
+    return () => {
+      alive = false;
+    };
+  }, [poster, source]);
+  const editorPoster = poster || ytPoster;
 
   // useEffect(() => {
   //   if (

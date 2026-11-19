@@ -3,12 +3,15 @@ import { createRoot } from 'react-dom/client';
 
 import './style.scss';
 import Style from './Components/Common/Style';
-import { getExtension, isYoutube, isVimeo, getYoutubeId, getVimeoId } from './utils/functions';
+import { getExtension, isYoutube, isVimeo, getYoutubeId, getVimeoId, getVimeoHash, getYoutubePoster, hideNativeVimeoCaptions } from './utils/functions';
 import { plyrConfig } from './utils/config';
 import { prefix } from './utils/data';
 import { ensurePlyrSprite } from './utils/sprite';
+import { convertSrtTracks } from './utils/srt';
+import ProviderPlayer from './Components/Common/ProviderPlayer';
+import { usesProviderPlayer } from './utils/providerPlayer';
 
-document.addEventListener('DOMContentLoaded', () => {
+const mountPlayers = () => {
 	ensurePlyrSprite(document);
 	const videoEls = document.querySelectorAll(
     ".wp-block-vpb-video",
@@ -24,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		videoEl?.removeAttribute('data-attributes')
 	});
-});
+};
 
 const RenderVideo = ({ attributes }) => {
 	const { source, poster, muted, autoplay, captions, lazyLoad, youtubeCaptions, vimeoCaptions } = attributes;
@@ -39,9 +42,28 @@ const RenderVideo = ({ attributes }) => {
 
 		let player = null;
 		let observer = null;
+		let cancelled = false;
+		// Once the visitor uses the CC button or the Captions menu, their choice wins:
+		// the "playing" hook below used to switch Vimeo back on, in the first
+		// language of the list, every time the video started again.
+		let userTouched = false;
+
+		// The track in the visitor's browser language, else the first one. Always
+		// taking the first gave e.g. German subtitles on an English site.
+		const pickTrack = (tracks) => {
+			const nav = typeof navigator !== 'undefined' ? navigator : {};
+			const langs = (nav.languages && nav.languages.length ? nav.languages : [nav.language || ''])
+				.map((l) => String(l).toLowerCase().split('-')[0])
+				.filter(Boolean);
+			for (const lang of langs) {
+				const match = tracks.find((t) => String(t?.language || '').toLowerCase().split('-')[0] === lang);
+				if (match) return match;
+			}
+			return tracks[0];
+		};
 
 		const applyCaptions = () => {
-			if (!player) return;
+			if (!player || userTouched) return;
 			try {
 				if (isYT) {
 					if (youtubeCaptions) {
@@ -54,7 +76,8 @@ const RenderVideo = ({ attributes }) => {
 					if (vimeoCaptions) {
 						player.embed?.getTextTracks?.().then?.((tracks) => {
 							if (tracks && tracks.length > 0) {
-								player.embed.enableTextTrack(tracks[0].language, tracks[0].kind || 'subtitles').catch(() => {});
+								const track = pickTrack(tracks);
+								player.embed.enableTextTrack(track.language, track.kind || 'subtitles').catch(() => {});
 							}
 						}).catch?.(() => {});
 					} else {
@@ -66,11 +89,27 @@ const RenderVideo = ({ attributes }) => {
 			}
 		};
 
-		const init = () => {
+		const init = async () => {
 			ensurePlyrSprite(node.ownerDocument || document);
+			// No custom poster: pin the current YouTube thumbnail (same as the
+			// editor) instead of leaving it to the embed, which can show a stale frame.
+			if (isYT && !poster) {
+				const ytPoster = await getYoutubePoster(getYoutubeId(source));
+				if (cancelled) return;
+				if (ytPoster) node.setAttribute('data-poster', ytPoster);
+			}
+			if (!isYT && !isVM && captions?.length) {
+				await convertSrtTracks(node);
+				if (cancelled) return;
+			}
 			player = new Plyr(node, plyrConfig(attributes));
 
+			player.elements?.container?.addEventListener('click', (e) => {
+				if (e.target?.closest?.('[data-plyr="captions"], [data-plyr="language"]')) userTouched = true;
+			}, true);
+
 			player.on('ready', () => {
+				if (isVM) hideNativeVimeoCaptions(player);
 				if (muted && autoplay) {
 					player.play();
 				}
@@ -95,6 +134,7 @@ const RenderVideo = ({ attributes }) => {
 		}
 
 		return () => {
+			cancelled = true;
 			if (observer) observer.disconnect();
 			if (player) {
 				try {
@@ -113,6 +153,16 @@ const RenderVideo = ({ attributes }) => {
 	// doesn't send CORS headers — the video fails to load and never plays.
 	const crossOriginProps = captions?.length ? { crossOrigin: 'anonymous' } : {};
 
+	// "Use YouTube's / Vimeo's own player": no Plyr, the provider's player as is.
+	// (The effect above finds no node and does nothing.)
+	if (usesProviderPlayer(attributes)) {
+		return <div className={prefix}>
+			<div className='videoWrapper'>
+				<ProviderPlayer attributes={attributes} />
+			</div>
+		</div>;
+	}
+
 	return <div className={prefix}>
 		<div className='videoWrapper'>
 			{isYT || isVM ? (
@@ -120,6 +170,7 @@ const RenderVideo = ({ attributes }) => {
 					ref={videoEl}
 					data-plyr-provider={isYT ? 'youtube' : 'vimeo'}
 					data-plyr-embed-id={isYT ? getYoutubeId(source) : getVimeoId(source)}
+					{...(isVM && getVimeoHash(source) ? { 'data-plyr-embed-hash': getVimeoHash(source) } : {})}
 					{...(poster ? { 'data-poster': poster } : {})}
 				></div>
 			) : (
@@ -134,4 +185,16 @@ const RenderVideo = ({ attributes }) => {
 			)}
 		</div>
 	</div>
+}
+
+/*
+ * Performance plugins that delay JavaScript (WP Rocket, LiteSpeed, Perfmatters)
+ * can run this after DOMContentLoaded has already fired; listening for it alone
+ * left the player empty on those sites. Kept at the end of the file so
+ * RenderVideo above is defined when this runs straight away.
+ */
+if ('loading' === document.readyState) {
+	document.addEventListener('DOMContentLoaded', mountPlayers);
+} else {
+	mountPlayers();
 }

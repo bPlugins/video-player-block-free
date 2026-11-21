@@ -9,6 +9,7 @@ import { prefix } from './utils/data';
 import { ensurePlyrSprite } from './utils/sprite';
 import { convertSrtTracks } from './utils/srt';
 import { setupVimeoQuality } from './utils/vimeoQuality';
+import { lazyPlaceholderStyle, releaseLazyPlaceholder } from './utils/lazyLoad';
 import ProviderPlayer from './Components/Common/ProviderPlayer';
 import { usesProviderPlayer } from './utils/providerPlayer';
 
@@ -31,7 +32,7 @@ const mountPlayers = () => {
 };
 
 const RenderVideo = ({ attributes }) => {
-	const { source, poster, muted, autoplay, captions, lazyLoad, youtubeCaptions, vimeoCaptions } = attributes;
+	const { source, poster, muted, autoplay, captions, lazyLoad, youtubeCaptions, vimeoCaptions, ratio } = attributes;
 
 	const videoEl = useRef(null);
 	const isYT = isYoutube(source);
@@ -104,6 +105,9 @@ const RenderVideo = ({ attributes }) => {
 				if (cancelled) return;
 			}
 			player = new Plyr(node, plyrConfig(attributes));
+			// Lazy Load: the player now sizes itself, so drop the reserved box and
+			// let a self-hosted file start loading (see the render below).
+			releaseLazyPlaceholder(node);
 			setupEmbedResetOnEnd(player, attributes);
 
 			player.elements?.container?.addEventListener('click', (e) => {
@@ -173,8 +177,14 @@ const RenderVideo = ({ attributes }) => {
 		</div>;
 	}
 
+	// Lazy Load: until the player loads, keep a box of the right size (with the
+	// poster, if any) so the page doesn't jump, and don't fetch a self-hosted
+	// file yet. Before, the box was 0px tall for YouTube/Vimeo, and the video
+	// file downloaded on page load anyway.
+	const lazyWait = Boolean(lazyLoad) && typeof IntersectionObserver !== 'undefined';
+
 	return <div className={prefix}>
-		<div className='videoWrapper'>
+		<div className='videoWrapper' style={lazyWait ? lazyPlaceholderStyle(ratio, poster) : undefined}>
 			{isYT || isVM ? (
 				<div
 					ref={videoEl}
@@ -185,7 +195,7 @@ const RenderVideo = ({ attributes }) => {
 				></div>
 			) : (
 				/* eslint-disable-next-line react/no-unknown-property */
-				<video controls playsinline {...crossOriginProps} data-poster={poster} preload='metadata' {...autoplayProps} {...mutedProps} ref={videoEl}>
+				<video controls playsinline {...crossOriginProps} data-poster={poster} preload={lazyWait ? 'none' : 'metadata'} {...autoplayProps} {...mutedProps} ref={videoEl}>
 					Your browser does not support the video tag.
 					<source src={source} type={`video/${getExtension(source) || 'mp4'}`} />
 					{captions?.map((cap, index) => cap.src ? (

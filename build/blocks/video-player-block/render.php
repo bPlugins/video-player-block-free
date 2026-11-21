@@ -10,6 +10,11 @@ if (!defined('ABSPATH')) {
 }
 
 $attributes = $attributes ?? [];
+// No video yet: render nothing. An empty <video src=""> resolves to the page
+// URL, so the browser downloaded the page again and showed a broken player.
+if ( '' === trim( (string) ( $attributes['source'] ?? '' ) ) ) {
+    return;
+}
 $id         = wp_unique_id( 'vpbpVideoPlayer-' );
 
 static $vpbp_plyr_sprite_rendered = false;

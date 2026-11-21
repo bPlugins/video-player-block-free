@@ -1,7 +1,7 @@
 import { __, sprintf } from "@wordpress/i18n";
 import { Button, TextControl, ToggleControl } from "@wordpress/components";
 
-import { InlineMediaUpload } from "../../../../../../../bpl-tools/Components";
+import { InlineMediaUpload } from "../../../../../../../bpl-tools/Components/MediaControl/MediaControl";
 
 /**
  * Captions repeater: an array of subtitle tracks { src, label, srclang, default }.

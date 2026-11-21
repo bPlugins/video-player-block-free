@@ -2,7 +2,7 @@ import { __ } from "@wordpress/i18n";
 import { useEffect, useRef } from "react";
 import { withSelect, useDispatch } from "@wordpress/data";
 import { useBlockProps } from "@wordpress/block-editor";
-import { MediaPlaceholder } from "../../../../../../bpl-tools/Components";
+import { MediaPlaceholder } from "../../../../../../bpl-tools/Components/MediaControl/MediaControl";
 import Settings from "./Settings/Settings";
 import Style from "../Common/Style";
 import {

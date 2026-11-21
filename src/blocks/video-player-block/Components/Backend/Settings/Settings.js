@@ -7,11 +7,9 @@ import {
   Button,
 } from "@wordpress/components";
 
-import {
-  HelpPanel,
-  InlineMediaUpload,
-  ColorControl,
-} from "../../../../../../../bpl-tools/Components";
+import HelpPanel from "../../../../../../../bpl-tools/Components/HelpPanel/HelpPanel";
+import { InlineMediaUpload } from "../../../../../../../bpl-tools/Components/MediaControl/MediaControl";
+import { ColorControl } from "../../../../../../../bpl-tools/Components/ColorControl/ColorControl";
 import {
   pxUnit,
   perUnit,

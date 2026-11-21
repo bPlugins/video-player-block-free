@@ -4,7 +4,6 @@ import {
   TabPanel,
   PanelBody,
   ToggleControl,
-  SelectControl,
   Button,
   __experimentalUnitControl as UnitControl,
 } from "@wordpress/components";
@@ -25,6 +24,7 @@ import { isYoutube, isVimeo } from "../../../utils/functions";
 import { CONTROL_PRESETS, activeControlPreset } from "../../../utils/controlPresets";
 import { Fragment } from "@wordpress/element";
 import Captions from "./Captions";
+import { ChoiceControl } from "../ChoiceControl";
 
 // Plyr's own accent colour, shown (and restored by Reset) when none is set.
 const PLYR_ACCENT = "#00b3ff";
@@ -316,7 +316,7 @@ const Settings = ({ attributes, setAttributes }) => {
                   units={[pxUnit(), emUnit(), perUnit()]}
                 />
 
-                <SelectControl
+                <ChoiceControl
                   label={__("Aspect Ratio", "video-player-block")}
                   labelPosition="left"
                   value={ratio}
@@ -325,7 +325,7 @@ const Settings = ({ attributes, setAttributes }) => {
                     { label: "16:9", value: "16:9" },
                     { label: "4:3", value: "4:3" },
                     { label: "1:1", value: "1:1" },
-                    { label: "9:16 (Vertical)", value: "9:16" },
+                    { label: "9:16", value: "9:16" },
                     { label: "21:9", value: "21:9" },
                   ]}
                   onChange={(val) => setAttributes({ ratio: val })}

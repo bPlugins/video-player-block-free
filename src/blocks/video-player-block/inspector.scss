@@ -6,9 +6,11 @@
 //
 // The bpl-tools stylesheet forces `.components-base-control { margin-bottom: 0
 // !important; }`, so vertical rhythm here uses margin-top. Everything is
-// scoped to `.vpb-inspector` (set on each block's TabPanel).
+// scoped to `.bPlTabPanel.vpb-inspector` (both set on the TabPanel): the extra
+// class outranks bpl-tools' `.bPlTabPanel …` / `.bPlPanelBody …` rules, which
+// load later and would otherwise win the tie.
 
-.vpb-inspector {
+.bPlTabPanel.vpb-inspector {
   // --- Sharp corners ---------------------------------------------------------
   .components-button,
   .components-tab-panel__tabs,
@@ -61,6 +63,18 @@
   }
 
   // --- Panels ----------------------------------------------------------------
+  // An open panel reads as a plain section: no blue box, no tinted title bar
+  // (bpl-tools' default), just a dark title and a hairline above it.
+  .bPlPanelBody.is-opened {
+    border: 0;
+    border-top: 1px solid #e0e0e0;
+
+    > .components-panel__body-title {
+      background: none;
+      color: #1e1e1e;
+    }
+  }
+
   .components-panel__body {
     > * + * {
       margin-top: 18px;
@@ -240,6 +254,11 @@
   }
 
   // --- Caption tracks --------------------------------------------------------
+  // The remove button stays quiet and turns red only on hover.
+  .vpb-caption-head .components-button.is-destructive:not(:hover):not(:focus) {
+    color: #757575;
+  }
+
   // One light card per track; the heading row holds a quiet remove icon.
   .vpb-caption-item {
     display: flex;
@@ -279,4 +298,10 @@
 .bPlAdvertiseCard.vpb-advertise,
 .bPlAdvertiseCard.vpb-advertise * {
   border-radius: 0 !important;
+}
+
+// Slash inserter: the selected row is blue, so the block icon turns white
+// (stroke only, so the outline doesn't fill in).
+.components-autocomplete__result.is-selected .vpb-block-icon {
+  stroke: #fff;
 }

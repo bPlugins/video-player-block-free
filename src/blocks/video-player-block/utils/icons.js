@@ -13,7 +13,7 @@ export const videoIcon = (
     strokeWidth="2"
     strokeLinecap="square"
     strokeLinejoin="miter"
-    className="video-player-icon"
+    className="vpb-block-icon video-player-icon"
     aria-hidden="true">
     <rect x="2" y="6" width="13" height="12" />
     <polygon points="15,10.5 22,7 22,17 15,13.5" />

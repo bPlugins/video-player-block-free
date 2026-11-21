@@ -238,6 +238,41 @@
       height: 36px;
     }
   }
+
+  // --- Caption tracks --------------------------------------------------------
+  // One light card per track; the heading row holds a quiet remove icon.
+  .vpb-caption-item {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+
+    > * {
+      margin: 0 !important;
+    }
+  }
+
+  .vpb-caption-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #1e1e1e;
+  }
+
+  .vpb-captions .vpb-note {
+    margin: 0 0 12px;
+  }
+
+  .vpb-captions-add {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 // bpl-tools AdvertiseCard renders outside the tab panel; sharp corners too.

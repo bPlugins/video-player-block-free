@@ -1,13 +1,12 @@
-import { __ } from "@wordpress/i18n";
+import { __, sprintf } from "@wordpress/i18n";
 import { Button, TextControl, ToggleControl } from "@wordpress/components";
 
 import { InlineMediaUpload } from "../../../../../../../bpl-tools/Components";
 
 /**
- * Captions repeater — manages an array of subtitle tracks.
- * Each track: { src, label, srclang, default }
- * Plyr picks up the rendered <track> elements automatically.
- * Only applies to self-hosted videos (YouTube/Vimeo supply their own captions).
+ * Captions repeater: an array of subtitle tracks { src, label, srclang, default }.
+ * Plyr picks up the rendered <track> elements. Self-hosted videos only
+ * (YouTube/Vimeo supply their own captions). Styles: inspector.scss.
  */
 const Captions = ({ captions = [], setAttributes }) => {
   const update = (index, key, val) => {
@@ -32,41 +31,36 @@ const Captions = ({ captions = [], setAttributes }) => {
     });
   };
 
+  // No confirm: the editor's Undo brings a removed track back.
   const remove = (index) => {
     setAttributes({ captions: captions.filter((_, i) => i !== index) });
   };
 
   return (
-    <div className="vpbCaptions">
+    <div className="vpb-captions">
       {captions.length === 0 && (
-        <div style={{ padding: "10px 0 15px", color: "#757575", fontStyle: "italic", fontSize: "13px" }}>
-          {__("No caption tracks added yet. Click below to add a subtitle track (.vtt or .srt).", "video-player-block")}
-        </div>
+        <p className="vpb-note">
+          {__("No caption tracks yet. Add a .vtt or .srt file.", "video-player-block")}
+        </p>
       )}
 
       {captions.map((cap, index) => (
-        <div
-          key={index}
-          className="vpbCaptionItem"
-          style={{
-            border: "1px solid #e0e0e0",
-            padding: "12px",
-            marginBottom: "15px",
-            backgroundColor: "#fafafa"
-          }}>
-          
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px", paddingBottom: "8px", borderBottom: "1px solid #eaeaea" }}>
-            <strong style={{ fontSize: "11px", textTransform: "uppercase", color: "#1e1e1e", letterSpacing: "0.5px" }}>
-              {__("Track", "video-player-block")} {index + 1}
-            </strong>
+        <div key={index} className="vpb-caption-item">
+          <div className="vpb-caption-head">
+            {sprintf(
+              /* translators: %d: track number */
+              __("Track %d", "video-player-block"),
+              index + 1,
+            )}
+            {/* Rare and destructive: a quiet icon, not a loud button. */}
             <Button
-              isDestructive
+              icon="trash"
               size="small"
-              variant="link"
-              style={{ textDecoration: "none", padding: 0 }}
-              onClick={() => remove(index)}>
-              {__("Remove", "video-player-block")}
-            </Button>
+              isDestructive
+              label={__("Remove track", "video-player-block")}
+              showTooltip
+              onClick={() => remove(index)}
+            />
           </div>
 
           <InlineMediaUpload
@@ -77,7 +71,7 @@ const Captions = ({ captions = [], setAttributes }) => {
             placeholder={__("https://…/captions.vtt", "video-player-block")}
           />
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginTop: "15px" }}>
+          <div className="vpb-grid-2">
             <TextControl
               label={__("Label", "video-player-block")}
               value={cap.label}
@@ -86,7 +80,7 @@ const Captions = ({ captions = [], setAttributes }) => {
             />
 
             <TextControl
-              label={__("Lang Code", "video-player-block")}
+              label={__("Language", "video-player-block")}
               value={cap.srclang}
               placeholder={__("en", "video-player-block")}
               onChange={(val) => update(index, "srclang", val)}
@@ -94,15 +88,14 @@ const Captions = ({ captions = [], setAttributes }) => {
           </div>
 
           <ToggleControl
-            className="mt10"
-            label={__("Set as Default", "video-player-block")}
+            label={__("Default Track", "video-player-block")}
             checked={!!cap.default}
             onChange={(val) => update(index, "default", val)}
           />
         </div>
       ))}
 
-      <Button variant="secondary" style={{ width: "100%", justifyContent: "center" }} onClick={add}>
+      <Button variant="secondary" className="vpb-captions-add" onClick={add}>
         {__("+ Add Caption Track", "video-player-block")}
       </Button>
     </div>

@@ -4,10 +4,11 @@ import { createRoot } from 'react-dom/client';
 import './style.scss';
 import Style from './Components/Common/Style';
 import { getExtension, isYoutube, isVimeo, getYoutubeId, getVimeoId, getVimeoHash, getYoutubePoster, hideNativeVimeoCaptions } from './utils/functions';
-import { plyrConfig } from './utils/config';
+import { plyrConfig, setupEmbedResetOnEnd } from './utils/config';
 import { prefix } from './utils/data';
 import { ensurePlyrSprite } from './utils/sprite';
 import { convertSrtTracks } from './utils/srt';
+import { setupVimeoQuality } from './utils/vimeoQuality';
 import ProviderPlayer from './Components/Common/ProviderPlayer';
 import { usesProviderPlayer } from './utils/providerPlayer';
 
@@ -103,6 +104,7 @@ const RenderVideo = ({ attributes }) => {
 				if (cancelled) return;
 			}
 			player = new Plyr(node, plyrConfig(attributes));
+			setupEmbedResetOnEnd(player, attributes);
 
 			player.elements?.container?.addEventListener('click', (e) => {
 				if (e.target?.closest?.('[data-plyr="captions"], [data-plyr="language"]')) userTouched = true;
@@ -115,8 +117,16 @@ const RenderVideo = ({ attributes }) => {
 				}
 				applyCaptions();
 				setTimeout(applyCaptions, 500);
+				// Vimeo quality picker in the settings menu (Plyr has none for Vimeo).
+				if (isVM) {
+					setupVimeoQuality(player);
+					setTimeout(() => setupVimeoQuality(player), 1000);
+				}
 			});
-			player.on('playing', applyCaptions);
+			player.on('playing', () => {
+				applyCaptions();
+				if (isVM) setupVimeoQuality(player);
+			});
 		};
 
 		if (lazyLoad && typeof IntersectionObserver !== 'undefined') {

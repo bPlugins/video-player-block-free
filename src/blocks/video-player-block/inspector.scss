@@ -1,0 +1,324 @@
+// Sidebar styles for the Video Player block, same look as the Pro plugin.
+// Everything is scoped to .vpb-inspector (the block TabPanel), so nothing else in
+// the editor is touched.
+
+.vpb-inspector {
+  // --- Tabs ---------------------------------------------------------------
+  // A cleaner segmented look for the General / Style switcher. The bar sticks
+  // to the top of the sidebar so the user can switch tabs without scrolling
+  // back up through long panels; the white ring (box-shadow) masks content
+  // scrolling behind the rounded pill.
+  .components-tab-panel__tabs {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    gap: 4px;
+    margin-bottom: 4px;
+    padding: 4px;
+    background: #f0f0f1;
+    border-radius: 8px;
+    box-shadow: 0 0 0 8px #fff;
+
+    button {
+      flex: 1 1 0;
+      height: 34px;
+      justify-content: center;
+      border-radius: 6px;
+      border-bottom: 0 !important;
+      font-weight: 500;
+      transition: background 0.15s ease, color 0.15s ease;
+
+      &:hover:not(.activeTab) {
+        color: var(--wp-admin-theme-color, #3858e9);
+      }
+    }
+
+    .activeTab {
+      background: #fff;
+      border-bottom: 0 !important;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  // --- Panels -------------------------------------------------------------
+  .components-panel__body {
+    // Vertical rhythm between every top-level control / group inside a panel.
+    > * + * {
+      margin-top: 18px;
+    }
+
+    // First control should clear the panel title comfortably.
+    > .components-panel__body-title + * {
+      margin-top: 16px;
+    }
+  }
+
+  // Tidy up the legacy spacing utilities so they don't stack with the rules
+  // above — let our rhythm own the vertical spacing.
+  .components-panel__body .mt15 {
+    margin-top: 0;
+  }
+  .components-panel__body .mt15:not(:first-child) {
+    margin-top: 18px;
+  }
+
+  // Inline media upload: URL field + upload button on one row. Without this the
+  // text field and the button render at different heights / baselines (made
+  // worse by the generic control margin above, which the reset here cancels).
+  .bPlInlineMediaUpload {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    // The text field fills the row; kill the inherited control spacing so it
+    // lines up with the button. The extra `.components-panel__row` qualifier
+    // raises specificity above the generic `:not(:last-child)` margin rule
+    // (which otherwise adds 16px below the field and breaks the alignment).
+    // bpl-tools' MediaControl.scss pins this field to `width: calc(100% - 36px)`
+    // (sized for a 36px button) — reset it to auto so flex owns the width and
+    // the row doesn't overflow, and drop the inherited bottom margin.
+    &.components-panel__row .components-base-control,
+    &.components-panel__row > .components-base-control {
+      flex: 1 1 auto;
+      width: auto !important;
+      margin: 0 !important;
+    }
+
+    // Force the field to a known height regardless of which input variant
+    // WordPress renders (TextControl vs. InputControl) — bpl-tools pins
+    // `.components-input-control__input` to 36px !important, so we override it.
+    .components-text-control__input,
+    .components-input-control__input,
+    input[type="text"],
+    input[type="url"] {
+      height: 40px !important;
+      min-height: 40px !important;
+    }
+
+    // The InputControl variant wraps the field in a bordered container; make
+    // that fill the row height too so the border matches the button.
+    .components-input-control__container {
+      height: 40px;
+    }
+
+    // Square the upload button to the field height.
+    .button.button-primary {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      padding: 0;
+      margin: 0;
+
+      svg {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+      }
+    }
+  }
+
+  // Help text rendered by InlineMediaUpload (mirrors a control's help text).
+  .bPlInlineMediaUpload__help {
+    margin: 6px 0 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #757575;
+  }
+
+  // Help / description text under a control.
+  .components-base-control__help {
+    margin-top: 6px;
+    margin-bottom: 0;
+    font-style: normal;
+    line-height: 1.5;
+    color: #757575;
+  }
+
+  // Range controls render their value input on the same row; give the whole
+  // control a little more vertical presence so the slider isn't cramped.
+  .components-range-control {
+    margin-bottom: 0;
+  }
+
+  // Toggle rows: keep the label/switch aligned and let multi-line labels wrap
+  // without crowding the switch.
+  .components-toggle-control .components-base-control__field > label {
+    line-height: 1.4;
+  }
+
+  // --- Repeatable item rows (reels / gallery / playlist) ------------------
+  // These wrappers already exist per-block; here we lift the shared visual
+  // treatment so each row reads as a distinct, tidy editing card. The
+  // `.is-open` selectors carry higher specificity than the per-block base
+  // styles, so the open-state card treatment always wins.
+  .vpb-vr-item-row,
+  .vpb-vg-item-row,
+  .vpb-vp-item-row {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease,
+      background 0.15s ease;
+
+    // Collapsed rows stay light and compact.
+    &.is-collapsed {
+      background: #fff;
+
+      &:hover {
+        border-color: #c3c4c7;
+        background: #fafafa;
+      }
+    }
+
+    // The expanded row becomes a clear, tinted editing card.
+    &.is-open {
+      border: 1px solid #135e96;
+      background: #f3f8fe;
+      box-shadow: 0 2px 8px rgba(19, 110, 245, 0.14);
+    }
+  }
+
+  // Header (title + move/delete actions) of an open card.
+  .vpb-vr-item-row.is-open .vpb-vr-item-head,
+  .vpb-vg-item-row.is-open .vpb-vg-item-head,
+  .vpb-vp-item-row.is-open .vpb-vp-item-head {
+    .vpb-vr-item-title,
+    .vpb-vg-item-title,
+    .vpb-vp-item-title {
+      color: #135e96;
+    }
+  }
+
+  // The open item body: white field area separated from the tinted header,
+  // with comfortable spacing between stacked fields.
+  .vpb-vr-item-row.is-open .vpb-vr-item-body,
+  .vpb-vg-item-row.is-open .vpb-vg-item-body,
+  .vpb-vp-item-row.is-open .vpb-vp-item-body {
+    gap: 12px;
+    padding: 12px;
+    margin-top: 2px;
+    background: #fff;
+    border: 1px solid #e6eef9;
+    border-radius: 6px;
+  }
+
+  // The "Add …" buttons sit full-width; give them a clear gap from the list.
+  .vpb-vr-add,
+  .vpb-vg-add,
+  .vpb-vp-add {
+    margin-top: 12px;
+    height: 40px;
+  }
+
+  // --- Section subheading --------------------------------------------------
+  // Groups related controls inside a long PanelBody without paying the cost
+  // of another collapsible panel. Usage:
+  //   <div className="vpb-subhead">{__("Timeline", "video-player-block")}</div>
+  .components-panel__body .vpb-subhead {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #50575e;
+
+    &::after {
+      content: "";
+      flex: 1 1 auto;
+      height: 1px;
+      background: #e0e0e0;
+    }
+
+    // First control group in a panel shouldn't double-space under the title.
+    &:first-child,
+    .components-panel__body-title + & {
+      margin-top: 16px;
+    }
+  }
+
+  // Controls directly following a subhead sit a little tighter to it than the
+  // default 18px rhythm, so the group reads as one unit.
+  .components-panel__body .vpb-subhead + * {
+    margin-top: 10px;
+  }
+
+  // Inside repeater item cards the flex gap already provides rhythm, so
+  // subheads there need much less of their own margin — and none at all when
+  // they open the card body.
+  .vpb-vr-item-body .vpb-subhead,
+  .vpb-vg-item-body .vpb-subhead,
+  .vpb-vp-item-body .vpb-subhead {
+    margin-top: 8px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  // --- Two-column field grid -------------------------------------------------
+  // Compact layout for small related numeric fields (e.g. shadow X/Y/Blur/
+  // Spread) that waste vertical space stacked full-width. Usage:
+  //   <div className="vpb-grid-2"> <NumberControl/> ×4 </div>
+  .vpb-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+
+    > * {
+      min-width: 0;
+      margin: 0 !important;
+    }
+  }
+
+  // --- Inline note -----------------------------------------------------------
+  // Small muted note under a control, for blocks that can't use the `help`
+  // prop (e.g. notes that apply to a whole group). Replaces ad-hoc <small>.
+  .vpb-note {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    line-height: 1.5;
+    font-style: normal;
+    color: #757575;
+  }
+
+  // --- Panel titles ----------------------------------------------------------
+  // Slightly stronger titles so closed panels scan faster in a long sidebar.
+  .components-panel__body > .components-panel__body-title button {
+    font-weight: 600;
+  }
+
+  // --- ToggleGroupControl ------------------------------------------------------
+  // Used for short 2-3 option choices instead of a dropdown; keep the segmented
+  // control full-width so options get equal hit areas.
+  .components-toggle-group-control {
+    width: 100%;
+  }
+}
+
+// --- One-click control presets (Video Player > Controls tab) ----------------
+// Three equal buttons in one row: Minimal / Standard / Full.
+.vpb-inspector .vpb-control-presets {
+  display: flex;
+  gap: 6px;
+
+  .components-button {
+    flex: 1 1 0;
+    justify-content: center;
+    height: 36px;
+    border-radius: 6px;
+  }
+}
+
+.vpb-inspector .components-panel__body .vpb-control-presets__note {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #757575;
+}

@@ -11,6 +11,81 @@ export const hasDefaultCaption = (attributes) =>
   Array.isArray(attributes?.captions) &&
   attributes.captions.some((cap) => cap?.src && cap.default);
 
+/** The controls a player shows when none were changed (the "Standard" preset). */
+export const DEFAULT_CONTROLS = {
+  "play-large": true,
+  "restart": false,
+  "rewind": true,
+  "play": true,
+  "fast-forward": true,
+  "progress": true,
+  "current-time": true,
+  "duration": false,
+  "mute": true,
+  "volume": true,
+  "pip": false,
+  "airplay": false,
+  "captions": false,
+  "settings": true,
+  "download": false,
+  "fullscreen": true,
+};
+
+/**
+ * Editor: apply the Playback toggles to a running player at once, without
+ * rebuilding it (a rebuild restarted the video and lagged behind the click).
+ * Plyr reads hideControls and resetOnEnd when it needs them, so changing its
+ * config is enough; muted and loop have setters.
+ */
+export const applyLivePlayback = (player, { muted, repeat, autoHideControl, resetOnEnd } = {}) => {
+  if (!player) return;
+  try {
+    player.muted = Boolean(muted);
+    player.loop = Boolean(repeat);
+    if (player.config) {
+      player.config.hideControls = Boolean(autoHideControl);
+      player.config.resetOnEnd = Boolean(resetOnEnd);
+    }
+    if (!autoHideControl) {
+      // Auto-Hide switched off while the bar was hidden: show it again now.
+      player.toggleControls?.(true);
+    } else if (player.playing) {
+      // Switched on while playing: hide after Plyr's usual 2s, not only after
+      // the next mouse move.
+      setTimeout(() => {
+        try {
+          const bar = player.elements?.controls;
+          if (player.config?.hideControls && player.playing && !bar?.hover && !bar?.pressed) {
+            player.toggleControls(false);
+          }
+        } catch (e) {
+          /* ignore */
+        }
+      }, 2000);
+    }
+  } catch (e) {
+    /* the player may be mid-teardown */
+  }
+};
+
+/**
+ * "Reset On End" for YouTube and Vimeo. Plyr applies resetOnEnd to self-hosted
+ * video only, so an embed stayed on the provider's end screen (YouTube's related
+ * videos). Back to the start, with the poster showing again.
+ */
+export const setupEmbedResetOnEnd = (player, attributes) => {
+  const { source, resetOnEnd, repeat } = attributes || {};
+  if (!player || !resetOnEnd || repeat) return;
+  if (!isYoutube(source) && !isVimeo(source)) return;
+  player.on("ended", () => {
+    try {
+      player.stop();
+    } catch (e) {
+      /* ignore */
+    }
+  });
+};
+
 export const plyrConfig = (attributes) => {
   const {
     source,
@@ -28,27 +103,8 @@ export const plyrConfig = (attributes) => {
   const isYT = isYoutube(source);
   const isVM = isVimeo(source);
 
-  const defaultControls = {
-    "play-large": true,
-    "restart": false,
-    "rewind": true,
-    "play": true,
-    "fast-forward": true,
-    "progress": true,
-    "current-time": true,
-    "duration": false,
-    "mute": true,
-    "volume": true,
-    "pip": false,
-    "airplay": false,
-    "captions": false,
-    "settings": true,
-    "download": false,
-    "fullscreen": true,
-  };
-
   const activeControls = {
-    ...defaultControls,
+    ...DEFAULT_CONTROLS,
     ...(controls || {}),
   };
   if (isYT) {
@@ -117,6 +173,9 @@ export const plyrConfig = (attributes) => {
       origin: currentOrigin,
     },
     vimeo: {
+      // Do Not Track: no Vimeo tracking cookies for visitors (Pro and the
+      // "Vimeo's own player" option already send it).
+      dnt: true,
       texttrack: vimeoCaptions ? "auto" : "",
     },
   };

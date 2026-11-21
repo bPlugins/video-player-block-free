@@ -1,5 +1,5 @@
 import { __ } from "@wordpress/i18n";
-import { useState,useEffect,useRef } from "react";
+import { useEffect, useRef } from "react";
 import { withSelect, useDispatch } from "@wordpress/data";
 import { useBlockProps } from "@wordpress/block-editor";
 import { MediaPlaceholder } from "../../../../../../bpl-tools/Components";
@@ -11,455 +11,108 @@ import {
   isVimeo,
   getYoutubeId,
   getVimeoId,
-  getYoutubePoster,
   controlsHandler,
   hideNativeVimeoCaptions,
 } from "../../utils/functions";
-import { plyrConfig } from "../../utils/config";
+import { plyrConfig, applyLivePlayback } from "../../utils/config";
 import {
   usesProviderPlayer,
   getProviderEmbedUrl,
-  PROVIDER_IFRAME_ALLOW,
+  cssAspectRatio,
 } from "../../utils/providerPlayer";
+import CanvasEmbedFrame from "./CanvasEmbedFrame";
+import { setupVimeoQuality } from "../../utils/vimeoQuality";
 import { cameraIcon } from "../../utils/icons";
 import { prefix } from "../../utils/data";
 import { FrontShortCode } from "../../../../Components/Common/FrontShortCode/FrontShortCode";
 
 
-const escapeHtmlAttr = (value) =>
-  String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-
-// Ensure the Plyr SVG sprite is present in the parent document.
-// Plyr's built-in loadSprite fetches from a CDN that may be blocked;
-// we load it ourselves so the control icons render correctly.
-const ensureSprite = (topDoc, PlyrConstructor) => {
-  if (topDoc.getElementById("sprite-plyr")) return Promise.resolve();
-
-  const spriteUrl = "https://cdn.plyr.io/3.7.8/plyr.svg";
-  return fetch(spriteUrl)
-    .then((r) => r.text())
-    .then((svg) => {
-      if (topDoc.getElementById("sprite-plyr")) return; // race guard
-      const container = topDoc.createElement("div");
-      container.setAttribute("hidden", "");
-      container.setAttribute("id", "sprite-plyr");
-      container.innerHTML = svg;
-      topDoc.body.insertAdjacentElement("afterbegin", container);
-    })
-    .catch(() => {
-      // Fallback: use Plyr's static helper (may also fail, but worth trying)
-      if (PlyrConstructor?.loadSprite) {
-        PlyrConstructor.loadSprite(spriteUrl, "sprite-plyr");
-      }
-    });
+/**
+ * Plyr options for the editor's YouTube/Vimeo preview. The preview frame fills
+ * the block edge to edge, which undoes Plyr's crop that hides Vimeo's own
+ * buttons, so Vimeo is asked not to draw them (same options Pro sends).
+ */
+const editorEmbedConfig = (attributes) => {
+  const config = plyrConfig(attributes);
+  return {
+    ...config,
+    vimeo: {
+      ...(config.vimeo || {}),
+      byline: false,
+      portrait: false,
+      title: false,
+      controls: false,
+      sidedock: false,
+      pip: false,
+      dnt: true,
+      premium: true,
+    },
+  };
 };
 
-const EmbedPortal = ({ source, placeholderRef, attributes, onSelect }) => {
-  const [rect, setRect] = useState(null);
-  const overlayRoot = useRef(null);
-  const portalRoot = useRef(null);
-  const playerRef = useRef(null);
-  const playerElRef = useRef(null);
-  // Keep the latest onSelect without re-binding the listener every render.
-  const onSelectRef = useRef(onSelect);
-  onSelectRef.current = onSelect;
-
-  // Create a container div in the TOP-LEVEL window's body to bypass iframe security.
-  useEffect(() => {
-    const topDoc = window.top?.document || window.document;
-
-    // Outer overlay carries the `.wp-block-vpb-video` wrapper class so the
-    // block's scoped CSS — including the responsive `@container` rules — matches
-    // here, exactly as it does on the frontend. Without this wrapper the portal
-    // sits bare on <body> and the mobile control layout never kicks in.
-    const overlay = topDoc.createElement("div");
-    overlay.className = "wp-block-vpb-video vpbp-portal-overlay";
-    // z-index must stay BELOW WordPress modal layers (`.media-modal` is
-    // 160000, Gutenberg `.components-modal__screen-overlay` is 100000) so an
-    // open Media Library / modal naturally covers the embed instead of the
-    // playing video painting over it. 10000 still sits above the canvas iframe
-    // content; the clip-to-canvas logic below keeps it off the editor chrome.
-    overlay.style.cssText = "position:fixed;z-index:10000;pointer-events:auto;";
-
-    // This overlay lives in the TOP window, layered over the iframe canvas, so
-    // clicks on it never reach Gutenberg's block-selection handling — the block
-    // would stay unselected and its Inspector (controls panel) would never open.
-    // Explicitly select the block on mousedown instead. `clickToPlay` is off, so
-    // this won't trigger playback; Plyr's own control handlers still fire because
-    // we neither stop propagation nor prevent default.
-    const selectHandler = () => onSelectRef.current?.();
-    overlay.addEventListener("mousedown", selectHandler, true);
-
-    // Inner element is the actual Plyr host AND the size container that the
-    // `@container (max-width: …)` queries measure against.
-    const inner = topDoc.createElement("div");
-    inner.className = "vpbpVideoPlayer";
-    inner.style.cssText = "width:100%;height:100%;";
-    overlay.appendChild(inner);
-
-    topDoc.body.appendChild(overlay);
-    overlayRoot.current = overlay;
-    portalRoot.current = inner;
-
-    return () => {
-      if (playerRef.current) {
-        try {
-          playerRef.current.destroy();
-        } catch (_) {
-          /* ignore */
+/**
+ * Captions for the YouTube/Vimeo editor preview (same rules as view.js): on in
+ * the visitor's language when the setting is on, kept off when it is off, and
+ * the editor user's own pick in the CC button / Captions menu always wins.
+ */
+const setupEditorCaptions = (player, attributes) => {
+  const source = attributes?.source;
+  let userTouched = false;
+  player.elements?.container?.addEventListener(
+    "click",
+    (e) => {
+      if (e.target?.closest?.('[data-plyr="captions"], [data-plyr="language"]')) userTouched = true;
+    },
+    true,
+  );
+  const pickTrack = (tracks) => {
+    const nav = typeof navigator !== "undefined" ? navigator : {};
+    const langs = (nav.languages && nav.languages.length ? nav.languages : [nav.language || ""])
+      .map((l) => String(l).toLowerCase().split("-")[0])
+      .filter(Boolean);
+    for (const lang of langs) {
+      const match = tracks.find((t) => String(t?.language || "").toLowerCase().split("-")[0] === lang);
+      if (match) return match;
+    }
+    return tracks[0];
+  };
+  const apply = () => {
+    if (userTouched) return;
+    try {
+      if (isYoutube(source)) {
+        if (attributes.youtubeCaptions) {
+          player.embed?.loadModule?.("captions");
+        } else {
+          player.embed?.unloadModule?.("captions");
+          player.embed?.setOption?.("captions", "track", {});
         }
-        playerRef.current = null;
-      }
-      overlay.removeEventListener("mousedown", selectHandler, true);
-      overlay.remove();
-      overlayRoot.current = null;
-      portalRoot.current = null;
-    };
-  }, []);
-
-  // Round the embed in the portal. The block's per-instance Style.js radius rule
-  // is scoped to `#blockId …`, but the portal lives in the top window OUTSIDE
-  // that block wrapper, so that rule never matches here. Mirror it with a
-  // top-window <style> targeting the portal's container (which already has
-  // overflow:hidden via the synced block CSS) so it's clipped to one clean
-  // rounded shape — rounding only the inner frame leaves the black player
-  // background poking out of the square corners.
-  useEffect(() => {
-    const topDoc = window.top?.document || window.document;
-    const styleId = "vpbp-portal-radius";
-    let styleEl = topDoc.getElementById(styleId);
-    if (!styleEl) {
-      styleEl = topDoc.createElement("style");
-      styleEl.id = styleId;
-      topDoc.head.appendChild(styleEl);
-    }
-    const r = attributes?.radius || "0px";
-    styleEl.innerHTML = `.vpbp-portal-overlay .vpbpVideoPlayer{border-radius:${r} !important;overflow:hidden !important;}`;
-
-    return () => {
-      const el = topDoc.getElementById(styleId);
-      if (el) el.remove();
-    };
-  }, [attributes?.radius]);
-
-  // Initialise Plyr on the portal element once it's mounted.
-  useEffect(() => {
-    if (!portalRoot.current || !attributes) return;
-
-    const topWin = window.top || window;
-    const topDoc = topWin.document || document;
-
-    // "Use YouTube's / Vimeo's own player": the provider's player as is, no
-    // Plyr. It plays straight away: the editor only gets here after a click.
-    if (usesProviderPlayer(attributes)) {
-      const nativeWrapper = topDoc.createElement("div");
-      nativeWrapper.className = "videoWrapper";
-      nativeWrapper.style.cssText = "width:100%;height:100%;position:relative;";
-      nativeWrapper.innerHTML = `<iframe src="${escapeHtmlAttr(
-        getProviderEmbedUrl(attributes, { autoplay: true }),
-      )}" allow="${escapeHtmlAttr(PROVIDER_IFRAME_ALLOW)}" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;inset:0;width:100%;height:100%;max-width:none;border:0;"></iframe>`;
-      portalRoot.current.appendChild(nativeWrapper);
-      playerElRef.current = nativeWrapper;
-      return () => {
-        nativeWrapper.remove();
-        if (playerElRef.current === nativeWrapper) playerElRef.current = null;
-      };
-    }
-
-    const PlyrConstructor =
-      topWin.Plyr || (typeof Plyr !== "undefined" ? Plyr : null);
-    if (!PlyrConstructor) return;
-
-    // Build the provider div that Plyr expects.
-    const provider = isYoutube(source) ? "youtube" : "vimeo";
-    const embedId = isYoutube(source)
-      ? getYoutubeId(source)
-      : getVimeoId(source);
-
-    // Create a wrapper to contain the Plyr player.
-    const wrapper = topDoc.createElement("div");
-    wrapper.className = "videoWrapper";
-    wrapper.style.cssText = "width:100%;height:100%;";
-    const poster = attributes?.poster;
-    const posterAttr = poster ? ` data-poster="${escapeHtmlAttr(poster)}"` : "";
-    wrapper.innerHTML = `<div data-plyr-provider="${escapeHtmlAttr(provider)}" data-plyr-embed-id="${escapeHtmlAttr(embedId)}"${posterAttr}></div>`;
-    portalRoot.current.appendChild(wrapper);
-    playerElRef.current = wrapper;
-
-    ensureSprite(topDoc, PlyrConstructor).finally(() => {
-      const config = {
-        ...plyrConfig(attributes),
-        loadSprite: false, // We handled it above
-        iconUrl: "https://cdn.plyr.io/3.7.8/plyr.svg",
-      };
-      playerRef.current = new PlyrConstructor(
-        wrapper.querySelector("[data-plyr-provider]"),
-        config,
-      );
-
-      // Once the CC button or the Captions menu is used, that choice wins: the
-      // "playing" hook below used to switch captions back on (first track) on
-      // every play, so Disabled/another language in the gear menu never stuck.
-      let userTouched = false;
-      playerRef.current.elements?.container?.addEventListener("click", (e) => {
-        if (e.target?.closest?.('[data-plyr="captions"], [data-plyr="language"]')) userTouched = true;
-      }, true);
-
-      const applyCaptions = () => {
-        if (userTouched) return;
-        try {
-          if (isYoutube(source)) {
-            if (attributes.youtubeCaptions) {
-              playerRef.current?.embed?.loadModule?.("captions");
-            } else {
-              playerRef.current?.embed?.unloadModule?.("captions");
-              playerRef.current?.embed?.setOption?.("captions", "track", {});
+      } else if (isVimeo(source)) {
+        if (attributes.vimeoCaptions) {
+          player.embed?.getTextTracks?.().then?.((tracks) => {
+            if (tracks && tracks.length > 0) {
+              const track = pickTrack(tracks);
+              player.embed.enableTextTrack(track.language, track.kind || "subtitles").catch(() => {});
             }
-          } else if (isVimeo(source)) {
-            if (attributes.vimeoCaptions) {
-              playerRef.current?.embed?.getTextTracks?.().then?.((tracks) => {
-                if (tracks && tracks.length > 0) {
-                  playerRef.current?.embed?.enableTextTrack(tracks[0].language, tracks[0].kind || "subtitles").catch(() => {});
-                }
-              }).catch?.(() => {});
-            } else {
-              playerRef.current?.embed?.disableTextTrack?.().catch?.(() => {});
-            }
-          }
-        } catch (e) {
-          /* ignore */
-        }
-      };
-
-      playerRef.current.on("ready", () => {
-        if (isVimeo(source)) hideNativeVimeoCaptions(playerRef.current);
-        applyCaptions();
-        setTimeout(applyCaptions, 500);
-      });
-      playerRef.current.on("playing", applyCaptions);
-    });
-
-    return () => {
-      if (playerRef.current) {
-        try {
-          playerRef.current.destroy();
-        } catch (_) {
-          /* ignore */
-        }
-        playerRef.current = null;
-      }
-      if (playerElRef.current) {
-        playerElRef.current.remove();
-        playerElRef.current = null;
-      }
-    };
-  }, [source, attributes]);
-
-  // Track the placeholder element's position so the portal overlay stays
-  // aligned even as the user scrolls the editor canvas.
-  useEffect(() => {
-    if (!placeholderRef.current) return;
-
-    const update = () => {
-      const el = placeholderRef.current;
-      if (!el) return;
-
-      // Walk up through iframe boundaries to get the correct viewport-relative
-      // rect in the top-level window.
-      const local = el.getBoundingClientRect();
-
-      // Visibility test: the embed lives in the top window above the whole
-      // canvas, so when the placeholder is scrolled out of the canvas viewport
-      // we must hide the overlay, otherwise the playing video paints over the
-      // editor chrome. We use a pure rect/viewport check (NOT elementFromPoint
-      // hit-testing) — the transient overlays Gutenberg paints at block
-      // boundaries while editing would otherwise make this flip on/off every
-      // frame, which is what made the player blink.
-      const ownerDoc = el.ownerDocument;
-      let visible = local.width > 0 && local.height > 0;
-      if (visible) {
-        const vw = ownerDoc.documentElement.clientWidth;
-        const vh = ownerDoc.documentElement.clientHeight;
-        // Hidden only once it's fully outside the canvas viewport (allow it to
-        // straddle an edge — the clipPath below trims the off-canvas part).
-        if (
-          local.bottom <= 0 ||
-          local.right <= 0 ||
-          local.top >= vh ||
-          local.left >= vw
-        ) {
-          visible = false;
+          }).catch?.(() => {});
+        } else {
+          player.embed?.disableTextTrack?.().catch?.(() => {});
         }
       }
-
-      let box = {
-        top: local.top,
-        left: local.left,
-        width: local.width,
-        height: local.height,
-      };
-      let win = el.ownerDocument.defaultView;
-      let clip = null;
-      const topDoc = window.top?.document || window.document;
-
-      // Sync block CSS from the editor iframe to the top-level window so our
-      // portal player receives the responsive media queries and custom UI.
-      if (
-        el.ownerDocument !== topDoc &&
-        !topDoc.querySelector("#vpbp-portal-styles")
-      ) {
-        const styles = Array.from(el.ownerDocument.querySelectorAll("style"));
-        styles.forEach((style) => {
-          if (style.innerHTML.includes(".vpbpVideoPlayer")) {
-            const clone = topDoc.createElement("style");
-            clone.id = "vpbp-portal-styles";
-            clone.innerHTML = style.innerHTML;
-            topDoc.head.appendChild(clone);
-          }
-        });
-      }
-
-      // The responsive `@container` rules live in the block's compiled
-      // stylesheet (view.css), loaded as a <link> in the editor iframe but NOT
-      // in the top document where this portal renders. Clone that link across so
-      // the portal player's controls adapt on small screens (mobile preview).
-      if (
-        el.ownerDocument !== topDoc &&
-        !topDoc.querySelector("#vpbp-portal-css")
-      ) {
-        const links = Array.from(
-          el.ownerDocument.querySelectorAll('link[rel="stylesheet"]'),
-        ).filter(
-          (l) =>
-            l.href &&
-            l.href.includes("video-player-block") &&
-            l.href.includes("view.css"),
-        );
-        links.forEach((l, i) => {
-          const clone = topDoc.createElement("link");
-          if (i === 0) clone.id = "vpbp-portal-css";
-          clone.rel = "stylesheet";
-          clone.href = l.href;
-          topDoc.head.appendChild(clone);
-        });
-      }
-
-      while (win && win !== window.top) {
-        const frameEl = win.frameElement;
-        if (!frameEl) break;
-        const frameBox = frameEl.getBoundingClientRect();
-        box = {
-          top: box.top + frameBox.top,
-          left: box.left + frameBox.left,
-          width: box.width,
-          height: box.height,
-        };
-        // Outermost frame (the editor canvas) is in top-window coordinates —
-        // its rect is the visible bounds the overlay must stay clipped within
-        // so it never overflows the editor header/sidebar.
-        clip = {
-          top: frameBox.top,
-          left: frameBox.left,
-          right: frameBox.right,
-          bottom: frameBox.bottom,
-        };
-        win = frameEl.ownerDocument.defaultView;
-      }
-
-      const sameClip = (a, b) =>
-        (!a && !b) ||
-        (a &&
-          b &&
-          a.top === b.top &&
-          a.left === b.left &&
-          a.right === b.right &&
-          a.bottom === b.bottom);
-
-      setRect((prev) => {
-        if (
-          prev &&
-          prev.top === box.top &&
-          prev.left === box.left &&
-          prev.width === box.width &&
-          prev.height === box.height &&
-          prev.visible === visible &&
-          sameClip(prev.clip, clip)
-        )
-          return prev;
-        return { ...box, visible, clip };
-      });
-    };
-
-    // Coalesce bursts of scroll/resize events into one update per frame so the
-    // overlay tracks the placeholder smoothly instead of lagging behind (the
-    // old 200ms poll made the top-window video visibly trail and briefly
-    // overflow the canvas while scrolling).
-    const topWin = window.top || window;
-    const iframeWin = placeholderRef.current.ownerDocument.defaultView;
-
-    let raf = 0;
-    const schedule = () => {
-      topWin.cancelAnimationFrame(raf);
-      raf = topWin.requestAnimationFrame(update);
-    };
-
-    update();
-
-    // Capture-phase scroll catches inner scroll containers (the canvas scrolls
-    // an inner element, not the window) in both the iframe and top realms.
-    iframeWin?.addEventListener("scroll", schedule, true);
-    iframeWin?.addEventListener("resize", schedule);
-    if (topWin !== iframeWin) {
-      topWin.addEventListener("scroll", schedule, true);
-      topWin.addEventListener("resize", schedule);
+    } catch (e) {
+      /* ignore */
     }
+  };
+  if (isVimeo(source)) hideNativeVimeoCaptions(player);
+  apply();
+  setTimeout(apply, 500);
+  player.on("playing", apply);
 
-    // Fallback poll (slower) for layout shifts that fire no event — e.g.
-    // toggling the settings sidebar, which reflows the canvas width.
-    const id = topWin.setInterval(update, 300);
-
-    return () => {
-      topWin.cancelAnimationFrame(raf);
-      topWin.clearInterval(id);
-      iframeWin?.removeEventListener("scroll", schedule, true);
-      iframeWin?.removeEventListener("resize", schedule);
-      if (topWin !== iframeWin) {
-        topWin.removeEventListener("scroll", schedule, true);
-        topWin.removeEventListener("resize", schedule);
-      }
-    };
-  }, [placeholderRef]);
-
-  // Keep the portal overlay positioned over the block placeholder, clipped to
-  // the editor canvas so it can't overflow the editor header/sidebar, and
-  // hidden entirely when the placeholder is scrolled out of / occluded in the
-  // canvas (e.g. another block scrolled over it).
-  useEffect(() => {
-    if (!overlayRoot.current || !rect) return;
-    const s = overlayRoot.current.style;
-    s.display = rect.visible ? "block" : "none";
-    s.top = `${rect.top}px`;
-    s.left = `${rect.left}px`;
-    s.width = `${rect.width}px`;
-    s.height = `${rect.height}px`;
-
-    const clip = rect.clip;
-    if (clip) {
-      const top = Math.max(0, clip.top - rect.top);
-      const left = Math.max(0, clip.left - rect.left);
-      const bottom = Math.max(0, rect.top + rect.height - clip.bottom);
-      const right = Math.max(0, rect.left + rect.width - clip.right);
-      s.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
-    } else {
-      s.clipPath = "none";
-    }
-  }, [rect]);
-
-  return null; // The DOM lives in the portal container, not in React's tree.
+  // Vimeo quality picker in the settings menu, same as the front end.
+  if (isVimeo(source)) {
+    setupVimeoQuality(player);
+    setTimeout(() => setupVimeoQuality(player), 1000);
+    player.on("playing", () => setupVimeoQuality(player));
+  }
 };
 
 const Edit = (props) => {
@@ -491,19 +144,15 @@ const Edit = (props) => {
   // is enabled, it stays visible if Plyr fails to take over. When Plyr does
   // init (below) it replaces these with its own styled control bar.
   const hasControls = controlsHandler(controls).length > 0;
-  // Editor: YouTube/Vimeo show a poster; clicking loads the embed via a portal
-  // into the parent admin window (bypassing the null-origin canvas restriction).
-  const [showEmbed, setShowEmbed] = useState(false);
-  const embedPlaceholderRef = useRef(null);
-
-  // The live YouTube/Vimeo embed renders in a top-window overlay (z-index above
-  // the canvas). Keeping it mounted while the block is deselected makes it sit
-  // on top of whatever block you select next — its toolbar/controls then render
-  // *behind* the video. So tear the embed down on deselect: the static poster
-  // (in the canvas) takes over, and re-selecting + clicking replays it.
-  useEffect(() => {
-    if (!isSelected) setShowEmbed(false);
-  }, [isSelected]);
+  // Editor YouTube/Vimeo preview: the real Plyr player INSIDE the canvas
+  // (CanvasEmbedFrame), with poster and control bar before any click, same as
+  // the front end. It scrolls with the page and needs no click to appear.
+  const embedRebuildKey = JSON.stringify({
+    source,
+    controls,
+    youtubeCaptions: attributes.youtubeCaptions,
+    vimeoCaptions: attributes.vimeoCaptions,
+  });
 
   /**
    * Self-hosted (HTML5) editor preview: drive Plyr on a native <video> inside
@@ -519,6 +168,10 @@ const Edit = (props) => {
    * races that otherwise leave the control bar showing the previous config.
    */
   const wrapperRef = useRef(null);
+  const html5PlayerRef = useRef(null);
+  // Playback toggles (Autoplay, Start Muted, Loop, Reset On End, Auto-Hide) are
+  // not part of the key: they apply to the running player below, at once and
+  // without restarting the video.
   const playerKey = JSON.stringify({
     source,
     poster,
@@ -526,13 +179,26 @@ const Edit = (props) => {
     captions,
     youtubeCaptions: attributes.youtubeCaptions,
     vimeoCaptions: attributes.vimeoCaptions,
-    repeat,
-    autoplay,
-    muted,
-    resetOnEnd,
-    autoHideControl,
     ratio,
   });
+
+  useEffect(() => {
+    applyLivePlayback(html5PlayerRef.current, { muted, repeat, autoHideControl, resetOnEnd });
+  }, [muted, repeat, autoHideControl, resetOnEnd]);
+
+  useEffect(() => {
+    const player = html5PlayerRef.current;
+    if (!player) return;
+    try {
+      if (autoplay) {
+        player.play()?.catch?.(() => {});
+      } else {
+        player.pause();
+      }
+    } catch (e) {
+      /* ignore */
+    }
+  }, [autoplay]);
 
   useEffect(() => {
     const element = wrapperRef.current;
@@ -593,6 +259,7 @@ const Edit = (props) => {
       const config = RealmJSON.parse(RealmJSON.stringify(rawConfig));
 
       player = new PlyrConstructor(videoWrapper.children[0], config);
+      html5PlayerRef.current = player;
 
       player.on("ready", () => {
         player.muted = muted;
@@ -617,29 +284,15 @@ const Edit = (props) => {
           /* ignore */
         }
       }
+      html5PlayerRef.current = null;
     };
-    // playerKey already encodes every attribute the effect reads.
+    // playerKey encodes what needs a rebuild; Playback toggles apply live above.
   }, [playerKey, hasControls]);
 
   const id = `${prefix}-${clientId}`;
   const blockProps = useBlockProps();
   const isPlayerPostType = ["video-player-block"].includes(currentPostType);
 
-  // Poster for the YouTube/Vimeo editor façade: explicit poster wins, then the
-  // YouTube thumbnail CDN (Vimeo has no static thumbnail URL, falls back to black).
-  const [ytPoster, setYtPoster] = useState("");
-  useEffect(() => {
-    let alive = true;
-    if (!poster && isYoutube(source)) {
-      getYoutubePoster(getYoutubeId(source)).then((u) => alive && setYtPoster(u));
-    } else {
-      setYtPoster("");
-    }
-    return () => {
-      alive = false;
-    };
-  }, [poster, source]);
-  const editorPoster = poster || ytPoster;
 
   // useEffect(() => {
   //   if (
@@ -681,72 +334,48 @@ const Edit = (props) => {
             <div className={prefix} ref={wrapperRef}>
               {isYoutube(source) || isVimeo(source) ? (
                 <div className="videoWrapper">
-                  {/* Portal-based embed overlay (rendered in the parent admin
-                      window so YouTube/Vimeo get a real origin). */}
-                  {showEmbed && isSelected && (
-                    <EmbedPortal
-                      source={source}
-                      placeholderRef={embedPlaceholderRef}
-                      attributes={attributes}
-                      onSelect={() => selectBlock(clientId)}
-                    />
-                  )}
-
+                  {/* The frame is absolutely positioned, so this box carries
+                      the player size (Aspect Ratio and Round Corner apply). */}
                   <div
-                    ref={embedPlaceholderRef}
-                    role="button"
-                    tabIndex={0}
-                    onMouseDown={() => selectBlock(clientId)}
-                    onClick={() => setShowEmbed(true)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ")
-                        setShowEmbed(true);
-                    }}
-                    aria-label="Play video preview"
                     style={{
                       position: "relative",
-                      display: "block",
                       width: "100%",
-                      aspectRatio: "16 / 9",
-                      border: 0,
-                      padding: 0,
-                      cursor: showEmbed ? "default" : "pointer",
-                      background: editorPoster
-                        ? `#000 center / cover no-repeat url(${editorPoster})`
-                        : "#000",
+                      aspectRatio: cssAspectRatio(ratio),
+                      borderRadius: attributes.radius,
+                      overflow: "hidden",
+                      background: "#000",
                     }}>
-                    {!showEmbed && (
-                      <span
-                        style={{
-                          position: "absolute",
-                          inset: 0,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}>
-                        <span
-                          style={{
-                            width: "68px",
-                            height: "48px",
-                            borderRadius: "12px",
-                            background: "rgba(0,0,0,0.65)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}>
-                          <span
-                            style={{
-                              width: 0,
-                              height: 0,
-                              borderTop: "10px solid transparent",
-                              borderBottom: "10px solid transparent",
-                              borderLeft: "16px solid #fff",
-                              marginLeft: "4px",
-                            }}
-                          />
-                        </span>
-                      </span>
+                    {/* First click selects the block; once selected, clicks reach the player. */}
+                    {!isSelected && (
+                      <div
+                        className="vpb-block-selection-overlay"
+                        style={{ position: "absolute", inset: 0, zIndex: 2, cursor: "pointer" }}
+                        onMouseDown={(e) => {
+                          e.stopPropagation();
+                          selectBlock(clientId);
+                        }}
+                      />
                     )}
+                    <CanvasEmbedFrame
+                      // A fresh frame when switching between this plugin's
+                      // player and the provider's own player.
+                      key={usesProviderPlayer(attributes) ? "provider" : "plyr"}
+                      provider={isYoutube(source) ? "youtube" : "vimeo"}
+                      embedId={isYoutube(source) ? getYoutubeId(source) : getVimeoId(source)}
+                      config={editorEmbedConfig(attributes)}
+                      accentColor={attributes.accentColor}
+                      fallbackSrc={
+                        isYoutube(source)
+                          ? `https://www.youtube.com/embed/${getYoutubeId(source)}?rel=0&modestbranding=1`
+                          : `https://player.vimeo.com/video/${getVimeoId(source)}?title=0&byline=0&portrait=0&dnt=1`
+                      }
+                      rebuildKey={embedRebuildKey}
+                      isSelected={isSelected}
+                      onSelect={() => selectBlock(clientId)}
+                      nativeSrc={usesProviderPlayer(attributes) ? getProviderEmbedUrl(attributes) : ""}
+                      poster={poster}
+                      onPlayerReady={(player) => setupEditorCaptions(player, attributes)}
+                    />
                   </div>
                 </div>
               ) : (

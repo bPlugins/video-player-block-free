@@ -10,7 +10,7 @@ import {
   videoPlaylistIcon,
   videoReelsIcon,
   videoTranscriptIcon
-} from "../../Components/Common/utils/icons";
+} from "./blockIcons";
 import blocks from "./blocks";
 import { videoPlayerBanner } from "../assets/banner";
 import { videoPlayerLogo } from "../assets/logo";

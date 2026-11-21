@@ -10,7 +10,7 @@ import {
   videoGalleryIcon,
   videoReelsIcon,
   videoTranscriptIcon,
-} from "../../Components/Common/utils/icons";
+} from "./blockIcons";
 
 const siteURL = "https://bblockswp.com";
 const demoLink = `${siteURL}/demo`;

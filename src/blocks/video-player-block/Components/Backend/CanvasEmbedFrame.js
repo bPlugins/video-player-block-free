@@ -204,6 +204,24 @@ const CanvasEmbedFrame = ({
     });
   }, [config?.muted, config?.loop?.active, config?.hideControls, config?.resetOnEnd]);
 
+  // Live accent colour: set it on the stage the frame already has, instead of
+  // rebuilding the player (the frame document is only written once, so a new
+  // colour used to stay invisible until reload). The first write reads it from
+  // accentRef.
+  const accentRef = useRef(accentColor);
+  accentRef.current = accentColor;
+  useEffect(() => {
+    let stage = null;
+    try {
+      stage = frameRef.current?.contentDocument?.getElementById("vpb-stage");
+    } catch (e) {
+      /* frame not reachable yet */
+    }
+    if (!stage) return;
+    if (accentColor) stage.style.setProperty("--plyr-color-main", accentColor);
+    else stage.style.removeProperty("--plyr-color-main");
+  }, [accentColor]);
+
   // Live autoplay toggle
   useEffect(() => {
     const player = playerRef.current;
@@ -260,9 +278,7 @@ const CanvasEmbedFrame = ({
       ".wp-block-vpb-video{width:100%;height:100%;position:relative;overflow:visible!important;}",
       ".vpbVideoPlayer{container-type:inline-size;width:100%;height:100%;position:relative;overflow:hidden;margin:0 auto;max-width:100%;}",
       ".vpbVideoPlayer .videoWrapper{width:100%;height:100%;position:relative;overflow:visible!important;}",
-      `#vpb-stage{position:relative;width:100%;height:100%;overflow:hidden;${
-        accentColor ? `--plyr-color-main:${accentColor};` : ""
-      }}`,
+      "#vpb-stage{position:relative;width:100%;height:100%;overflow:hidden;}",
       "#vpb-stage .plyr,#vpb-stage .plyr__video-wrapper,#vpb-stage .plyr__video-embed,#vpb-stage .plyr__video-embed__container{position:absolute;inset:0;width:100%!important;min-width:0!important;height:100%!important;padding:0!important;transform:none!important;}",
       "#vpb-stage iframe{border:0;position:absolute;inset:0;width:100%;height:100%;}",
       ".plyr.plyr--vimeo iframe,#vpb-stage .plyr--vimeo iframe{pointer-events:none!important;}",
@@ -344,7 +360,7 @@ const CanvasEmbedFrame = ({
           `<style>${css}</style></head><body>` +
           `<div id="sprite-plyr" hidden style="display:none">${PLYR_SPRITE}</div>` +
           `<div class="wp-block-vpb-video" style="width:100%;height:100%;position:relative;overflow:visible!important;"><div class="vpbVideoPlayer" style="width:100%;height:100%;container-type:inline-size;position:relative;overflow:hidden;"><div class="videoWrapper" style="width:100%;height:100%;position:relative;"><div id="vpb-stage" style="position:relative;width:100%;height:100%;overflow:hidden;${
-            accentColor ? `--plyr-color-main:${accentColor};` : ""
+            accentRef.current ? `--plyr-color-main:${accentRef.current};` : ""
           }"><div id="vpb-target" data-plyr-provider="${escapeHtmlAttr(
             provider,
           )}" data-plyr-embed-id="${escapeHtmlAttr(
@@ -505,7 +521,6 @@ const CanvasEmbedFrame = ({
   }, [
     provider,
     embedId,
-    accentColor,
     fallbackSrc,
     rebuildKey,
     nativeSrc,

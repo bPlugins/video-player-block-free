@@ -5,7 +5,6 @@ import {
   PanelBody,
   ToggleControl,
   Button,
-  __experimentalUnitControl as UnitControl,
 } from "@wordpress/components";
 
 import {
@@ -25,6 +24,7 @@ import { CONTROL_PRESETS, activeControlPreset } from "../../../utils/controlPres
 import { Fragment } from "@wordpress/element";
 import Captions from "./Captions";
 import { ChoiceControl } from "../ChoiceControl";
+import { SizeControl } from "../SizeControl";
 
 // Plyr's own accent colour, shown (and restored by Reset) when none is set.
 const PLYR_ACCENT = "#00b3ff";
@@ -267,7 +267,7 @@ const Settings = ({ attributes, setAttributes }) => {
             {"controls" === tab.name && (
               <PanelBody className="bPlPanelBody vpb-main-panel">
                 {/* One click sets the whole control bar; the toggles below fine-tune it. */}
-                <div className="vpb-control-presets" role="group" aria-label={__("Control presets", "video-player-block")}>
+                <div className="vpb-control-presets" role="group" aria-label={__("Control Presets", "video-player-block")}>
                   {CONTROL_PRESETS.map((preset) => (
                     <Button
                       key={preset.key}
@@ -308,7 +308,7 @@ const Settings = ({ attributes, setAttributes }) => {
             {"style" === tab.name && (
               <PanelBody className="bPlPanelBody vpb-main-panel">
                 <div className="vpb-subhead">{__("Size", "video-player-block")}</div>
-                <UnitControl
+                <SizeControl
                   label={__("Width", "video-player-block")}
                   labelPosition="left"
                   value={width}
@@ -332,7 +332,7 @@ const Settings = ({ attributes, setAttributes }) => {
                 />
 
                 <div className="vpb-subhead">{__("Look", "video-player-block")}</div>
-                <UnitControl
+                <SizeControl
                   label={__("Round Corner", "video-player-block")}
                   labelPosition="left"
                   value={radius}

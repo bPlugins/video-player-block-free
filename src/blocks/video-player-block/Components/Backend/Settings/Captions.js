@@ -57,14 +57,14 @@ const Captions = ({ captions = [], setAttributes }) => {
               icon="trash"
               size="small"
               isDestructive
-              label={__("Remove track", "video-player-block")}
+              label={__("Remove Track", "video-player-block")}
               showTooltip
               onClick={() => remove(index)}
             />
           </div>
 
           <InlineMediaUpload
-            label={__("Caption file (.vtt or .srt)", "video-player-block")}
+            label={__("Caption File (.vtt or .srt)", "video-player-block")}
             value={cap.src}
             types={["text"]}
             onChange={(val) => update(index, "src", val)}

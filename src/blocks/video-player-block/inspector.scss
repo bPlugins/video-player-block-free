@@ -6,9 +6,9 @@
 //
 // The bpl-tools stylesheet forces `.components-base-control { margin-bottom: 0
 // !important; }`, so vertical rhythm here uses margin-top. Everything is
-// scoped to `.bPlTabPanel.vpb-inspector` (both set on the TabPanel): the extra
-// class outranks bpl-tools' `.bPlTabPanel …` / `.bPlPanelBody …` rules, which
-// load later and would otherwise win the tie.
+// scoped to `.bPlTabPanel.vpb-inspector` (both set on the TabPanel) so these
+// rules win over stylesheets that load later. bpl-tools' own look (tab
+// colors, the blue open panel) is never restyled here.
 
 .bPlTabPanel.vpb-inspector {
   // --- Sharp corners ---------------------------------------------------------
@@ -30,51 +30,17 @@
   }
 
   // --- Tabs ------------------------------------------------------------------
-  // Segmented switcher, sticky so the tabs stay reachable in long panels; the
-  // white ring masks content scrolling behind it.
+  // bpl-tools' tab look stays as is; they only stick to the top so they stay
+  // reachable in long panels (the white ring masks content scrolling behind).
   .components-tab-panel__tabs {
     position: sticky;
     top: 0;
     z-index: 4;
-    gap: 4px;
-    margin-bottom: 4px;
-    padding: 4px;
-    background: #f0f0f1;
+    background: #fff;
     box-shadow: 0 0 0 8px #fff;
-
-    button {
-      flex: 1 1 0;
-      height: 34px;
-      justify-content: center;
-      border-bottom: 0 !important;
-      font-weight: 500;
-      transition: background 0.15s ease, color 0.15s ease;
-
-      &:hover:not(.activeTab) {
-        color: var(--wp-admin-theme-color, #3858e9);
-      }
-    }
-
-    .activeTab {
-      background: #fff;
-      border-bottom: 0 !important;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
-    }
   }
 
   // --- Panels ----------------------------------------------------------------
-  // An open panel reads as a plain section: no blue box, no tinted title bar
-  // (bpl-tools' default), just a dark title and a hairline above it.
-  .bPlPanelBody.is-opened {
-    border: 0;
-    border-top: 1px solid #e0e0e0;
-
-    > .components-panel__body-title {
-      background: none;
-      color: #1e1e1e;
-    }
-  }
-
   .components-panel__body {
     > * + * {
       margin-top: 18px;
@@ -251,6 +217,59 @@
       justify-content: center;
       height: 36px;
     }
+  }
+
+  // One selected look for every one-click choice (WordPress makes a pressed
+  // button black; segmented rows use the accent color).
+  .vpb-control-presets,
+  .vpb-choice-grid {
+    .components-button.is-pressed {
+      box-shadow: none;
+      background: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+      color: #fff;
+    }
+  }
+
+  // ChoiceControl when one row is too narrow: equal buttons in a grid.
+  .vpb-choice-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--vpb-choice-columns, 3), 1fr);
+    gap: 4px;
+
+    .components-button {
+      justify-content: center;
+      min-width: 0;
+      height: 32px;
+      padding: 0 6px;
+      box-shadow: inset 0 0 0 1px #949494;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  // --- Size fields (_shared/SizeControl.js) -----------------------------------
+  // Number and one-click unit buttons on one row.
+  .vpb-size-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    > :first-child {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    > .components-toggle-group-control {
+      flex: 0 0 auto;
+      width: auto;
+    }
+  }
+
+  .vpb-size-unit {
+    min-width: 28px;
+    font-size: 13px;
+    color: #757575;
   }
 
   // --- Caption tracks --------------------------------------------------------

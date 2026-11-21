@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { PLYR_SPRITE } from "../../utils/sprite";
-import { applyLivePlayback } from "../../utils/config";
+import { applyLivePlayback, setupEmbedResetOnEnd } from "../../utils/config";
 
 /*
  * Free copy of the Pro plugin's _shared/media/CanvasEmbedFrame.js. The only
@@ -409,18 +409,7 @@ const CanvasEmbedFrame = ({
         const player = new PlyrCtor(target, frameConfig);
         playerRef.current = player;
 
-        // Reset On End (Plyr only does it for self-hosted video). Reads the
-        // latest settings, so switching it on/off works without a rebuild.
-        player.on("ended", () => {
-          const latest = configRef.current;
-          if (latest?.resetOnEnd && !latest?.loop?.active) {
-            try {
-              player.stop();
-            } catch (e) {
-              /* ignore */
-            }
-          }
-        });
+        setupEmbedResetOnEnd(player);
 
         // Set up captions/quality once the provider embed exists. The frame
         // loads the first plyr.js on the page, which can be another plugin's

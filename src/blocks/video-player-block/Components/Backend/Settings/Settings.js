@@ -23,6 +23,7 @@ import { AdvertiseCard } from "../../../../../../../bpl-tools/ProControls";
 import { pricingUrl } from "../../../utils/data";
 import { isYoutube, isVimeo } from "../../../utils/functions";
 import { CONTROL_PRESETS, activeControlPreset } from "../../../utils/controlPresets";
+import { Fragment } from "@wordpress/element";
 import Captions from "./Captions";
 
 // Plyr's own accent colour, shown (and restored by Reset) when none is set.
@@ -63,20 +64,46 @@ const Settings = ({ attributes, setAttributes }) => {
   const nativePlayer = isEmbed && Boolean(providerPlayer);
   const providerName = isYT ? "YouTube" : "Vimeo";
   const hasCaptions = Array.isArray(captionTracks) && captionTracks.length > 0;
-  const {
-    restart,
-    rewind,
-    play,
-    progress,
-    duration,
-    mute,
-    volume,
-    pip,
-    airplay,
-    settings,
-    download,
-    fullscreen,
-  } = controls || {};
+  // Controls tab, grouped. Items a source can't show are left out (false).
+  const controlGroups = [
+    {
+      title: __("Playback", "video-player-block"),
+      items: [
+        { key: "play-large", label: __("Play Large", "video-player-block") },
+        { key: "play", label: __("Play", "video-player-block") },
+        { key: "restart", label: __("Restart", "video-player-block") },
+        { key: "rewind", label: __("Rewind", "video-player-block") },
+        { key: "fast-forward", label: __("Fast Forward", "video-player-block") },
+      ],
+    },
+    {
+      title: __("Timeline", "video-player-block"),
+      items: [
+        { key: "progress", label: __("Progress Bar", "video-player-block") },
+        { key: "current-time", label: __("Current Time", "video-player-block") },
+        { key: "duration", label: __("Duration", "video-player-block") },
+      ],
+    },
+    {
+      title: __("Audio & Screen", "video-player-block"),
+      items: [
+        { key: "volume", label: __("Volume", "video-player-block") },
+        { key: "mute", label: __("Mute", "video-player-block") },
+        { key: "fullscreen", label: __("Fullscreen", "video-player-block") },
+        !isEmbed && { key: "pip", label: __("PiP", "video-player-block") },
+        !isEmbed && { key: "airplay", label: __("AirPlay", "video-player-block") },
+      ],
+      note: !isEmbed ? __("AirPlay shows in Safari on Apple devices only.", "video-player-block") : "",
+    },
+    {
+      title: __("Menus & Extras", "video-player-block"),
+      items: [
+        !isEmbed && hasCaptions && { key: "captions", label: __("CC Button", "video-player-block") },
+        { key: "settings", label: __("Settings", "video-player-block") },
+        !isEmbed && { key: "download", label: __("Download", "video-player-block") },
+      ],
+    },
+  ];
 
   const updateControls = (type, val) => {
     const newControls = { ...(controls || {}) };
@@ -108,10 +135,8 @@ const Settings = ({ attributes, setAttributes }) => {
           <>
             {"settings" === tab.name && (
               <>
-                <PanelBody
-                  className="bPlPanelBody"
-                  initialOpen={true}
-                  title={__("Settings", "video-player-block")}>
+                {/* No panel title: the tab already says "Settings". */}
+                <PanelBody className="bPlPanelBody vpb-main-panel">
                   {/* The video first: it is what every player starts with. */}
                   <div className="vpb-subhead">{__("Video", "video-player-block")}</div>
                   <InlineMediaUpload
@@ -184,6 +209,7 @@ const Settings = ({ attributes, setAttributes }) => {
                     />
                   )}
 
+                  <div className="vpb-subhead">{__("Display & Loading", "video-player-block")}</div>
                   {!nativePlayer && (
                     <ToggleControl
                       label={__("Auto-Hide Controls", "video-player-block")}
@@ -239,10 +265,7 @@ const Settings = ({ attributes, setAttributes }) => {
             )}
 
             {"controls" === tab.name && (
-              <PanelBody
-                className="bPlPanelBody"
-                initialOpen={true}
-                title={__("Player Controls", "video-player-block")}>
+              <PanelBody className="bPlPanelBody vpb-main-panel">
                 {/* One click sets the whole control bar; the toggles below fine-tune it. */}
                 <div className="vpb-control-presets" role="group" aria-label={__("Control presets", "video-player-block")}>
                   {CONTROL_PRESETS.map((preset) => (
@@ -255,118 +278,38 @@ const Settings = ({ attributes, setAttributes }) => {
                     </Button>
                   ))}
                 </div>
-                <p className="vpb-control-presets__note">
+                <p className="vpb-note">
                   {activePreset
                     ? __("Pick a set, or switch single buttons below.", "video-player-block")
                     : __("Custom set. Pick one above to start over.", "video-player-block")}
                 </p>
 
-                <div className="vpb-subhead">{__("Playback", "video-player-block")}</div>
-                <ToggleControl
-                  label={__("Play Large", "video-player-block")}
-                  checked={controls["play-large"]}
-                  onChange={(val) => updateControls("play-large", val)}
-                />
-                <ToggleControl
-                  label={__("Play", "video-player-block")}
-                  checked={play}
-                  onChange={(val) => updateControls("play", val)}
-                />
-                <ToggleControl
-                  label={__("Restart", "video-player-block")}
-                  checked={restart}
-                  onChange={(val) => updateControls("restart", val)}
-                />
-                <ToggleControl
-                  label={__("Rewind", "video-player-block")}
-                  checked={rewind}
-                  onChange={(val) => updateControls("rewind", val)}
-                />
-                <ToggleControl
-                  label={__("Fast Forward", "video-player-block")}
-                  checked={controls["fast-forward"]}
-                  onChange={(val) => updateControls("fast-forward", val)}
-                />
-
-                <div className="vpb-subhead">{__("Timeline", "video-player-block")}</div>
-                <ToggleControl
-                  label={__("Progress Bar", "video-player-block")}
-                  checked={progress}
-                  onChange={(val) => updateControls("progress", val)}
-                />
-                <ToggleControl
-                  label={__("Current Time", "video-player-block")}
-                  checked={controls["current-time"]}
-                  onChange={(val) => updateControls("current-time", val)}
-                />
-                <ToggleControl
-                  label={__("Duration", "video-player-block")}
-                  checked={duration}
-                  onChange={(val) => updateControls("duration", val)}
-                />
-
-                <div className="vpb-subhead">{__("Audio & Display", "video-player-block")}</div>
-                <ToggleControl
-                  label={__("Volume Slider", "video-player-block")}
-                  checked={volume}
-                  onChange={(val) => updateControls("volume", val)}
-                />
-                <ToggleControl
-                  label={__("Mute Button", "video-player-block")}
-                  checked={mute}
-                  onChange={(val) => updateControls("mute", val)}
-                />
-                <ToggleControl
-                  label={__("Fullscreen", "video-player-block")}
-                  checked={fullscreen}
-                  onChange={(val) => updateControls("fullscreen", val)}
-                />
-                {!isEmbed && (
-                  <ToggleControl
-                    label={__("PIP (Picture-in-Picture)", "video-player-block")}
-                    checked={pip}
-                    onChange={(val) => updateControls("pip", val)}
-                  />
-                )}
-                {!isEmbed && (
-                  <ToggleControl
-                    label={__("Airplay", "video-player-block")}
-                    checked={airplay}
-                    onChange={(val) => updateControls("airplay", val)}
-                    help={__("Safari on Apple devices only.", "video-player-block")}
-                  />
-                )}
-
-                <div className="vpb-subhead">{__("Features", "video-player-block")}</div>
-                {!isEmbed && hasCaptions && (
-                  <ToggleControl
-                    label={__("Captions Button (CC)", "video-player-block")}
-                    checked={controls["captions"]}
-                    onChange={(val) => updateControls("captions", val)}
-                  />
-                )}
-                <ToggleControl
-                  label={__("Settings Menu", "video-player-block")}
-                  checked={settings}
-                  onChange={(val) => updateControls("settings", val)}
-                />
-                {!isEmbed && (
-                  <ToggleControl
-                    label={__("Download Button", "video-player-block")}
-                    checked={download}
-                    onChange={(val) => updateControls("download", val)}
-                  />
-                )}
+                {/* Two-column grid per group: half the length of a single
+                    column, and each group reads as one block. */}
+                {controlGroups.map((group) => (
+                  <Fragment key={group.title}>
+                    <div className="vpb-subhead">{group.title}</div>
+                    <div className="vpb-toggle-grid">
+                      {group.items.filter(Boolean).map((item) => (
+                        <ToggleControl
+                          key={item.key}
+                          label={item.label}
+                          checked={Boolean(controls?.[item.key])}
+                          onChange={(val) => updateControls(item.key, val)}
+                        />
+                      ))}
+                    </div>
+                    {group.note && <p className="vpb-note">{group.note}</p>}
+                  </Fragment>
+                ))}
               </PanelBody>
             )}
 
             {"style" === tab.name && (
-              <PanelBody
-                className="bPlPanelBody"
-                initialOpen={true}
-                title={__("Player Style", "video-player-block")}>
+              <PanelBody className="bPlPanelBody vpb-main-panel">
+                <div className="vpb-subhead">{__("Size", "video-player-block")}</div>
                 <UnitControl
-                  label={__("Width:", "video-player-block")}
+                  label={__("Width", "video-player-block")}
                   labelPosition="left"
                   value={width}
                   onChange={(val) => setAttributes({ width: val })}
@@ -374,7 +317,7 @@ const Settings = ({ attributes, setAttributes }) => {
                 />
 
                 <SelectControl
-                  label={__("Aspect Ratio:", "video-player-block")}
+                  label={__("Aspect Ratio", "video-player-block")}
                   labelPosition="left"
                   value={ratio}
                   options={[
@@ -388,8 +331,9 @@ const Settings = ({ attributes, setAttributes }) => {
                   onChange={(val) => setAttributes({ ratio: val })}
                 />
 
+                <div className="vpb-subhead">{__("Look", "video-player-block")}</div>
                 <UnitControl
-                  label={__("Round Corner:", "video-player-block")}
+                  label={__("Round Corner", "video-player-block")}
                   labelPosition="left"
                   value={radius}
                   onChange={(val) => setAttributes({ radius: val })}
@@ -398,7 +342,7 @@ const Settings = ({ attributes, setAttributes }) => {
 
                 {!nativePlayer && (
                   <ColorControl
-                    label={__("Accent Color:", "video-player-block")}
+                    label={__("Accent Color", "video-player-block")}
                     value={accentColor || PLYR_ACCENT}
                     defaultColor={PLYR_ACCENT}
                     onChange={(val) =>
@@ -412,7 +356,7 @@ const Settings = ({ attributes, setAttributes }) => {
         )}
       </TabPanel>
 
-      <AdvertiseCard planLink={pricingUrl} />
+      <AdvertiseCard className="vpb-advertise" planLink={pricingUrl} />
     </InspectorControls>
   );
 };

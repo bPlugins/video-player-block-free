@@ -108,7 +108,7 @@ const RenderVideo = ({ attributes }) => {
 			// Lazy Load: the player now sizes itself, so drop the reserved box and
 			// let a self-hosted file start loading (see the render below).
 			releaseLazyPlaceholder(node);
-			setupEmbedResetOnEnd(player, attributes);
+			setupEmbedResetOnEnd(player);
 
 			player.elements?.container?.addEventListener('click', (e) => {
 				if (e.target?.closest?.('[data-plyr="captions"], [data-plyr="language"]')) userTouched = true;

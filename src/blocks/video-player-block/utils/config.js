@@ -69,20 +69,26 @@ export const applyLivePlayback = (player, { muted, repeat, autoHideControl, rese
 };
 
 /**
- * "Reset On End" for YouTube and Vimeo. Plyr applies resetOnEnd to self-hosted
- * video only, so an embed stayed on the provider's end screen (YouTube's related
- * videos). Back to the start, with the poster showing again.
+ * "Reset On End" for YouTube and Vimeo: back to the start with the poster when
+ * the video ends (Plyr only does it for self-hosted video). Reads the player's
+ * current settings, so switching Reset On End or Loop later just works.
  */
-export const setupEmbedResetOnEnd = (player, attributes) => {
-  const { source, resetOnEnd, repeat } = attributes || {};
-  if (!player || !resetOnEnd || repeat) return;
-  if (!isYoutube(source) && !isVimeo(source)) return;
-  player.on("ended", () => {
+export const setupEmbedResetOnEnd = (player) => {
+  if (!player || player.isHTML5) return;
+  const reset = () => {
     try {
       player.stop();
     } catch (e) {
       /* ignore */
     }
+  };
+  player.on("ended", () => {
+    if (!player.config?.resetOnEnd || player.config?.loop?.active) return;
+    reset();
+    // Vimeo sometimes ignores a seek sent the moment the video ends: retry once.
+    setTimeout(() => {
+      if (!player.playing && player.currentTime > 0.5) reset();
+    }, 1000);
   });
 };
 

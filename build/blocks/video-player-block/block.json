@@ -64,6 +64,10 @@
       "type": "string",
       "default": "cover"
     },
+    "posterPosition": {
+      "type": "string",
+      "default": "center"
+    },
     "accentColor": {
       "type": "string",
       "default": ""

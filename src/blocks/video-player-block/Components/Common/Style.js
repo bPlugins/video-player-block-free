@@ -3,7 +3,7 @@ import { posterFitCss } from '../../utils/posterFit';
 import { sanitizeStyleTag } from '../../../../Components/Common/utils/sanitizeStyleTag';
 
 const Style = ({ attributes, id }) => {
-	const { width, radius, accentColor, posterFit } = attributes;
+	const { width, radius, accentColor, posterFit, posterPosition } = attributes;
 
 	return (
     <style
@@ -19,7 +19,7 @@ const Style = ({ attributes, id }) => {
 		#${id} .${prefix} .videoWrapper {
 			border-radius: ${radius};
 		}
-		${posterFitCss(`#${id} .${prefix} .plyr__poster, #${id} .${prefix} .vpbProviderPlayer__poster-img`, posterFit)}
+		${posterFitCss(`#${id} .${prefix} .plyr__poster, #${id} .${prefix} .vpbProviderPlayer__poster-img`, posterFit, posterPosition)}
 		#${id} .${prefix} .plyr__video-wrapper {
 			overflow: hidden !important;
 			border-radius: ${radius};

@@ -147,7 +147,7 @@ const Edit = (props) => {
   // (CanvasEmbedFrame), with poster and control bar before any click, same as
   // the front end. It scrolls with the page and needs no click to appear.
   // The frame is its own document: the poster's fit rule goes in with it.
-  const posterCss = posterFitCss(".plyr .plyr__poster", attributes.posterFit);
+  const posterCss = posterFitCss(".plyr .plyr__poster", attributes.posterFit, attributes.posterPosition);
   const embedRebuildKey = JSON.stringify({
     source,
     posterCss,

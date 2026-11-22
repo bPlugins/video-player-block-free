@@ -230,6 +230,58 @@
     }
   }
 
+  // Layout choices as pictures (_shared/VisualChoiceControl.js): an icon of the
+  // layout with its name under it; the selected one uses the accent color.
+  .vpb-visual-choice {
+    display: grid;
+    grid-template-columns: repeat(var(--vpb-visual-columns, 3), minmax(0, 1fr));
+    gap: 6px;
+
+    .components-button {
+      --vpb-knock: #fff;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 4px;
+      height: auto;
+      min-width: 0;
+      padding: 8px 4px 6px;
+      background: #fff;
+      color: #8c8f94;
+      box-shadow: inset 0 0 0 1px #c3c4c7;
+
+      svg {
+        width: 100%;
+        max-width: 56px;
+        height: auto;
+      }
+
+      span {
+        max-width: 100%;
+        font-size: 11px;
+        line-height: 1.2;
+        text-align: center;
+        color: #1e1e1e;
+        white-space: normal;
+      }
+
+      &:hover:not(.is-pressed) {
+        color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+        box-shadow: inset 0 0 0 1px var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+      }
+
+      &.is-pressed {
+        --vpb-knock: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+        background: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+        color: #fff;
+        box-shadow: none;
+
+        span {
+          color: #fff;
+        }
+      }
+    }
+  }
+
   // ChoiceControl when one row is too narrow: equal buttons in a grid.
   .vpb-choice-grid {
     display: grid;

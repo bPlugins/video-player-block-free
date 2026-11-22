@@ -22,6 +22,8 @@ import { CONTROL_PRESETS, activeControlPreset } from "../../../utils/controlPres
 import { Fragment } from "@wordpress/element";
 import Captions from "./Captions";
 import { ChoiceControl } from "../ChoiceControl";
+import VisualChoiceControl from "../VisualChoiceControl";
+import { choiceIcons } from "../../../utils/choiceIcons";
 import { videoFitOptions } from "../../../utils/videoFit";
 import { usesProviderPlayer } from "../../../utils/providerPlayer";
 import { posterFitOptions, posterPositionOptions } from "../../../utils/posterFit";
@@ -320,10 +322,10 @@ const Settings = ({ attributes, setAttributes }) => {
                   units={[pxUnit(), emUnit(), perUnit()]}
                 />
 
-                <ChoiceControl
+                <VisualChoiceControl
                   label={__("Aspect Ratio", "video-player-block")}
-                  labelPosition="left"
-                  value={ratio}
+                  value={ratio || ""}
+                  icons={choiceIcons.aspect}
                   options={[
                     { label: __("Auto", "video-player-block"), value: "" },
                     { label: "16:9", value: "16:9" },

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { PLYR_SPRITE } from "../../utils/sprite";
 import { applyLivePlayback, setupEmbedResetOnEnd } from "../../utils/config";
+import useSelectBlockOnClick from "../../utils/useSelectBlockOnClick";
 
 /*
  * Free copy of the Pro plugin's _shared/media/CanvasEmbedFrame.js. The only
@@ -166,8 +167,6 @@ const injectSprite = (frameDoc) => {
  * @param {string}  [props.accentColor] Becomes `--plyr-color-main` inside the frame.
  * @param {string}  [props.title]
  * @param {string}  [props.rebuildKey] Change it to rebuild the document + player.
- * @param {boolean} [props.isSelected] Whether the owning block is selected in Gutenberg.
- * @param {Function} [props.onSelect]   Callback when the embed is clicked.
  * @param {Function} [props.onPlayerReady] Called once with the Plyr player when the provider embed is ready (captions setup).
  */
 const CanvasEmbedFrame = ({
@@ -178,13 +177,13 @@ const CanvasEmbedFrame = ({
   accentColor = "",
   title = "Video",
   rebuildKey = "",
-  isSelected = true,
-  onSelect,
   nativeSrc = "",
   poster = "",
   onPlayerReady,
 }) => {
   const frameRef = useRef(null);
+  // The player takes clicks at once; the same click also selects the block.
+  useSelectBlockOnClick(frameRef);
   const playerRef = useRef(null);
   const onPlayerReadyRef = useRef(onPlayerReady);
   onPlayerReadyRef.current = onPlayerReady;
@@ -373,14 +372,6 @@ const CanvasEmbedFrame = ({
       stage = frameDoc.getElementById("vpb-stage");
     }
 
-    const handleFrameMouseDown = () => {
-      if (!isSelected) {
-        onSelect?.();
-      }
-    };
-    frameDoc.removeEventListener("mousedown", handleFrameMouseDown, true);
-    frameDoc.addEventListener("mousedown", handleFrameMouseDown, true);
-
     const start = () => {
       if (cancelled) return;
       const frameWin = iframe.contentWindow;
@@ -507,11 +498,6 @@ const CanvasEmbedFrame = ({
       cancelled = true;
       window.clearTimeout(timer);
       try {
-        frameDoc?.removeEventListener("mousedown", handleFrameMouseDown, true);
-      } catch (e) {
-        /* ignore */
-      }
-      try {
         playerRef.current?.destroy();
       } catch (e) {
         /* the frame may already be gone */
@@ -545,7 +531,6 @@ const CanvasEmbedFrame = ({
         height: "100%",
         border: 0,
         display: "block",
-        pointerEvents: isSelected ? "auto" : "none",
       }}
     />
   );

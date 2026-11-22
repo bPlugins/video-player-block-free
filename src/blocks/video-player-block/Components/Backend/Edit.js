@@ -1,6 +1,6 @@
 import { __ } from "@wordpress/i18n";
 import { useEffect, useRef } from "react";
-import { withSelect, useDispatch } from "@wordpress/data";
+import { withSelect } from "@wordpress/data";
 import { useBlockProps } from "@wordpress/block-editor";
 import { MediaPlaceholder } from "../../../../../../bpl-tools/Components/MediaControl/MediaControl";
 import Settings from "./Settings/Settings";
@@ -120,11 +120,9 @@ const Edit = (props) => {
     attributes,
     setAttributes,
     clientId,
-    isSelected,
     currentPostId,
     currentPostType,
   } = props;
-  const { selectBlock } = useDispatch("core/block-editor");
   const {
     source,
     poster,
@@ -345,17 +343,6 @@ const Edit = (props) => {
                       overflow: "hidden",
                       background: "#000",
                     }}>
-                    {/* First click selects the block; once selected, clicks reach the player. */}
-                    {!isSelected && (
-                      <div
-                        className="vpb-block-selection-overlay"
-                        style={{ position: "absolute", inset: 0, zIndex: 2, cursor: "pointer" }}
-                        onMouseDown={(e) => {
-                          e.stopPropagation();
-                          selectBlock(clientId);
-                        }}
-                      />
-                    )}
                     <CanvasEmbedFrame
                       // A fresh frame when switching between this plugin's
                       // player and the provider's own player.
@@ -370,8 +357,6 @@ const Edit = (props) => {
                           : `https://player.vimeo.com/video/${getVimeoId(source)}?title=0&byline=0&portrait=0&dnt=1`
                       }
                       rebuildKey={embedRebuildKey}
-                      isSelected={isSelected}
-                      onSelect={() => selectBlock(clientId)}
                       nativeSrc={usesProviderPlayer(attributes) ? getProviderEmbedUrl(attributes) : ""}
                       poster={poster}
                       onPlayerReady={(player) => setupEditorCaptions(player, attributes)}

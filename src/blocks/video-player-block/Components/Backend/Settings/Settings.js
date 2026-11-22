@@ -22,6 +22,7 @@ import { CONTROL_PRESETS, activeControlPreset } from "../../../utils/controlPres
 import { Fragment } from "@wordpress/element";
 import Captions from "./Captions";
 import { ChoiceControl } from "../ChoiceControl";
+import { posterRatioOptions } from "../../../utils/posterRatio";
 import { SizeControl } from "../SizeControl";
 
 // Plyr's own accent colour, shown (and restored by Reset) when none is set.
@@ -44,6 +45,7 @@ const Settings = ({ attributes, setAttributes }) => {
     width,
     radius,
     ratio,
+    posterRatio,
     accentColor,
     repeat,
     autoplay,
@@ -328,6 +330,16 @@ const Settings = ({ attributes, setAttributes }) => {
                   ]}
                   onChange={(val) => setAttributes({ ratio: val })}
                 />
+                {poster && (
+                  <ChoiceControl
+                    label={__("Poster Ratio", "video-player-block")}
+                    labelPosition="left"
+                    value={posterRatio || ""}
+                    options={posterRatioOptions}
+                    onChange={(val) => setAttributes({ posterRatio: val })}
+                    help={__("Shape of the poster image before play. Auto fills the player.", "video-player-block")}
+                  />
+                )}
 
                 <div className="vpb-subhead">{__("Look", "video-player-block")}</div>
                 <SizeControl

@@ -62,14 +62,21 @@ const ProviderPlayer = ({ attributes }) => {
             padding: 0,
             border: 0,
             cursor: "pointer",
-            background: `#000 center / cover no-repeat url("${String(poster).replace(/"/g, "%22")}")`,
+            background: "#000",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
           }}>
+          <img
+            className="vpbProviderPlayer__poster-img"
+            src={poster}
+            alt=""
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+          />
           <span
             aria-hidden="true"
             style={{
+              position: "relative",
               width: "68px",
               height: "48px",
               borderRadius: "12px",

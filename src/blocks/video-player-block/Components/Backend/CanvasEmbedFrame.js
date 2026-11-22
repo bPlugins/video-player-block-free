@@ -179,6 +179,7 @@ const CanvasEmbedFrame = ({
   rebuildKey = "",
   nativeSrc = "",
   poster = "",
+  posterCss = "",
   onPlayerReady,
 }) => {
   const frameRef = useRef(null);
@@ -283,6 +284,7 @@ const CanvasEmbedFrame = ({
       ".plyr.plyr--vimeo iframe,#vpb-stage .plyr--vimeo iframe{pointer-events:none!important;}",
       ".plyr{overflow:visible!important;position:relative!important;z-index:20!important;pointer-events:all!important;}",
       ".plyr .plyr__poster{background-size:cover!important;background-position:center!important;}",
+      posterCss,
       ".plyr .plyr__controls{position:absolute!important;bottom:0!important;left:0!important;right:0!important;z-index:10!important;pointer-events:all!important;}",
       ".plyr .plyr__control--overlaid{z-index:3!important;pointer-events:all!important;}",
       ".plyr.plyr--menu-open .plyr__control--overlaid{opacity:0!important;visibility:hidden!important;pointer-events:none!important;}",

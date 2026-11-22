@@ -5,7 +5,7 @@ import { useBlockProps } from "@wordpress/block-editor";
 import { MediaPlaceholder } from "../../../../../../bpl-tools/Components/MediaControl/MediaControl";
 import Settings from "./Settings/Settings";
 import Style from "../Common/Style";
-import { plyrPosterCss } from "../../utils/posterRatio";
+import { posterFitCss } from "../../utils/posterFit";
 import {
   getExtension,
   isYoutube,
@@ -146,8 +146,8 @@ const Edit = (props) => {
   // Editor YouTube/Vimeo preview: the real Plyr player INSIDE the canvas
   // (CanvasEmbedFrame), with poster and control bar before any click, same as
   // the front end. It scrolls with the page and needs no click to appear.
-  // The frame is its own document: the poster's ratio rule goes in with it.
-  const posterCss = plyrPosterCss("", attributes.posterRatio, ratio || "16:9");
+  // The frame is its own document: the poster's fit rule goes in with it.
+  const posterCss = posterFitCss(".plyr .plyr__poster", attributes.posterFit);
   const embedRebuildKey = JSON.stringify({
     source,
     posterCss,

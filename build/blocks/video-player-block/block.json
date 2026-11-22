@@ -60,9 +60,9 @@
       "type": "string",
       "default": "16:9"
     },
-    "posterRatio": {
+    "posterFit": {
       "type": "string",
-      "default": ""
+      "default": "cover"
     },
     "accentColor": {
       "type": "string",

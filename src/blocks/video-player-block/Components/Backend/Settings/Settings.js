@@ -22,6 +22,8 @@ import { CONTROL_PRESETS, activeControlPreset } from "../../../utils/controlPres
 import { Fragment } from "@wordpress/element";
 import Captions from "./Captions";
 import { ChoiceControl } from "../ChoiceControl";
+import { videoFitOptions } from "../../../utils/videoFit";
+import { usesProviderPlayer } from "../../../utils/providerPlayer";
 import { posterFitOptions, posterPositionOptions } from "../../../utils/posterFit";
 import { SizeControl } from "../SizeControl";
 
@@ -46,6 +48,7 @@ const Settings = ({ attributes, setAttributes }) => {
     radius,
     ratio,
     posterFit,
+    videoFit,
     posterPosition,
     accentColor,
     repeat,
@@ -331,6 +334,16 @@ const Settings = ({ attributes, setAttributes }) => {
                   ]}
                   onChange={(val) => setAttributes({ ratio: val })}
                 />
+                {!usesProviderPlayer(attributes) ? (
+                  <ChoiceControl
+                    label={__("Video Fit", "video-player-block")}
+                    labelPosition="left"
+                    value={videoFit || "contain"}
+                    options={videoFitOptions}
+                    onChange={(val) => setAttributes({ videoFit: val })}
+                    help={__("Fit shows the whole video; Fill covers the player and crops the edges.", "video-player-block")}
+                  />
+                ) : null}
                 {poster && (
                   <ChoiceControl
                     label={__("Poster Fit", "video-player-block")}

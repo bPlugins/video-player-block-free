@@ -60,6 +60,10 @@
       "type": "string",
       "default": "16:9"
     },
+    "videoFit": {
+      "type": "string",
+      "default": "contain"
+    },
     "posterFit": {
       "type": "string",
       "default": "cover"

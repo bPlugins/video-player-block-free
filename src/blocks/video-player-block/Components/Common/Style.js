@@ -1,9 +1,10 @@
 import { prefix } from '../../utils/data';
+import { videoFitCss } from '../../utils/videoFit';
 import { posterFitCss } from '../../utils/posterFit';
 import { sanitizeStyleTag } from '../../../../Components/Common/utils/sanitizeStyleTag';
 
 const Style = ({ attributes, id }) => {
-	const { width, radius, accentColor, posterFit, posterPosition } = attributes;
+	const { width, radius, accentColor, posterFit, posterPosition, videoFit } = attributes;
 
 	return (
     <style
@@ -19,6 +20,7 @@ const Style = ({ attributes, id }) => {
 		#${id} .${prefix} .videoWrapper {
 			border-radius: ${radius};
 		}
+		${videoFitCss(`#${id} .${prefix} `, videoFit)}
 		${posterFitCss(`#${id} .${prefix} .plyr__poster, #${id} .${prefix} .vpbProviderPlayer__poster-img`, posterFit, posterPosition)}
 		#${id} .${prefix} .plyr__video-wrapper {
 			overflow: hidden !important;

@@ -117,6 +117,19 @@ const Settings = ({ attributes, setAttributes }) => {
     setAttributes({ controls: newControls });
   };
 
+  // Adding the first caption file also turns the CC button on, so the captions
+  // can be used straight away. Only that first file does it: once tracks exist,
+  // the CC toggle stays as the user left it.
+  const setCaptionAttributes = (attrs) => {
+    const hadFile = (captionTracks || []).some((t) => t?.src);
+    const hasFile = (attrs.captions || []).some((t) => t?.src);
+    setAttributes(
+      !hadFile && hasFile && !controls?.captions
+        ? { ...attrs, controls: { ...(controls || {}), captions: true } }
+        : attrs,
+    );
+  };
+
   // Controls a player can't show for this source don't decide which preset is active.
   const ignoredKeys = [
     ...(isEmbed ? ["pip", "airplay", "download", "captions"] : []),
@@ -257,7 +270,7 @@ const Settings = ({ attributes, setAttributes }) => {
                   ) : (
                     <Captions
                       captions={captionTracks}
-                      setAttributes={setAttributes}
+                      setAttributes={setCaptionAttributes}
                     />
                   )}
                 </PanelBody>

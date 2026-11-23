@@ -18,6 +18,19 @@
   --wp-components-color-accent: var(--vpb-accent);
   --wp-admin-theme-color: var(--vpb-accent);
 
+  // --- Toggles ---------------------------------------------------------------
+  // Off is neutral grey, so on (blue) and off read at a glance.
+  .components-form-toggle:not(.is-checked) {
+    .components-form-toggle__track {
+      border-color: #949494;
+    }
+
+    .components-form-toggle__thumb {
+      background-color: #949494;
+      border-color: #949494;
+    }
+  }
+
   // --- Sharp corners ---------------------------------------------------------
   .components-button,
   .components-tab-panel__tabs,

@@ -2,8 +2,10 @@ import { prefix } from '../../utils/data';
 import { videoFitCss } from '../../utils/videoFit';
 import { posterFitCss } from '../../utils/posterFit';
 import { sanitizeStyleTag } from '../../../../Components/Common/utils/sanitizeStyleTag';
+import { cssSafeAttributes } from '../../../../Components/Common/utils/cssSafeAttributes';
 
-const Style = ({ attributes, id }) => {
+const Style = ({ attributes: rawAttributes, id }) => {
+	const attributes = cssSafeAttributes(rawAttributes);
 	const { width, radius, accentColor, posterFit, posterPosition, videoFit } = attributes;
 
 	return (

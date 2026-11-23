@@ -35,7 +35,6 @@ const ProviderPlayer = ({ attributes }) => {
           src={src}
           title={label}
           allow={PROVIDER_IFRAME_ALLOW}
-          allowFullScreen
           referrerPolicy="strict-origin-when-cross-origin"
           {...(lazyLoad && !autoplay ? { loading: "lazy" } : {})}
           style={{

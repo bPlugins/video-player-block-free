@@ -260,7 +260,7 @@ const CanvasEmbedFrame = ({
           "iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}</style></head><body>" +
           `<iframe src="${escapeHtmlAttr(
             nativeSrc,
-          )}" allow="${EMBED_ALLOW}; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>` +
+          )}" allow="${EMBED_ALLOW}; fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe>` +
           "</body></html>",
       );
       frameDoc.close();

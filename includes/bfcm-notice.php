@@ -664,9 +664,7 @@ if ( ! class_exists( 'BPlugins_BFCM_Notice' ) ) {
 						fetch(window.ajaxurl || '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', {
 							method: 'POST',
 							body: formData
-						}).catch(function(err) {
-							console.warn('Notice dismissal failed:', err);
-						});
+						}).catch(function() {});
 					});
 				})();
 			</script>
@@ -780,9 +778,7 @@ if ( ! class_exists( 'BPlugins_BFCM_Notice' ) ) {
 						fetch(window.ajaxurl || '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', {
 							method: 'POST',
 							body: formData
-						}).catch(function(err) {
-							console.warn('Row notice dismissal failed:', err);
-						});
+						}).catch(function() {});
 					});
 				})();
 			</script>

@@ -11,6 +11,13 @@
 // colors, the blue open panel) is never restyled here.
 
 .bPlTabPanel.vpb-inspector {
+  // The bPlugins brand blue (bpl-tools primaryColor), used for every selected
+  // state here and handed to WordPress components (toggle, focus ring) in place
+  // of the admin color scheme.
+  --vpb-accent: #146ef5;
+  --wp-components-color-accent: var(--vpb-accent);
+  --wp-admin-theme-color: var(--vpb-accent);
+
   // --- Sharp corners ---------------------------------------------------------
   .components-button,
   .components-tab-panel__tabs,
@@ -225,7 +232,7 @@
   .vpb-choice-grid {
     .components-button.is-pressed {
       box-shadow: none;
-      background: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+      background: var(--vpb-accent);
       color: #fff;
     }
   }
@@ -265,13 +272,13 @@
       }
 
       &:hover:not(.is-pressed) {
-        color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
-        box-shadow: inset 0 0 0 1px var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+        color: var(--vpb-accent);
+        box-shadow: inset 0 0 0 1px var(--vpb-accent);
       }
 
       &.is-pressed {
-        --vpb-knock: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
-        background: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+        --vpb-knock: var(--vpb-accent);
+        background: var(--vpb-accent);
         color: #fff;
         box-shadow: none;
 

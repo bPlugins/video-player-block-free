@@ -35,6 +35,7 @@ const useBlocksSettings = (action, nonce) => {
       setInternalStatus("success");
       return response;
     } catch (error) {
+      // eslint-disable-next-line no-console -- the only trace of a failed save
       console.error("Save failed:", error);
       setInternalStatus("error");
     }

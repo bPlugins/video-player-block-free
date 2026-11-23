@@ -22,6 +22,7 @@ import { CONTROL_PRESETS, activeControlPreset } from "../../../utils/controlPres
 import { Fragment } from "@wordpress/element";
 import Captions from "./Captions";
 import VisualChoiceControl from "../VisualChoiceControl";
+import { ChoiceControl } from "../ChoiceControl";
 import { choiceIcons } from "../../../utils/choiceIcons";
 import { videoFitOptions } from "../../../utils/videoFit";
 import { usesProviderPlayer } from "../../../utils/providerPlayer";
@@ -353,10 +354,10 @@ const Settings = ({ attributes, setAttributes }) => {
                   onChange={(val) => setAttributes({ ratio: val })}
                 />
                 {!usesProviderPlayer(attributes) ? (
-                  <VisualChoiceControl
+                  <ChoiceControl
                     label={__("Video Fit", "video-player-block")}
+                    labelPosition="left"
                     value={videoFit || "contain"}
-                    icons={choiceIcons.fit}
                     options={videoFitOptions}
                     onChange={(val) => setAttributes({ videoFit: val })}
                     help={__("Fit shows the whole video; Fill covers the player and crops the edges.", "video-player-block")}

@@ -26,6 +26,7 @@ import { choiceIcons } from "../../../utils/choiceIcons";
 import { videoFitOptions } from "../../../utils/videoFit";
 import { usesProviderPlayer } from "../../../utils/providerPlayer";
 import { posterFitOptions, posterPositionOptions } from "../../../utils/posterFit";
+import { posterFitsPlayer, usePosterRatio } from "../../../utils/posterShape";
 import { SizeControl } from "../SizeControl";
 
 // Plyr's own accent colour, shown (and restored by Reset) when none is set.
@@ -60,6 +61,9 @@ const Settings = ({ attributes, setAttributes }) => {
     lazyLoad,
     providerPlayer,
   } = attributes;
+
+  // A poster the same shape as the player has nothing to crop: no Position.
+  const posterSameShape = posterFitsPlayer(usePosterRatio(poster), ratio);
 
   const isYT = isYoutube(source);
   const isVM = isVimeo(source);
@@ -368,15 +372,20 @@ const Settings = ({ attributes, setAttributes }) => {
                     help={__("Cover fills the player; Contain shows the whole image.", "video-player-block")}
                   />
                 )}
-                {poster && (posterFit || "cover") === "cover" && (
-                  <VisualChoiceControl
-                    label={__("Poster Position", "video-player-block")}
-                    value={posterPosition || "center"}
-                    icons={choiceIcons.position}
-                    options={posterPositionOptions}
-                    onChange={(val) => setAttributes({ posterPosition: val })}
-                  />
-                )}
+                {poster && (posterFit || "cover") === "cover" &&
+                  (posterSameShape ? (
+                    <p className="vpb-note">
+                      {__("The poster is the same shape as the player, so there is nothing to move. Poster Position shows for a poster of another shape.", "video-player-block")}
+                    </p>
+                  ) : (
+                    <VisualChoiceControl
+                      label={__("Poster Position", "video-player-block")}
+                      value={posterPosition || "center"}
+                      icons={choiceIcons.position}
+                      options={posterPositionOptions}
+                      onChange={(val) => setAttributes({ posterPosition: val })}
+                    />
+                  ))}
 
                 <div className="vpb-subhead">{__("Look", "video-player-block")}</div>
                 <SizeControl

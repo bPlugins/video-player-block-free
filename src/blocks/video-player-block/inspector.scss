@@ -331,44 +331,35 @@
     color: #757575;
   }
 
-  // --- Caption tracks --------------------------------------------------------
-  // The remove button stays quiet and turns red only on hover.
-  .vpb-caption-head .components-button.is-destructive:not(:hover):not(:focus) {
-    color: #757575;
-  }
-
-  // One light card per track; the heading row holds a quiet remove icon.
-  .vpb-caption-item {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 12px;
-    padding: 12px;
-    border: 1px solid #e0e0e0;
-
-    > * {
-      margin: 0 !important;
-    }
-  }
-
-  .vpb-caption-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: #1e1e1e;
-  }
-
+  // --- Caption tracks (bpl-tools ItemsPanel rows) -----------------------------
   .vpb-captions .vpb-note {
     margin: 0 0 12px;
   }
 
-  .vpb-captions-add {
-    width: 100%;
-    justify-content: center;
+  .bPlSortablePanelItem {
+    margin-bottom: 8px;
+
+    // Let the title use the row; bpl-tools fixes it at 125px.
+    .repeater-panel-title {
+      flex: 1 1 auto;
+      width: auto;
+      min-width: 0;
+    }
+
+    .itemsPanelBody.hidden {
+      display: none;
+    }
+
+    .itemsPanelBody:not(.hidden) {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 12px 10px;
+
+      > * {
+        margin: 0 !important;
+      }
+    }
   }
 }
 

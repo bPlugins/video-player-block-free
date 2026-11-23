@@ -188,6 +188,20 @@ export const welcomeInfo = (adminUrl = "") => ({
   // Changelogs — each list item starts with <strong>Type:</strong> for badges
   changelogs: [
     {
+      version: "2.3.0 - 23 Nov 26",
+      type: "new",
+      list: [
+        "<strong>New:</strong> Video Fit (Fit / Fill), Poster Fit (Cover / Contain) and Poster Position (Top / Center / Bottom) as picture buttons.",
+        "<strong>New:</strong> Caption tracks are a draggable list with copy and delete; adding the first caption file turns the CC button on.",
+        "<strong>New:</strong> Live YouTube and Vimeo player in the editor: one click plays or pauses and selects the block; Vimeo quality menu; Lazy Load really defers the video.",
+        "<strong>Improve:</strong> A cleaner sidebar organised by importance, one-click Aspect Ratio and size units, new dashboard icons and accent color.",
+        "<strong>Improve:</strong> Phone players show the Picture-in-Picture, Download and Restart buttons when you turn them on.",
+        "<strong>Fix:</strong> An empty player renders nothing; smaller editor bundle.",
+        "<strong>Security:</strong> Block settings can no longer break out of the block's CSS; the [video_player id=…] shortcode only shows Video Player posts; the admin dashboard library is updated.",
+        "<strong>Tweak:</strong> The first-time tour only appears where it fits.",
+      ],
+    },
+    {
       version: "2.2.1 - 16 Nov 26",
       type: "update",
       list: [

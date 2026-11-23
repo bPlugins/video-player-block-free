@@ -281,14 +281,6 @@ $primaryColor: #4527a4;
             font-size: 10px;
           }
         }
-
-        // Hide controls that are less important on mobile
-        [data-plyr="pip"],
-        [data-plyr="airplay"],
-        [data-plyr="download"],
-        [data-plyr="restart"] {
-          display: none !important;
-        }
       }
 
       .plyr .plyr__time {

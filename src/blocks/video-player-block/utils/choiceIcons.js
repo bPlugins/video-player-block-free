@@ -27,4 +27,18 @@ export const choiceIcons = {
     "9:16": make([[16, 2, 15.8, 28, 1]]),
     "21:9": make([[3, 7, 42, 18, 1]]),
   },
+
+  // Video Fit / Poster Fit: Fit (contain) shows the whole picture inside the
+  // frame (bars show), Fill (cover) fills the frame and the edges are cropped.
+  fit: {
+    contain: make([[6, 3, 36, 26, 0], [6, 9.5, 36, 13, 1]]),
+    cover: make([[6, 3, 36, 26, 1], [1, 8, 5, 16, 0], [42, 8, 5, 16, 0]]),
+  },
+
+  // Poster Position: the solid band is the part of the image that stays in view.
+  position: {
+    top: make([[6, 3, 36, 26, 0], [6, 3, 36, 10, 1]]),
+    center: make([[6, 3, 36, 26, 0], [6, 11, 36, 10, 1]]),
+    bottom: make([[6, 3, 36, 26, 0], [6, 19, 36, 10, 1]]),
+  },
 };

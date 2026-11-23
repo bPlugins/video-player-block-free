@@ -21,7 +21,6 @@ import { isYoutube, isVimeo } from "../../../utils/functions";
 import { CONTROL_PRESETS, activeControlPreset } from "../../../utils/controlPresets";
 import { Fragment } from "@wordpress/element";
 import Captions from "./Captions";
-import { ChoiceControl } from "../ChoiceControl";
 import VisualChoiceControl from "../VisualChoiceControl";
 import { choiceIcons } from "../../../utils/choiceIcons";
 import { videoFitOptions } from "../../../utils/videoFit";
@@ -337,30 +336,30 @@ const Settings = ({ attributes, setAttributes }) => {
                   onChange={(val) => setAttributes({ ratio: val })}
                 />
                 {!usesProviderPlayer(attributes) ? (
-                  <ChoiceControl
+                  <VisualChoiceControl
                     label={__("Video Fit", "video-player-block")}
-                    labelPosition="left"
                     value={videoFit || "contain"}
+                    icons={choiceIcons.fit}
                     options={videoFitOptions}
                     onChange={(val) => setAttributes({ videoFit: val })}
                     help={__("Fit shows the whole video; Fill covers the player and crops the edges.", "video-player-block")}
                   />
                 ) : null}
                 {poster && (
-                  <ChoiceControl
+                  <VisualChoiceControl
                     label={__("Poster Fit", "video-player-block")}
-                    labelPosition="left"
                     value={posterFit || "cover"}
+                    icons={choiceIcons.fit}
                     options={posterFitOptions}
                     onChange={(val) => setAttributes({ posterFit: val })}
                     help={__("Cover fills the player; Contain shows the whole image.", "video-player-block")}
                   />
                 )}
                 {poster && (posterFit || "cover") === "cover" && (
-                  <ChoiceControl
+                  <VisualChoiceControl
                     label={__("Poster Position", "video-player-block")}
-                    labelPosition="left"
                     value={posterPosition || "center"}
+                    icons={choiceIcons.position}
                     options={posterPositionOptions}
                     onChange={(val) => setAttributes({ posterPosition: val })}
                   />

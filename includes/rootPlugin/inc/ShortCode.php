@@ -16,7 +16,8 @@ class ShortCode {
 			return '';
 		}
 		$post = get_post( $post_id );
-		if ( ! $post ) {
+		// Only Video Player posts: the id must not pull in another post type's content.
+		if ( ! $post || 'video-player-block' !== $post->post_type ) {
 			return '';
 		}
 		if ( post_password_required( $post ) ) {

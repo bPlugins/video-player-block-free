@@ -36,8 +36,12 @@ class VPBP_Onboarding {
 		add_action( 'rest_api_init', [ $this, 'register_rest' ] );
 	}
 
+	// Tours about the plugin's admin pages and menu are for the site owner: other
+	// roles cannot open Help & Demos.
+	private const ADMIN_ONLY = [ 'adminmenu', 'dashboard' ];
+
 	private function should_show( $type ) {
-		if ( ! current_user_can( 'edit_posts' ) ) return false;
+		if ( ! current_user_can( in_array( $type, self::ADMIN_ONLY, true ) ? 'manage_options' : 'edit_posts' ) ) return false;
 		return ! get_user_meta( get_current_user_id(), self::USER_META[ $type ], true );
 	}
 
@@ -69,8 +73,11 @@ class VPBP_Onboarding {
 	 * other post type gets the generic editor tour.
 	 */
 	public function enqueue_editor() {
-		$screen  = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-		$context = ( $screen && self::CPT === $screen->post_type ) ? 'cpt-editor' : 'editor';
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		// The post editor only: the Site Editor and widgets screen have no Publish
+		// button or post canvas, and showing the tour there would use it up.
+		if ( ! $screen || 'post' !== $screen->base ) return;
+		$context = self::CPT === $screen->post_type ? 'cpt-editor' : 'editor';
 
 		if ( ! $this->should_show( $context ) ) return;
 		if ( ! $this->enqueue_assets() ) return;

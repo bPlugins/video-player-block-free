@@ -49,7 +49,6 @@
 		"sanitize-html": "^2.14.0",
 		"select-pure": "^2.1.4",
 		"slick-carousel": "^1.8.1",
-		"swiper": "^11.1.14",
 		"typed.js": "^2.1.0"
 	},
 	"devDependencies": {

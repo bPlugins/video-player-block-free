@@ -197,6 +197,7 @@ export const welcomeInfo = (adminUrl = "") => ({
         "<strong>Improve:</strong> A cleaner sidebar organised by importance, one-click Aspect Ratio and size units, new dashboard icons and accent color.",
         "<strong>Improve:</strong> Phone players show the Picture-in-Picture, Download and Restart buttons when you turn them on.",
         "<strong>Fix:</strong> An empty player renders nothing; smaller editor bundle.",
+        "<strong>Fix:</strong> The editor and the page now show the same YouTube thumbnail.",
         "<strong>Security:</strong> Block settings can no longer break out of the block's CSS; the [video_player id=…] shortcode only shows Video Player posts; the admin dashboard library is updated.",
         "<strong>Tweak:</strong> The first-time tour only appears where it fits.",
         "<strong>New:</strong> Dashboard, Docs, Support and Rate links on the Plugins screen.",

@@ -67,16 +67,22 @@ export const hideNativeVimeoCaptions = (player) => {
 	embed.vpbHiddenTracks = true;
 };
 /**
- * Best available YouTube thumbnail for a video id, resolved the same way in the
- * editor and on the front end so both always show the same image.
- * Prefers maxresdefault (sharpest); YouTube answers 200 with a 120px
- * placeholder when it doesn't exist, so fall back to hqdefault in that case.
+ * Best available YouTube thumbnail for a video id, picked in the same order as
+ * Plyr (which draws the poster in the editor), so the editor and the front end
+ * show the same image: maxresdefault, then sddefault, then hqdefault. YouTube
+ * answers a missing size with a 120px placeholder, so that counts as missing.
  */
 export const getYoutubePoster = (id) => new Promise((resolve) => {
 	if (!id) return resolve('');
 	const base = `https://i.ytimg.com/vi/${id}/`;
-	const img = new Image();
-	img.onload = () => resolve(img.naturalWidth > 120 ? `${base}maxresdefault.jpg` : `${base}hqdefault.jpg`);
-	img.onerror = () => resolve(`${base}hqdefault.jpg`);
-	img.src = `${base}maxresdefault.jpg`;
+	const sizes = ['maxres', 'sd'];
+	const next = () => {
+		if (!sizes.length) return resolve(`${base}hqdefault.jpg`);
+		const src = `${base}${sizes.shift()}default.jpg`;
+		const img = new Image();
+		img.onload = () => (img.naturalWidth > 120 ? resolve(src) : next());
+		img.onerror = next;
+		img.src = src;
+	};
+	next();
 });

@@ -268,6 +268,7 @@ As the external service functionality is handled by bpl-tools as a third-party l
 * Fix: An empty player renders nothing; smaller editor bundle.
 * Security: Block settings can no longer break out of the block's CSS; the `[video_player id=…]` shortcode only shows Video Player posts; the admin dashboard library is updated.
 * Tweak: The first-time tour only appears where it fits (post editor, admin-only tours for admins).
+* Fix: Activating Pro now always turns Free off, whichever folder Free is installed in.
 
 = 2.2.1 - 16 November 2026 =
 * Security: Hardened block CSS output and video embed ID handling.

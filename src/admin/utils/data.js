@@ -199,6 +199,7 @@ export const welcomeInfo = (adminUrl = "") => ({
         "<strong>Fix:</strong> An empty player renders nothing; smaller editor bundle.",
         "<strong>Security:</strong> Block settings can no longer break out of the block's CSS; the [video_player id=…] shortcode only shows Video Player posts; the admin dashboard library is updated.",
         "<strong>Tweak:</strong> The first-time tour only appears where it fits.",
+        "<strong>Fix:</strong> Activating Pro now always turns Free off, whichever folder Free is installed in.",
       ],
     },
     {

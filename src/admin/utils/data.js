@@ -188,7 +188,7 @@ export const welcomeInfo = (adminUrl = "") => ({
   // Changelogs — each list item starts with <strong>Type:</strong> for badges
   changelogs: [
     {
-      version: "2.3.0 - 23 Nov 26",
+      version: "2.3.0 - 24 Nov 26",
       type: "new",
       list: [
         "<strong>New:</strong> Video Fit (Fit / Fill), Poster Fit (Cover / Contain) and Poster Position (Top / Center / Bottom) as picture buttons.",
@@ -199,6 +199,7 @@ export const welcomeInfo = (adminUrl = "") => ({
         "<strong>Fix:</strong> An empty player renders nothing; smaller editor bundle.",
         "<strong>Security:</strong> Block settings can no longer break out of the block's CSS; the [video_player id=…] shortcode only shows Video Player posts; the admin dashboard library is updated.",
         "<strong>Tweak:</strong> The first-time tour only appears where it fits.",
+        "<strong>New:</strong> Dashboard, Docs, Support and Rate links on the Plugins screen.",
         "<strong>Fix:</strong> Activating Pro now always turns Free off, whichever folder Free is installed in.",
       ],
     },

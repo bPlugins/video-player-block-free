@@ -259,7 +259,7 @@ As the external service functionality is handled by bpl-tools as a third-party l
 
 == Changelog ==
 
-= 2.3.0 - 23 November 2026 =
+= 2.3.0 - 24 November 2026 =
 * New: Video Fit (Fit / Fill), Poster Fit (Cover / Contain) and Poster Position (Top / Center / Bottom) as picture buttons.
 * New: Caption tracks are a draggable list with copy and delete; adding the first caption file turns the CC button on.
 * New: Live YouTube and Vimeo player in the editor: one click plays or pauses and selects the block; Vimeo quality menu; Lazy Load really defers the video.
@@ -268,6 +268,7 @@ As the external service functionality is handled by bpl-tools as a third-party l
 * Fix: An empty player renders nothing; smaller editor bundle.
 * Security: Block settings can no longer break out of the block's CSS; the `[video_player id=…]` shortcode only shows Video Player posts; the admin dashboard library is updated.
 * Tweak: The first-time tour only appears where it fits (post editor, admin-only tours for admins).
+* New: Dashboard, Docs, Support and Rate links on the Plugins screen.
 * Fix: Activating Pro now always turns Free off, whichever folder Free is installed in.
 
 = 2.2.1 - 16 November 2026 =

@@ -40,6 +40,9 @@ require_once VPBP_DIR_PATH . '/includes/patterns.php';
 // One polite, dismissible review request (admins only, after a week).
 require_once VPBP_DIR_PATH . '/includes/review-notice.php';
 
+// Plugins screen: Dashboard, Upgrade, Docs, Support and Rate links on the plugin row.
+require_once VPBP_DIR_PATH . '/includes/plugin-links.php';
+
 // BFCM promotional banner and notice.
 require_once VPBP_DIR_PATH . '/includes/bfcm-notice.php';
 

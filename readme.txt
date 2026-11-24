@@ -267,6 +267,7 @@ As the external service functionality is handled by bpl-tools as a third-party l
 * Improved: Phone players show the Picture-in-Picture, Download and Restart buttons when you turn them on.
 * Fix: An empty player renders nothing; smaller editor bundle.
 * Fix: The editor and the page now show the same YouTube thumbnail.
+* Fix: YouTube captions stay off in the editor when the setting is off, also on a slow site.
 * Security: Block settings can no longer break out of the block's CSS; the `[video_player id=…]` shortcode only shows Video Player posts; the admin dashboard library is updated.
 * Tweak: The first-time tour only appears where it fits (post editor, admin-only tours for admins).
 * New: Dashboard, Docs, Support and Rate links on the Plugins screen.

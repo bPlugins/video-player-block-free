@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { PLYR_SPRITE } from "../../utils/sprite";
 import { applyLivePlayback, setupEmbedResetOnEnd } from "../../utils/config";
 import useSelectBlockOnClick from "../../utils/useSelectBlockOnClick";
+import { applyEmbedCaptions, embedCaptionParams } from "../../utils/embedCaptions";
 
 /*
  * Free copy of the Pro plugin's _shared/media/CanvasEmbedFrame.js. The only
@@ -269,6 +270,7 @@ const CanvasEmbedFrame = ({
 
     let cancelled = false;
     let timer = 0;
+    let stopFallbackCaptions = () => {};
 
     const css = [
       "html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#000;box-sizing:border-box;}",
@@ -379,6 +381,7 @@ const CanvasEmbedFrame = ({
       const frameWin = iframe.contentWindow;
       const PlyrCtor = frameWin?.Plyr;
       if (!PlyrCtor || !stage) return;
+      stopFallbackCaptions();
 
       if (playerRef.current) {
         try {
@@ -485,9 +488,17 @@ const CanvasEmbedFrame = ({
         if (waited > 5000 && !fellBack) {
           fellBack = true;
           if (stage && fallbackSrc) {
+            // The plain embed follows the Captions setting too: without this a
+            // visitor whose YouTube remembers "captions on" saw them although
+            // the setting was off (on a slow site, the first insert).
+            const cfg = configRef.current || {};
+            const ccMode = (provider === "youtube" ? cfg.youtubeCaptions : cfg.vimeoCaptions) ? "on" : "off";
+            const src = new URL(fallbackSrc);
+            Object.entries(embedCaptionParams(provider, ccMode)).forEach(([k, v]) => src.searchParams.set(k, v));
             stage.innerHTML = `<iframe src="${escapeHtmlAttr(
-              fallbackSrc,
+              src.toString(),
             )}" allow="${EMBED_ALLOW}" allowfullscreen></iframe>`;
+            stopFallbackCaptions = applyEmbedCaptions(stage.querySelector("iframe"), provider, ccMode);
           }
         }
         if (waited > 60000) return;
@@ -499,6 +510,7 @@ const CanvasEmbedFrame = ({
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
+      stopFallbackCaptions();
       try {
         playerRef.current?.destroy();
       } catch (e) {

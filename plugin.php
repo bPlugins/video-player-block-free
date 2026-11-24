@@ -20,7 +20,8 @@ if (!defined('ABSPATH')) {
 }
 
 if (function_exists('vpb_fs')) {
-    vpb_fs()->set_basename(true, __FILE__);
+    // false = this is the free edition (Freemius then deactivates Pro when Free is activated).
+    vpb_fs()->set_basename(false, __FILE__);
 } else {
 
 // Constants

@@ -19,14 +19,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists( 'BPlugins_BFCM_Notice' ) ) {
+if ( ! class_exists( 'VPB_BFCM_Notice' ) ) {
 
 	/**
-	 * Class BPlugins_BFCM_Notice
+	 * Class VPB_BFCM_Notice
 	 *
 	 * A self-contained, reusable promotional notice class.
 	 */
-	class BPlugins_BFCM_Notice {
+	class VPB_BFCM_Notice {
 
 		/**
 		 * Configuration settings.
@@ -137,6 +137,10 @@ if ( ! class_exists( 'BPlugins_BFCM_Notice' ) ) {
 			} else {
 				$dir    = dirname( $plugin_file );
 				$my_dir = $my_file ? dirname( $my_file ) : '';
+				// Pro owners already paid: never put the discount on the Pro row.
+				if ( '-pro' === substr( $dir, -4 ) ) {
+					return $links;
+				}
 				if (
 					( $my_dir && $dir === $my_dir ) ||
 					false !== strpos( $dir, $this->config['plugin_slug'] ) ||
@@ -791,7 +795,7 @@ if ( ! class_exists( 'BPlugins_BFCM_Notice' ) ) {
  * Initialize BFCM Notice for Video Player Block.
  */
 function vpbp_init_bfcm_notice() {
-	new BPlugins_BFCM_Notice(
+	new VPB_BFCM_Notice(
 		[
 			'campaign_id'         => 'bfcm2026',
 			'plugin_slug'         => 'video-player-block',
